@@ -182,7 +182,7 @@ export default function PrimarySearchAppBar() {
             component="div"
             sx={{ display: { xs: 'none', sm: 'block' } }}
           >
-            アプリタイトル＜考え中＞
+            EnjoyDIYing
           </Typography>
           <Search>
             <SearchIconWrapper>

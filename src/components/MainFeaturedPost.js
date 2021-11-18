@@ -48,7 +48,7 @@ function MainFeaturedPost(props) {
               {post.title}
               <Avatar
                 alt="Remy Sharp"
-                src="./static/images/avatar/1.jpg"
+                src="https://firebasestorage.googleapis.com/v0/b/myfirebasesample-c6d99.appspot.com/o/MainPageBackImage.jpg?alt=media&token=cebffe65-94e7-4015-bf53-06ff29746431"
                 sx={{ width: 120, height: 120 }}/>
             </Typography>
             <Typography variant="h5" color="inherit" paragraph>
