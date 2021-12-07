@@ -7,7 +7,7 @@ import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useHistory,withRouter } from 'react-router';
 import MainPageHeader from './MainPageHeader';
-import ImageListWithTitleBars from './ImageListWithTitleBars';
+import MainPageImageList from './MainPageImageList';
 
 function Copyright() {
   return (
@@ -32,7 +32,7 @@ function Album(props) {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-        <Container maxWidth="lg">
+      <Container maxWidth="lg">
         <MainPageHeader/>
         <main>
           <Box
@@ -51,7 +51,7 @@ function Album(props) {
           >
             注目のレシピ
           </Typography>
-          <ImageListWithTitleBars/>
+          <MainPageImageList/>
           <Typography
               component="h1"
               variant="h4"
@@ -61,7 +61,7 @@ function Album(props) {
             >
               新着レシピ
           </Typography>
-          <ImageListWithTitleBars/>
+          <MainPageImageList/>
           <Typography
               component="h1"
               variant="h4"
@@ -71,7 +71,7 @@ function Album(props) {
             >
               お気に入りの投稿
           </Typography>
-          <ImageListWithTitleBars/>
+          <MainPageImageList/>
           <Typography
               component="h1"
               variant="h4"
@@ -81,7 +81,7 @@ function Album(props) {
             >
               ＜ユーザー名＞さんの過去の作品
           </Typography>
-          <ImageListWithTitleBars/>
+          <MainPageImageList/>
           </Box>
         </main>
       </Container>

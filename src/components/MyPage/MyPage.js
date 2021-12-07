@@ -4,9 +4,9 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MyPageHeader from './MyPageHeader';
 import MainFeaturedPost from './MainFeaturedPost';
-import ImageListWithTitleBars from './ImageListWithTitleBars';
+import MainPageImageList from '../MainPage/MainPageImageList';
 import { withRouter } from 'react-router';
-import Footer from './Footer';
+import Footer from '../Footer';
 import Typography from '@mui/material/Typography';
 
 const mainFeaturedPost = {
@@ -22,7 +22,7 @@ function Blog() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container maxWidth="lg">
-        <MyPageHeader title="Myページ" />
+        <MyPageHeader/>
         <main>
           <MainFeaturedPost post={mainFeaturedPost}/>
           <Typography
@@ -34,7 +34,7 @@ function Blog() {
             >
               投稿した作品
           </Typography>
-          <ImageListWithTitleBars/>
+          <MainPageImageList/>
         </main>
       </Container>
       <Footer

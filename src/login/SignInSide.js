@@ -135,7 +135,7 @@ const handleChange = (e) => {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="/checkout" variant="body2"> 
+                  <Link href="/userregistration" variant="body2"> 
                     {"無料ユーザー登録はこちらから"}
                   </Link>
                 </Grid>

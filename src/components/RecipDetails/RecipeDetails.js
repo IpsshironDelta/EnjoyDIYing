@@ -15,7 +15,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import MainPageHeader from './MainPageHeader';
+import MainPageHeader from '../MainPage/MainPageHeader';
 
 function Copyright() {
   return (

@@ -1,14 +1,13 @@
 import { BrowserRouter, Route, Switch,useHistory } from "react-router-dom";
-//import Dashboard from "./components/Dashboard";
 import SignInSide from "./login/SignInSide";
-import PastTranslation from "./components/PastTranslation";
-import MainPage from "./components/MainPage";
-import Page404 from './page/Page404';
-import Post from './components/Post';
-import MainTop from './components/MainPage';
-import MyPage from './components/MyPage';
-import RecipeDetails from './components/RecipeDetails';
-import Checkout from './components/Checkout';
+import PastWork from "./components/PastWorks/PastWork";
+import MainPage from "./components/MainPage/MainPage";
+import Post from './components/PostPage/Post';
+import MainTop from './components/MainPage/MainPage';
+import MyPage from './components/MyPage/MyPage';
+import RecipeDetails from './components/RecipDetails/RecipeDetails';
+import UserRegistration from './components/UserRegistration/UserRegistration';
+import SecondPage from './components/SecondPage';
 
 function App() {
   const history = useHistory();
@@ -17,14 +16,16 @@ function App() {
       <Switch>
         <Route exact path="/login" component={SignInSide} />
         <Route exact path="/" component={MainTop} />
-        <Route exact path="/pasttranslation" component={PastTranslation} />
+        <Route exact path="/pastwork" component={PastWork} />
         <Route exact path="/post" component={Post} />
         <Route exact path="/mainpage" component={MainPage} />
         <Route exact path="/mypage" component={MyPage} />
         <Route exact path="/recipedetails" component={RecipeDetails} />
-        <Route exact path="/checkout" component={Checkout} />
+        <Route exact path="/userregistration" component={UserRegistration} />
 
-        <Route component={Page404} />
+        <Route exact path="/secondpage" component={SecondPage} />
+
+        {/* <Route component={Page404} /> */}
       </Switch>
     </BrowserRouter>
   )

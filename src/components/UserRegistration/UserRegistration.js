@@ -12,8 +12,7 @@ import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import MemberStatusForm from './MemberStatusForm';
-import PaymentForm from './PaymentForm';
+import MemberStatusForm from './MemberStatus';
 import MemberReview from './MemberReview';
 import { useHistory} from 'react-router';
 
@@ -46,7 +45,7 @@ function getStepContent(step) {
 
 const theme = createTheme();
 
-export default function Checkout() {
+export default function UserRegistration() {
   const [activeStep, setActiveStep] = React.useState(0);
 
   const handleNext = () => {
@@ -55,6 +54,7 @@ export default function Checkout() {
 
   const handleBack = () => {
     setActiveStep(activeStep - 1);
+    history.push("/userregistration");
   };
   const history = useHistory();
   const toppage = (event) =>{

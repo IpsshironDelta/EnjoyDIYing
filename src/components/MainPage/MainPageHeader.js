@@ -3,11 +3,18 @@ import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
+import Badge from '@mui/material/Badge';
+import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
-import MyPageButton from './MyPageButton';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import MailIcon from '@mui/icons-material/Mail';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import { useHistory } from "react-router-dom";
+import MainPageButton from './MainPageButton';
 
 const Input = styled('input')({
     display: 'none',
@@ -77,7 +84,17 @@ export default function PrimarySearchAppBar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-const menuId = 'primary-search-account-menu';
+  const history = useHistory();
+  const login = (event) => {
+      event.preventDefault();
+      history.push("/login");
+  };
+  const mypage = (event) => {
+    event.preventDefault();
+    history.push("/mypage");
+};
+
+  const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -94,6 +111,8 @@ const menuId = 'primary-search-account-menu';
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
+      <MenuItem onClick={mypage}>Myページ</MenuItem>
+      <MenuItem onClick={login}>新規登録＜ログイン＞</MenuItem>
     </Menu>
   );
 
@@ -114,6 +133,40 @@ const menuId = 'primary-search-account-menu';
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
+
+      <MenuItem>
+        <IconButton size="large" 
+                    aria-label="show 4 new mails" 
+                    color="inherit">
+          <Badge badgeContent={4} color="error">
+            <MailIcon />
+          </Badge>
+        </IconButton>
+        <p>Messages</p>
+      </MenuItem>
+      <MenuItem>
+        <IconButton
+          size="large"
+          aria-label="show 17 new notifications"
+          color="inherit">
+          <Badge badgeContent={17} color="error">
+            <NotificationsIcon />
+          </Badge>
+        </IconButton>
+        <p>Notifications</p>
+      </MenuItem>
+      <MenuItem onClick={handleProfileMenuOpen}>
+        <IconButton
+          size="large"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <AccountCircle />
+        </IconButton>
+        <p>Profile</p>
+      </MenuItem>
     </Menu>
   );
 
@@ -121,9 +174,6 @@ const menuId = 'primary-search-account-menu';
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <MyPageButton
-            text="閲覧トップ" 
-            link="/"/>
           <Typography
             variant="h6"
             noWrap
@@ -143,9 +193,15 @@ const menuId = 'primary-search-account-menu';
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <MyPageButton
+            <MainPageButton
+              text="投稿する" 
+              link="/post"/>
+            <MainPageButton
               text="Myページ" 
               link="/mypage"/>
+            <MainPageButton
+              text="新規登録＜ログイン＞" 
+              link="/login"/>
           </Box>
         </Toolbar>
       </AppBar>
