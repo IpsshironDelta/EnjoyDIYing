@@ -12,10 +12,12 @@ import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import MemberStatusForm from './MemberStatus';
+import MemberProfile from './MemberProfile';
 import MemberReview from './MemberReview';
 import { useHistory} from 'react-router';
-
+import app from "../../firebase";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import store from '../../store/index';
 
 function Copyright() {
   return (
@@ -35,7 +37,7 @@ const steps = ['ユーザー登録', '内容確認'];
 function getStepContent(step) {
   switch (step) {
     case 0:
-      return <MemberStatusForm />;
+      return <MemberProfile />;
     case 1:
       return <MemberReview />;
     default:
@@ -50,6 +52,28 @@ export default function UserRegistration() {
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
+    console.log("activeStep => ",activeStep)
+    if(activeStep===1){
+      console.log("Firebaseに登録")
+      const auth = getAuth(app);
+      createUserWithEmailAndPassword(auth, 
+        store.getState().address, 
+        store.getState().password1)
+      .then((userCredential) => {
+        // Signed in 
+        console.log("userCredential => ",userCredential);
+        const user = userCredential.user;
+        console.log("Firebaseに登録されました");
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log("error        => ",error);
+        console.log("errorCode    => ",errorCode);
+        console.log("errorMessage => ",errorMessage);
+        console.log("登録失敗しました。");
+      });
+    }
   };
 
   const handleBack = () => {
@@ -96,11 +120,14 @@ export default function UserRegistration() {
           <React.Fragment>
             {activeStep === steps.length ? (
               <React.Fragment>
+
                 <Typography variant="h5" gutterBottom>
-                  ありがとうございます。
+                  ようこそ！{store.getState().nickname}さん
                 </Typography>
                 <Typography variant="subtitle1">
-                  ユーザー登録が完了しました。あなたの素晴らしい作品をたくさん投稿して仲間とたくさんアイディアを共有してDIYを楽しみましょう！
+                  ユーザー登録が完了しました。
+                  あなたの素晴らしい作品をたくさん投稿して仲間とたくさんアイディアを共有して
+                  DIYを楽しみましょう！
                 </Typography>
                 <Button onClick={toppage} sx={{ mt: 3, ml: 1 }}>
                       閲覧ページTOP

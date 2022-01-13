@@ -7,7 +7,7 @@ import MainTop from './components/MainPage/MainPage';
 import MyPage from './components/MyPage/MyPage';
 import RecipeDetails from './components/RecipDetails/RecipeDetails';
 import UserRegistration from './components/UserRegistration/UserRegistration';
-import SecondPage from './components/SecondPage';
+import FirebaseTest from './components/test/test';
 
 function App() {
   const history = useHistory();
@@ -23,7 +23,7 @@ function App() {
         <Route exact path="/recipedetails" component={RecipeDetails} />
         <Route exact path="/userregistration" component={UserRegistration} />
 
-        <Route exact path="/secondpage" component={SecondPage} />
+        <Route exact path="/test" component={FirebaseTest} />
 
         {/* <Route component={Page404} /> */}
       </Switch>
