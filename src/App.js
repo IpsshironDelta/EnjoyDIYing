@@ -1,13 +1,16 @@
-import { BrowserRouter, Route, Switch,useHistory } from "react-router-dom";
-import SignInSide from "./login/SignInSide";
-import PastWork from "./components/PastWorks/PastWork";
-import MainPage from "./components/MainPage/MainPage";
-import Post from './components/PostPage/Post';
-import MainTop from './components/MainPage/MainPage';
-import MyPage from './components/MyPage/MyPage';
-import RecipeDetails from './components/RecipDetails/RecipeDetails';
+import { BrowserRouter, 
+         Route, 
+         Switch,
+         useHistory }   from "react-router-dom";
+import SignInSide       from "./login/SignInSide";
+import PastWork         from "./components/PastWorks/PastWork";
+import MainPage         from "./components/MainPage/MainPage";
+import Post             from './components/PostPage/Post';
+import MainTop          from './components/MainPage/MainPage';
+import MyPage           from './components/MyPage/MyPage';
+import RecipeDetails    from './components/RecipDetails/RecipeDetails';
 import UserRegistration from './components/UserRegistration/UserRegistration';
-import FirebaseTest from './components/test/test';
+import FirebaseTest     from './components/test/test';
 
 function App() {
   const history = useHistory();

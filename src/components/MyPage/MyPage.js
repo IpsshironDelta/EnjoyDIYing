@@ -1,13 +1,14 @@
-import * as React from 'react';
-import CssBaseline from '@mui/material/CssBaseline';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import MyPageHeader from './MyPageHeader';
-import MainFeaturedPost from './MainFeaturedPost';
+import * as React         from 'react';
+import CssBaseline       from '@mui/material/CssBaseline';
+import Container         from '@mui/material/Container';
+import { createTheme, 
+         ThemeProvider } from '@mui/material/styles';
+import MyPageHeader      from './MyPageHeader';
+import MainFeaturedPost  from './MainFeaturedPost';
 import MainPageImageList from '../MainPage/MainPageImageList';
-import { withRouter } from 'react-router';
-import Footer from '../Footer';
-import Typography from '@mui/material/Typography';
+import { withRouter }    from 'react-router';
+import Footer            from '../Footer';
+import Typography        from '@mui/material/Typography';
 
 const mainFeaturedPost = {
   title: '<ユーザー名>',

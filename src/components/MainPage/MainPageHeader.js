@@ -1,20 +1,21 @@
-import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
-import Badge from '@mui/material/Badge';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
+import * as React        from 'react';
+import { styled, 
+         alpha }         from '@mui/material/styles';
+import AppBar            from '@mui/material/AppBar';
+import Box               from '@mui/material/Box';
+import Toolbar           from '@mui/material/Toolbar';
+import IconButton        from '@mui/material/IconButton';
+import Typography        from '@mui/material/Typography';
+import InputBase         from '@mui/material/InputBase';
+import Badge             from '@mui/material/Badge';
+import MenuItem          from '@mui/material/MenuItem';
+import Menu              from '@mui/material/Menu';
+import SearchIcon        from '@mui/icons-material/Search';
+import AccountCircle     from '@mui/icons-material/AccountCircle';
+import MailIcon          from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { useHistory } from "react-router-dom";
-import MainPageButton from './MainPageButton';
+import { useHistory }    from "react-router-dom";
+import MainPageButton    from './MainPageButton';
 
 const Input = styled('input')({
     display: 'none',
@@ -194,14 +195,25 @@ export default function PrimarySearchAppBar() {
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <MainPageButton
-              text="投稿する" 
-              link="/post"/>
+              text    ="投稿する" 
+              link    = "/post"
+              size    = "large"
+              variant = "contained"/>
             <MainPageButton
-              text="Myページ" 
-              link="/mypage"/>
+              text    = "閲覧トップ" 
+              link    = "/"
+              size    = "large"
+              variant = "contained"/>
             <MainPageButton
-              text="新規登録＜ログイン＞" 
-              link="/login"/>
+              text    = "Myページ" 
+              link    = "/mypage"
+              size    = "large"
+              variant = "contained"/>
+            <MainPageButton
+              text    = "新規登録＜ログイン＞" 
+              link    = "/login"
+              size    = "large"
+              variant = "contained"/>
           </Box>
         </Toolbar>
       </AppBar>

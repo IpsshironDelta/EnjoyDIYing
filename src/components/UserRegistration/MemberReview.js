@@ -1,10 +1,10 @@
-import React from 'react';
-import Typography from '@mui/material/Typography';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
+import React        from 'react';
+import Typography   from '@mui/material/Typography';
+import List         from '@mui/material/List';
+import ListItem     from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import Grid from '@mui/material/Grid';
-import store from '../../store/index';
+import Grid         from '@mui/material/Grid';
+import store        from '../../store/index';
 
 export default function Review(props) {
   return (

@@ -1,222 +1,190 @@
-import React, { useState } from 'react';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
-import TextField from '@mui/material/TextField';
-import ImageUpload from './ImageUpload';
-import { Button, stepContentClasses } from '@mui/material';
+import React, 
+      { useState }     from 'react';
+import Typography      from '@mui/material/Typography';
+import Grid            from '@mui/material/Grid';
+import TextField       from '@mui/material/TextField';
+import ImageUpload     from './ImageUpload';
 import { withRouter  } from "react-router-dom";
-import store from '../../store/index';
-import Collapse from '@mui/material/Collapse';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import { TransitionGroup } from 'react-transition-group';
-import Box from '@mui/material/Box';
-import { width } from '@mui/system';
+import store           from '../../store/index';
+import Paper           from '@mui/material/Paper';
+import Stack           from '@mui/material/Stack';
+import { styled }      from '@mui/material/styles';
+import Box             from '@mui/material/Box';
+import {updateRecipe}  from '../../actions/memberAction';
+import PPSelectBox     from './PPSelectBox';
 
-const STEP =[
-   '手順1',
-   '手順2',
-   '手順3',
-   '手順4',
-   '手順5',
-];
-
-function renderItem({ item, ClickDelStep }) {
-  return (
-    <ListItem
-      secondaryAction={
-        <Button
-          variant="contained"
-          edge="end"
-          aria-label="delete"
-          title="Delete"
-          onClick={() => ClickDelStep(item)}>
-          削除
-        </Button>
-      }
-    >
-      <ListItemText primary={item} />
-    </ListItem>
-  );
-}
+const Item = styled(Paper)(({ theme }) => ({
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
 
 function HowToMakeForm() {
 
-  const [stepcount , setStepCount]= useState(STEP.slice(0,1));
-  const [count , setCount] = useState(1);
+  const [detailInfo , setdetailinfos] = useState([{
+    recipetitle      : store.getState().recipetitle,
+    category         : store.getState().category,
+    productionCost   : '制作費用',
+    productionPeriod : '制作期間',
+    width            : '横幅',
+    height           : '高さ',
+    depth            : '奥行',
+  }]);
 
-  const ClickAddStep = ()=>{
-    console.log("ClickAddStep起動")
-    setCount(count + 1);
-    const nextStepItem = STEP.find((i) => !stepcount.includes(i));
-    if(nextStepItem){
-      setStepCount((prev) => [nextStepItem,...prev]);
-    }
-  }
-
-  const ClickDelStep = (item) => {
-    console.log("ClickDelStep起動")
-    setCount(count - 1);
-    setStepCount((prev) => [...prev.filter((i) => i !== item)]);
+  const handleChange = (e) =>{
+    const name = e.target.name;
+    const value = e.target.value;
+    detailInfo[name] = value;
+    const data = detailInfo;
+    setdetailinfos(data);
+    store.dispatch(updateRecipe(data))
+    console.log("======以下handleChange内======")
+    console.log("e => ",name);
+    console.log("value => ",value);
+    console.log("handleChangeのdata => ",data);
+    console.log("==============================")
   };
-
-  const addStepButton = (
-    <Button
-      variant="contained"
-      disabled={stepcount.length >= STEP.length}
-      onClick={ClickAddStep}
-    >
-      手順を追加する
-    </Button>
-  );
 
   return (
     <React.Fragment>
-      <Typography variant="h4" gutterBottom>
-        作り方を入力する
+      <Typography variant="h5" gutterBottom>
+        詳細を入力する
       </Typography>
-      <Grid container spacing={4}>
-        <Grid item xs={12} md={12}>
-          <Typography variant="h5" gutterBottom>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={6}>
+          <Typography variant="h6" gutterBottom>
             作品タイトル
           </Typography>
+          <Box
+            sx={{
+              width: 500,
+              maxWidth: '100%',
+              }}>
+            <TextField
+              fullWidth
+              id       = "recipetitle"
+              name     = "recipetitle"
+              variant  = "standard"
+              defaultValue={store.getState().recipetitle}
+              InputProps={{
+                readOnly: true,
+              }}/>
+          </Box>
+        </Grid>
+        <Grid item xs={12} md={6}>
           <Typography variant="h6" gutterBottom>
-            {store.getState().recipetitle}
-          </Typography>
-
-          <Typography variant="h5" gutterBottom>
             カテゴリー
           </Typography>
-          <Typography variant="h6" gutterBottom>
-            {store.getState().category}
-          </Typography>
-        </Grid>
-        <Grid item xs={12} md={4}>
-        <Typography variant="h6" gutterBottom>
-            制作費用：￥
-          </Typography>
-        </Grid>
-        <Grid item xs={12} md={8}>
-        <TextField
-              id="productionCost"
+          <Box
+            sx={{
+              width: 500,
+              maxWidth: '100%',
+              }}>
+            <TextField
               fullWidth
-              autoComplete="p-cost"
-              variant="standard"
-            />
+              id       = "category"
+              variant  = "standard"
+              name     = "category"
+              defaultValue={store.getState().category}
+              InputProps={{
+                readOnly: true,
+              }}/>
+          </Box>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Typography variant="h6" gutterBottom>
+            制作費用
+          </Typography>
+          <Typography variant="h7">
+            ￥：
+            <TextField
+              id       = "productionCost"
+              label    = "入力してください。"
+              name     = "productionCost"
+              size     = "small"
+              onChange={handleChange}/>
+            円
+          </Typography>
+          <br/><br/>
+          <Typography variant="h6" gutterBottom>
+            制作期間
+          </Typography>
+          <Typography variant="h7">
+            約 ： 
+            <TextField
+              id       = "productionPeriod"
+              type     = "number"
+              name     = "productionPeriod"
+              size     = "small"
+              label    = "入力してください。"
+              onChange ={handleChange}/>
+              <PPSelectBox
+               onChange={handleChange}/>
+          </Typography>
         </Grid>
 
-        <Grid item xs={12} md={4}>
-        <Typography variant="h6" gutterBottom>
+        <Grid item xs={12} md={6}>
+          <Typography variant="h6" gutterBottom>
             完成サイズ
           </Typography>
-        </Grid>
-        <Grid item xs={12} md={1}>
           <Typography variant="h7">
-            W：
+            W ： 
+            <TextField
+              id       = "width"
+              type     = "number"
+              name     = "width"
+              size     = "small"
+              label    = "数値を入力してください。"
+              onChange = {handleChange}/>
+            mm
           </Typography>
-        </Grid>
-        <Grid item xs={12} md={6}>
-        <TextField
-          fullWidth
-          id="outlined-number"
-          type="number"
-          defaultValue="Small"
-          size="small"/>
-        </Grid>
-        <Grid item xs={12} md={1}>
+          <br/><br/>
           <Typography variant="h7">
+            H ： 
+            <TextField
+              id       = "height"
+              type     = "number"
+              name     = "height"
+              size     = "small"
+              label    = "数値を入力してください。"
+              onChange = {handleChange}/>
             mm
           </Typography>
-        </Grid>
-
-        <Grid item xs={12} md={4}>
-        <Typography variant="h6" gutterBottom/>
-        </Grid>
-        <Grid item xs={12} md={1}>
-          <Typography variant="h7" gutterBottom>
-            D：
+          <br/><br/>
+          <Typography variant="h7">
+            D ：
+            <TextField
+              id       = "depth"
+              type     = "number"
+              name     = "depth"
+              size     = "small"
+              label    = "数値を入力してください。"
+              onChange = {handleChange}/>
+             mm
           </Typography>
-        </Grid>
-        <Grid item xs={12} md={6}>
-        <TextField
-          fullWidth
-          id="outlined-number"
-          type="number"
-          defaultValue="Small"
-          size="small"/>
-        </Grid>
-        <Grid item xs={12} md={1}>
-          <Typography variant="h7" gutterBottom>
-            mm
-          </Typography>
-        </Grid>
-      
-        <Grid item xs={12} md={4}>
-        <Typography variant="h6" gutterBottom/>
-        </Grid>
-        <Grid item xs={12} md={1}>
-          <Typography variant="h7" gutterBottom>
-            H：
-          </Typography>
-        </Grid>
-        <Grid item xs={12} md={6}>
-        <TextField
-          fullWidth
-          id="outlined-number"
-          type="number"
-          defaultValue="Small"
-          size="small"/>
-        </Grid>
-        <Grid item xs={12} md={1}>
-          <Typography variant="h7" gutterBottom>
-            mm
-          </Typography>
-        </Grid>
-
-        <Grid item xs={12} md={4}>
-          <Typography
-            variant="h6"
-            gutterBottom>使用した材料</Typography >
-        </Grid>
-        <Grid item xs={12} md={8}>
-          <TextField
-            id="material"
-            fullWidth
-            autoComplete="material"
-            variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Typography
-            variant="h6"
-            gutterBottom>使用した工具</Typography >
-        </Grid>
-        <Grid item xs={12} md={8}>
-          <TextField
-            id="material"
-            fullWidth
-            autoComplete="material"
-            variant="standard"
-          />
         </Grid>
       </Grid>
-        
-      <Grid item xs={12} md={4}>
-        {addStepButton}
-      </Grid>
-      <Box sx={{ 
-        mt: 1,
-        width : 250,
-        }}>
-        <TransitionGroup>
-          {stepcount.map((item) => (
-            <Collapse key={item}>
-              {renderItem({ item, ClickDelStep })}
-              <ImageUpload/>
-            </Collapse>
-          ))}
-        </TransitionGroup>
-      </Box>
+      <br/>
+
+      <Stack
+        direction={{ xs: 'column', sm: 'row' }}
+        spacing={{ xs: 1, sm: 2, md: 10 }}
+      >
+        <Item>タイトル画像<ImageUpload/></Item>
+        <Item>画像2<ImageUpload/></Item>
+        <Item>画像3<ImageUpload/></Item>
+      </Stack>
+      <br/>
+      <Stack
+        direction={{ xs: 'column', sm: 'row' }}
+        spacing={{ xs: 1, sm: 2, md: 10 }}
+      >
+        <Item>画像4<ImageUpload/></Item>
+        <Item>画像5<ImageUpload/></Item>
+        <Item>画像6<ImageUpload/></Item>
+      </Stack>
+
     </React.Fragment>
   );
 }

@@ -1,19 +1,22 @@
-import { createStore } from "redux";
-import {UPDATE_NAME,
-        UPDATE_FORM,
-        UPDATE_RECIPE,
-        UPDATE_AGE} from '../actions/memberAction';
+import { createStore }  from "redux";
+import {UPDATE_FORM,
+        UPDATE_RECIPE,} from '../actions/memberAction';
 
 const initialState = {
-  firstname  : "",
-  secondname : "",
-  address    : "",
-  password1  : "",
-  password2  : "",
-  nickname   : "",
-  location   : "",
-  recipetitle: "",
-  category   : ""
+  firstname        : "",
+  secondname       : "",
+  address          : "",
+  password1        : "",
+  password2        : "",
+  nickname         : "",
+  location         : "",
+  recipetitle      : "",
+  category         : "",
+  productionCost   : "",
+  productionPeriod : "",
+  width            : "",
+  height           : "",
+  depth            : "",
 };
 
 const reducer = (state = initialState ,action) => {

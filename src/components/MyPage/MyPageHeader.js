@@ -1,12 +1,13 @@
-import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
-import Menu from '@mui/material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
+import * as React   from 'react';
+import { styled, 
+         alpha }    from '@mui/material/styles';
+import AppBar       from '@mui/material/AppBar';
+import Box          from '@mui/material/Box';
+import Toolbar      from '@mui/material/Toolbar';
+import Typography   from '@mui/material/Typography';
+import InputBase    from '@mui/material/InputBase';
+import Menu         from '@mui/material/Menu';
+import SearchIcon   from '@mui/icons-material/Search';
 import MyPageButton from './MyPageButton';
 
 const Input = styled('input')({
@@ -121,9 +122,6 @@ const menuId = 'primary-search-account-menu';
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <MyPageButton
-            text="閲覧トップ" 
-            link="/"/>
           <Typography
             variant="h6"
             noWrap
@@ -144,11 +142,20 @@ const menuId = 'primary-search-account-menu';
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
           <MyPageButton
-              text="投稿する" 
-              link="/post"/>
+              text    = "投稿する" 
+              link    = "/post"
+              size    = "large"
+              variant = "contained"/>
+          <MyPageButton
+            text    = "閲覧トップ" 
+            link    = "/"
+            size    = "large"
+            variant = "contained"/>
             <MyPageButton
-              text="Myページ" 
-              link="/mypage"/>
+              text    = "Myページ" 
+              link    = "/mypage"
+              size    = "large"
+              variant = "contained"/>
           </Box>
         </Toolbar>
       </AppBar>

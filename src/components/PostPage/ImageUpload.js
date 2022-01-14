@@ -1,8 +1,8 @@
-import { Button } from '@mui/material';
-import React from 'react'
+import { Button }        from '@mui/material';
+import React             from 'react'
 import { useFileUpload } from "use-file-upload";
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
-import { styled } from '@mui/material/styles';
+import PhotoCamera       from '@mui/icons-material/PhotoCamera';
+import { styled }        from '@mui/material/styles';
 
 const Input = styled('input')({
   display: 'none',
@@ -18,7 +18,7 @@ const Sample = () => {
       <div>
         <img src={files?.source || defaultSrc} 
           alt="preview" 
-          width="200px" 
+          width="220px" 
           padding ="1em"/>
       </div>
 

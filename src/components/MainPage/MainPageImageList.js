@@ -1,10 +1,10 @@
-import * as React from 'react';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
+import * as React       from 'react';
+import ImageList        from '@mui/material/ImageList';
+import ImageListItem    from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
-import IconButton from '@mui/material/IconButton';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
+import IconButton       from '@mui/material/IconButton';
+import FavoriteIcon     from '@mui/icons-material/Favorite';
+import ShareIcon        from '@mui/icons-material/Share';
 
 
 export default function TitlebarImageList() {

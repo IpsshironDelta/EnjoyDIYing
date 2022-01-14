@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import app from "../firebase";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import React, { useState }            from "react";
+import app                            from "../firebase";
+import { getAuth, 
+         signInWithEmailAndPassword } from "firebase/auth";
 
 function Signin() {
     const [formData, setFormData] = useState({

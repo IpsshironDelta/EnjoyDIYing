@@ -1,16 +1,18 @@
-import React from 'react'
-import { Link,useHistory } from "react-router-dom";
-import Button from '@mui/material/Button';
+import React          from 'react'
+import { useHistory } from "react-router-dom";
+import Button         from '@mui/material/Button';
 
 export default function MyPageButton(props){
     const history = useHistory();
     return(
-        <Button variant="contained" disableElevation>
-            <p onClick={() => {
+        <Button 
+            size     = {props.size}
+            variant  = {props.variant}  
+            disableElevation
+            onClick={() => {
             history.push(props.link);
             }}>
             {props.text}
-            </p>
         </Button>
     )
 }

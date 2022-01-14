@@ -1,12 +1,13 @@
-import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
-import Menu from '@mui/material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
+import * as React     from 'react';
+import { styled, 
+         alpha }      from '@mui/material/styles';
+import AppBar         from '@mui/material/AppBar';
+import Box            from '@mui/material/Box';
+import Toolbar        from '@mui/material/Toolbar';
+import Typography     from '@mui/material/Typography';
+import InputBase      from '@mui/material/InputBase';
+import Menu           from '@mui/material/Menu';
+import SearchIcon     from '@mui/icons-material/Search';
 import PostPageButton from './PostPageButton';
 
 const Input = styled('input')({
@@ -121,16 +122,13 @@ const menuId = 'primary-search-account-menu';
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <PostPageButton
-            text="閲覧トップ" 
-            link="/"/>
           <Typography
             variant="h6"
             noWrap
             component="div"
             sx={{ display: { xs: 'none', sm: 'block' } }}
           >
-            EnjoyDIYing
+            これ、考えた人すごいね。
           </Typography>
           <Search>
             <SearchIconWrapper>
@@ -144,8 +142,15 @@ const menuId = 'primary-search-account-menu';
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <PostPageButton
-              text="Myページ" 
-              link="/mypage"/>
+              text    = "閲覧トップ" 
+              link    = "/"
+              size    = ""
+              variant = ""/>
+            <PostPageButton
+              text    = "Myページ" 
+              link    = "/mypage"
+              size    = ""
+              variant = ""/>
           </Box>
         </Toolbar>
       </AppBar>
