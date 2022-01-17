@@ -31,7 +31,8 @@ function Copyright() {
   );
 }
 
-const steps = ['DIY作品の内容を書く', '画像を選択する', '完了'];
+const steps = ['DIY作品の内容を書く',
+               '完了'];
 
 function getStepContent(step) {
   switch (step) {

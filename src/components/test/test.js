@@ -1,79 +1,57 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Collapse from '@mui/material/Collapse';
-import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { TransitionGroup } from 'react-transition-group';
+// 画像アップロードサンプルコード
+import React               from "react";
+import app                 from "../../firebase";
+import { getStorage, 
+         ref as sRef, 
+         uploadBytesResumable, 
+         getDownloadURL }  from "firebase/storage";
 
-const FRUITS = [
-  '🍏 Apple',
-  '🍌 Banana',
-  '🍍 Pineapple',
-  '🥥 Coconut',
-  '🍉 Watermelon',
-];
-
-function renderItem({ item, handleRemoveFruit }) {
-  return (
-    <ListItem
-      secondaryAction={
-        <IconButton
-          edge="end"
-          aria-label="delete"
-          title="Delete"
-          onClick={() => handleRemoveFruit(item)}
-        >
-          <DeleteIcon />
-        </IconButton>
-      }
-    >
-      <ListItemText primary={item} />
-    </ListItem>
-  );
-}
-
-export default function TransitionGroupExample() {
-  const [fruitsInBasket, setFruitsInBasket] = React.useState(FRUITS.slice(0, 3));
-
-  const handleAddFruit = () => {
-    const nextHiddenItem = FRUITS.find((i) => !fruitsInBasket.includes(i));
-    if (nextHiddenItem) {
-      setFruitsInBasket((prev) => [nextHiddenItem, ...prev]);
+function Upload() {
+    const storage = getStorage(app)
+    const handleUploadImage = (e) => {
+        e.preventDefault();
+        const file = e.target[0].files[0]
+        uploadImage(file)
     }
-  };
 
-  const handleRemoveFruit = (item) => {
-    setFruitsInBasket((prev) => [...prev.filter((i) => i !== item)]);
-  };
+    const uploadImage = (file) => {
+        if (!file) return
+        const storageRef = sRef(storage, `files/${file.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, file)
+        uploadTask.on('state_changed',
+            (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload is ' + progress + '% done');
+                switch (snapshot.state) {
+                    case 'paused':
+                        console.log('Upload is paused');
+                        break;
+                    case 'running':
+                        console.log('Upload is running');
+                        break;
+                    default:
+                        break
+                }
+            },
+            (error) => {
+                console.log(error)
+            },
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    console.log('File available at', downloadURL);
+                });
+            }
+        );
+    }
 
-  const addFruitButton = (
-    <Button
-      variant="contained"
-      disabled={fruitsInBasket.length >= FRUITS.length}
-      onClick={handleAddFruit}
-    >
-      Add fruit to basket
-    </Button>
-  );
-
-  return (
-    <div>
-      {addFruitButton}
-      <Box sx={{ mt: 1 }}>
-        <List>
-          <TransitionGroup>
-            {fruitsInBasket.map((item) => (
-              <Collapse key={item}>
-                {renderItem({ item, handleRemoveFruit })}
-              </Collapse>
-            ))}
-          </TransitionGroup>
-        </List>
-      </Box>
-    </div>
-  );
+    return (
+        <div>
+            <form onSubmit={handleUploadImage}>
+                <input type={'file'} className={'input'}/>
+                <button type={'submit'}>Upload</button>
+            </form>
+        </div>
+    )
 }
+
+export default Upload;
