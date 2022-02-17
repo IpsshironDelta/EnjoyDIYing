@@ -27,9 +27,7 @@ function HowToMakeForm() {
     category         : store.getState().category,
     productionCost   : '制作費用',
     productionPeriod : '制作期間',
-    width            : '横幅',
-    height           : '高さ',
-    depth            : '奥行',
+    memo             : 'メモ',
   }]);
 
   const handleChange = (e) =>{
@@ -40,7 +38,6 @@ function HowToMakeForm() {
     setdetailinfos(data);
     store.dispatch(updateRecipe(data))
     console.log("======以下handleChange内======")
-    console.log("e => ",name);
     console.log("value => ",value);
     console.log("handleChangeのdata => ",data);
     console.log("==============================")
@@ -103,7 +100,10 @@ function HowToMakeForm() {
               label    = "入力してください。"
               name     = "productionCost"
               size     = "small"
-              onChange={handleChange}/>
+              defaultValue={store.getState().productionCost}
+              InputProps={{
+                readOnly: true,
+              }}/>
             円
           </Typography>
           <br/><br/>
@@ -114,55 +114,31 @@ function HowToMakeForm() {
             約 ： 
             <TextField
               id       = "productionPeriod"
-              type     = "number"
               name     = "productionPeriod"
               size     = "small"
               label    = "入力してください。"
-              onChange ={handleChange}/>
-              <PPSelectBox
-               onChange={handleChange}/>
+              defaultValue={store.getState().productionPeriod}
+              InputProps={{
+                readOnly: true,
+              }}/>
           </Typography>
         </Grid>
 
         <Grid item xs={12} md={6}>
           <Typography variant="h6" gutterBottom>
-            完成サイズ
+            作品メモ
           </Typography>
-          <Typography variant="h7">
-            W ： 
-            <TextField
-              id       = "width"
-              type     = "number"
-              name     = "width"
-              size     = "small"
-              label    = "数値を入力してください。"
-              onChange = {handleChange}/>
-            mm
-          </Typography>
-          <br/><br/>
-          <Typography variant="h7">
-            H ： 
-            <TextField
-              id       = "height"
-              type     = "number"
-              name     = "height"
-              size     = "small"
-              label    = "数値を入力してください。"
-              onChange = {handleChange}/>
-            mm
-          </Typography>
-          <br/><br/>
-          <Typography variant="h7">
-            D ：
-            <TextField
-              id       = "depth"
-              type     = "number"
-              name     = "depth"
-              size     = "small"
-              label    = "数値を入力してください。"
-              onChange = {handleChange}/>
-             mm
-          </Typography>
+          <TextField
+            fullWidth
+              id       = "memo"
+              label    = "入力してください。"
+              name     = "memo"
+              multiline
+              rows={6}
+              defaultValue={store.getState().memo}
+              InputProps={{
+                readOnly: true,
+              }}/>
         </Grid>
       </Grid>
       <br/>

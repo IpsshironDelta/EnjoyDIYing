@@ -17,6 +17,12 @@ import Review            from './Review';
 import PostPageHeader    from './PostPageHeader';
 import PostPageButton    from './PostPageButton';
 import { useHistory}     from 'react-router';
+import store             from '../../store/index';
+import app               from "../../firebase";
+import {getStorage,
+        ref as sRef, 
+        uploadBytesResumable, 
+        getDownloadURL } from "firebase/storage";
 
 function Copyright() {
   return (
@@ -32,6 +38,7 @@ function Copyright() {
 }
 
 const steps = ['DIY作品の内容を書く',
+//               'TEST',
                '完了'];
 
 function getStepContent(step) {
@@ -51,15 +58,55 @@ const theme = createTheme();
 
 export default function Post() {
   const [activeStep, setActiveStep] = React.useState(0);
+  const storage = getStorage(app)
 
   const handleNext = () => {
-    console.log("before => ",activeStep)
     setActiveStep(activeStep + 1);
-    console.log("after => ",activeStep)
-    if(activeStep===1){
-      console.log("完了です。");
+    // 確定ボタンをクリックしたタイミングで画像をアップロードする。
+    if(activeStep===0){
+      console.log("ファイルをアップロードします。")
+      // 空の配列を削除
+      var newStructFiles = store.getState().structfiles.filter(Boolean);
+
+      // ファイルをアップロード
+      newStructFiles.forEach(element => {
+        uploadImage(element)
+      });
+      console.log("すべての画像のアップロードが完了しました。")
     }
   };
+
+  const uploadImage = (file) => {
+    if (!file) return
+    const storageRef = sRef(storage, `files/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file)
+    uploadTask.on('state_changed',(snapshot) => {
+      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      console.log('Upload is ' + progress + '% done');
+      switch (snapshot.state) {
+        case 'paused':
+          console.log('Upload is paused');
+          break;
+        case 'running':
+          console.log('Upload is running');
+          break;
+        default:
+          break
+        }
+      },
+        (error) => {
+          console.log(error)
+          console.log("アップロードできませんでした。")
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log('File available at', downloadURL);
+            console.log(file.name,"　の画像アップロード完了")
+        });
+      }
+    );
+  }
+
 
   const handleBack = () => {
     setActiveStep(activeStep - 1);
@@ -89,7 +136,7 @@ export default function Post() {
               ))}
             </Stepper>
             <React.Fragment>
-              {activeStep === steps.length-1 ? (
+              {activeStep === steps.length - 1 ? (
                 <React.Fragment>
                   <Typography variant="h5" gutterBottom>
                     おめでとうございます！<br></br>投稿が完了しました!
@@ -144,7 +191,7 @@ export default function Post() {
                       onClick={handleNext}
                       sx={{ mt: 3, ml: 1 }}
                     >
-                      {activeStep === steps.length - 2 ? '確定する' : '次へ'}
+                      {activeStep === steps.length - 1 ? '確定する' : '次へ'}
                     </Button>
                   </Box>
                 </React.Fragment>

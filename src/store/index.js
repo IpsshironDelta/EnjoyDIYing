@@ -14,9 +14,7 @@ const initialState = {
   category         : "",
   productionCost   : "",
   productionPeriod : "",
-  width            : "",
-  height           : "",
-  depth            : "",
+  memo             : "",
 };
 
 const reducer = (state = initialState ,action) => {

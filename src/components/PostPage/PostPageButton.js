@@ -9,7 +9,9 @@ export default function PostPageButton(props){
             variant={props.variant}
             size = {props.size}
             onClick={() => {
-            history.push(props.link)}}>
+            history.push(props.link)
+            console.log("ボタンのクリックイベント")
+            }}>
             {props.text}
         </Button>
         )

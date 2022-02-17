@@ -20,6 +20,7 @@ import app                                from "../../firebase";
 import { getAuth, 
          createUserWithEmailAndPassword } from "firebase/auth";
 import store                              from '../../store/index';
+import URdialogs                          from './URdialogs'
 
 function Copyright() {
   return (
@@ -55,28 +56,42 @@ export default function UserRegistration() {
   const handleNext = () => {
     setActiveStep(activeStep + 1);
     console.log("activeStep => ",activeStep)
-    if(activeStep===1){
-      console.log("Firebaseに登録")
-      const auth = getAuth(app);
-      createUserWithEmailAndPassword(auth, 
-        store.getState().address, 
-        store.getState().password1)
-      .then((userCredential) => {
-        // Signed in 
-        console.log("userCredential => ",userCredential);
-        const user = userCredential.user;
-        console.log("Firebaseに登録されました");
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log("error        => ",error);
-        console.log("errorCode    => ",errorCode);
-        console.log("errorMessage => ",errorMessage);
-        console.log("登録失敗しました。");
-      });
+    switch (activeStep){
+      case 0:
+        console.log("確認すること")
+        if(store.getState().nickname === ""){
+          console.log("ニックネーム未入力")
+        }
+        if(store.getState().location === ""){
+          console.log("所在地の未入力")
+        }
+        if(store.getState().password1 !== store.getState().password2){
+          console.log("パスワードの入力ミス")
+          console.log("パスワードは英数字6文字以上")
+        }
+        break  
+      case 1:
+        console.log("Firebaseに登録")
+        const auth = getAuth(app);
+        createUserWithEmailAndPassword(auth, 
+          store.getState().address, 
+          store.getState().password1)
+        .then((userCredential) => {
+          // Signed in 
+          console.log("userCredential => ",userCredential);
+          const user = userCredential.user;
+          console.log("Firebaseに登録されました");
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log("error        => ",error);
+          console.log("errorCode    => ",errorCode);
+          console.log("errorMessage => ",errorMessage);
+          console.log("登録失敗しました。");
+        });
+      }
     }
-  };
 
   const handleBack = () => {
     setActiveStep(activeStep - 1);

@@ -19,6 +19,11 @@ import { useHistory,
 import app                            from "../firebase";
 import { getAuth, 
          signInWithEmailAndPassword } from "firebase/auth";
+import Alert                          from '@mui/material/Alert';
+import IconButton                     from '@mui/material/IconButton';
+import Collapse                       from '@mui/material/Collapse';
+import CloseIcon                      from '@mui/icons-material/Close';
+
 
 function Copyright(props) {
     return (
@@ -36,6 +41,8 @@ function Copyright(props) {
 const theme = createTheme();
 
 function SignInSide() {
+  // アラート表示
+  const [open, setOpen] = React.useState(false);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -48,9 +55,11 @@ const handleSignIn = (event) => {
         console.log(v);
         event.preventDefault();
         history.push("/");
+        console.log("ログイン成功")
     }).catch((e) => {
-        console.log(e);
-        alert("認証失敗");
+        console.log(e)
+        console.log("ログイン失敗")
+        setOpen(true)
     })
 }
 
@@ -60,7 +69,28 @@ const handleChange = (e) => {
 }
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>      
+      {/* ログイン失敗時のエラーアラート表示(start) */}
+      <Collapse in={open}>
+        <Alert
+          severity="error"
+          action={
+            <IconButton
+              aria-label="close"
+              size="small"
+              onClick={() => {
+                setOpen(false);
+              }}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+          sx={{ mb: 2 }}>
+            ログインに失敗しました。
+        </Alert>
+      </Collapse>
+      {/* ログイン失敗時のエラーアラート表示(end) */}
+
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid
@@ -91,7 +121,7 @@ const handleChange = (e) => {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-            EnjoyDIYingにログイン
+            これ、考えた人すごいね。にログイン
             </Typography>
             {/* <Box component="form" noValidate onSubmit={handleSignIn} sx={{ mt: 1 }}> */}
               <TextField
@@ -131,6 +161,7 @@ const handleChange = (e) => {
               >
                   ログイン
               </Button>
+
               <Grid container>
                 <Grid item xs>
                   <Link href="#" variant="body2">

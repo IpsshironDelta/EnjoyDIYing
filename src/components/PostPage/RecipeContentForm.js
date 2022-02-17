@@ -13,12 +13,11 @@ import { collection,
         getFirestore } from "firebase/firestore";
 import store           from '../../store/index';
 import {updateRecipe}  from '../../actions/memberAction';
-import {Select}        from '@mui/material';
+import {Button, Select}        from '@mui/material';
 import ImageUpload     from './ImageUpload';
 import Paper           from '@mui/material/Paper';
 import Stack           from '@mui/material/Stack';
 import { styled }      from '@mui/material/styles';
-import PPSelectBox     from './PPSelectBox';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -29,13 +28,11 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function AddressForm() {
   const [categorys, setcategorys] = useState([{
-    recipetitle  : '作品タイトル',
-    category     : 'カテゴリー',
+    recipetitle      : '作品タイトル',
+    category         : 'カテゴリー',
     productionCost   : '制作費用',
     productionPeriod : '制作期間',
-    width            : '横幅',
-    height           : '高さ',
-    depth            : '奥行',
+    memo             : '作品メモ',
     }]);
   const array = [];
   const db = getFirestore(app);
@@ -48,12 +45,11 @@ export default function AddressForm() {
     setcategorys(data);
     store.dispatch(updateRecipe(data))
     console.log("======以下handleChange内======")
-    console.log("e => ",name);
     console.log("value => ",value);
     console.log("handleChangeのdata => ",data);
     console.log("==============================")
   };
-  
+
   useEffect(() => {
     getDocs(collection(db, "category")).then((querySnapshot)=>{
       querySnapshot.forEach((doc) => {
@@ -63,7 +59,8 @@ export default function AddressForm() {
     }).then(()=>{
       setcategorys([...array])
     })},[]);
-  return (
+
+    return (
     <React.Fragment>
       <Typography variant="h5" gutterBottom>
           DIY作品の内容を書く
@@ -75,6 +72,7 @@ export default function AddressForm() {
           </Typography>
         <TextField
           fullWidth
+          id    = "recipetitle"
           label = "入力してください。"
           name  = "recipetitle"
           type  = "recipetitle"
@@ -128,78 +126,49 @@ export default function AddressForm() {
             約 ： 
             <TextField
               id       = "productionPeriod"
-              type     = "number"
               name     = "productionPeriod"
               size     = "small"
               label    = "入力してください。"
               onChange ={handleChange}/>
-              <PPSelectBox
-               onChange={handleChange}/>
           </Typography>
         </Grid>
 
         <Grid item xs={12} md={6}>
           <Typography variant="h6" gutterBottom>
-            完成サイズ
+            作品メモ
           </Typography>
-          <Typography variant="h7">
-            W ： 
-            <TextField
-              id       = "width"
-              type     = "number"
-              name     = "width"
-              size     = "small"
-              label    = "数値を入力してください。"
-              onChange = {handleChange}/>
-            mm
-          </Typography>
-          <br/><br/>
-          <Typography variant="h7">
-            H ： 
-            <TextField
-              id       = "height"
-              type     = "number"
-              name     = "height"
-              size     = "small"
-              label    = "数値を入力してください。"
-              onChange = {handleChange}/>
-            mm
-          </Typography>
-          <br/><br/>
-          <Typography variant="h7">
-            D ：
-            <TextField
-              id       = "depth"
-              type     = "number"
-              name     = "depth"
-              size     = "small"
-              label    = "数値を入力してください。"
-              onChange = {handleChange}/>
-             mm
-          </Typography>
+          <TextField
+            fullWidth
+            id    = "memo"
+            label = "メモを入力してください。"
+            name  = "memo"
+            type  = "memo"
+            multiline
+            rows={6}
+            onChange={handleChange}
+          />
         </Grid>
       <br/>
 
       <Stack
         direction={{ xs: 'column', sm: 'row' }}
-        spacing={{ xs: 1, sm: 2, md: 10 }}
+        spacing={{ xs: 1, sm: 2, md: 8 }}
       >
-        <Item>タイトル画像<ImageUpload/></Item>
-        <Item>画像2<ImageUpload/></Item>
-        <Item>画像3<ImageUpload/></Item>
+        <Item>タイトル画像<ImageUpload id="0"/></Item>
+        <Item>画像1<ImageUpload id="1"/></Item>
+        <Item>画像2<ImageUpload id="2"/></Item>
+        <Item>画像3<ImageUpload id="3"/></Item>
       </Stack>
       <br/>
       <Stack
         direction={{ xs: 'column', sm: 'row' }}
-        spacing={{ xs: 1, sm: 2, md: 10 }}
+        spacing={{ xs: 1, sm: 2, md: 8 }}
       >
-        <Item>画像4<ImageUpload/></Item>
-        <Item>画像5<ImageUpload/></Item>
-        <Item>画像6<ImageUpload/></Item>
+        <Item>画像4<ImageUpload id="4"/></Item>
+        <Item>画像5<ImageUpload id="5"/></Item>
+        <Item>画像6<ImageUpload id="6"/></Item>
+        <Item>画像7<ImageUpload id="7"/></Item>
       </Stack>
-
-
-
       </Grid>
     </React.Fragment>
   );
