@@ -38,7 +38,6 @@ function Copyright() {
 }
 
 const steps = ['DIY作品の内容を書く',
-//               'TEST',
                '完了'];
 
 function getStepContent(step) {
@@ -101,7 +100,7 @@ export default function Post() {
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             console.log('File available at', downloadURL);
-            console.log(file.name,"　の画像アップロード完了")
+            console.log(file.name," の画像アップロード完了")
         });
       }
     );
@@ -136,7 +135,7 @@ export default function Post() {
               ))}
             </Stepper>
             <React.Fragment>
-              {activeStep === steps.length - 1 ? (
+              {activeStep === steps.length -1 ? (
                 <React.Fragment>
                   <Typography variant="h5" gutterBottom>
                     おめでとうございます！<br></br>投稿が完了しました!

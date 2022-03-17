@@ -7,14 +7,12 @@ import { Select }      from '@mui/material';
 import { withRouter }  from 'react-router-dom';
 import FormHelperText  from '@mui/material/FormHelperText';
 
-function URSelectBox(props) {
+function MyPageEditSelectBox(props) {
 
   return (
     <Box sx={{ minWidth: 120 }}>
       <FormControl fullWidth error={props.error}>
-        <InputLabel id="location-label">
-          選択してください
-        </InputLabel>
+        <InputLabel id="location-label"/>
         <Select
           labelId  = {props.labelId}
           id       = {props.id}
@@ -77,4 +75,4 @@ function URSelectBox(props) {
   );
 }
 
-export default withRouter(URSelectBox);
+export default withRouter(MyPageEditSelectBox);

@@ -11,7 +11,6 @@ import Stack           from '@mui/material/Stack';
 import { styled }      from '@mui/material/styles';
 import Box             from '@mui/material/Box';
 import {updateRecipe}  from '../../actions/memberAction';
-import PPSelectBox     from './PPSelectBox';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,

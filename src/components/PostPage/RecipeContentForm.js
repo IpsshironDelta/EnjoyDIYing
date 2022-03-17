@@ -13,7 +13,7 @@ import { collection,
         getFirestore } from "firebase/firestore";
 import store           from '../../store/index';
 import {updateRecipe}  from '../../actions/memberAction';
-import {Button, Select}        from '@mui/material';
+import {Select}        from '@mui/material';
 import ImageUpload     from './ImageUpload';
 import Paper           from '@mui/material/Paper';
 import Stack           from '@mui/material/Stack';
@@ -28,11 +28,11 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function AddressForm() {
   const [categorys, setcategorys] = useState([{
-    recipetitle      : '作品タイトル',
-    category         : 'カテゴリー',
-    productionCost   : '制作費用',
-    productionPeriod : '制作期間',
-    memo             : '作品メモ',
+    recipetitle      : '',
+    category         : '',
+    productionCost   : '',
+    productionPeriod : '',
+    memo             : '',
     }]);
   const array = [];
   const db = getFirestore(app);
@@ -46,6 +46,7 @@ export default function AddressForm() {
     store.dispatch(updateRecipe(data))
     console.log("======以下handleChange内======")
     console.log("value => ",value);
+    console.log("name => ",name);
     console.log("handleChangeのdata => ",data);
     console.log("==============================")
   };
@@ -96,7 +97,7 @@ export default function AddressForm() {
               value={categorys.category}
               onChange={handleChange}>
                 {categorys.map((name,i) => (
-                <MenuItem key={i}>
+                <MenuItem key={i} value={name.detail}>
                   {name.category}{name.detail}
                 </MenuItem>
                 ))}

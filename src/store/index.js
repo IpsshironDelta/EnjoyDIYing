@@ -3,18 +3,21 @@ import {UPDATE_FORM,
         UPDATE_RECIPE,} from '../actions/memberAction';
 
 const initialState = {
-  firstname        : "",
-  secondname       : "",
   address          : "",
+  addressErrorMS   : "",
   password1        : "",
   password2        : "",
-  nickname         : "",
+  passwordErrorMS  : "",
+  displayName      : "",
+  nicknameErrorMS  : "",
   location         : "",
+  locationErrorMS  : "",
   recipetitle      : "",
   category         : "",
   productionCost   : "",
   productionPeriod : "",
   memo             : "",
+  photoURL         : "",
 };
 
 const reducer = (state = initialState ,action) => {
@@ -23,6 +26,12 @@ const reducer = (state = initialState ,action) => {
         //     let nameState = {...state};
         //     nameState.name = action.payload;
         //     return nameState;
+
+        // case UPDATE_AGE:
+        //     let ageState = {...state};
+        //     ageState.age = action.payload;
+        //     return ageState;
+
         case UPDATE_FORM:
             let formState = {...state};
             formState = action.payload;
@@ -31,10 +40,6 @@ const reducer = (state = initialState ,action) => {
             let recipeState = {...state};
             recipeState = action.payload;
             return recipeState;
-        // case UPDATE_AGE:
-        //     let ageState = {...state};
-        //     ageState.age = action.payload;
-        //     return ageState;
         default:
             return state;
     }

@@ -1,187 +1,346 @@
-import * as React                         from 'react';
-import CssBaseline                        from '@mui/material/CssBaseline';
-import AppBar                             from '@mui/material/AppBar';
-import Box                                from '@mui/material/Box';
-import Container                          from '@mui/material/Container';
-import Toolbar                            from '@mui/material/Toolbar';
-import Paper                              from '@mui/material/Paper';
-import Stepper                            from '@mui/material/Stepper';
-import Step                               from '@mui/material/Step';
-import StepLabel                          from '@mui/material/StepLabel';
-import Button                             from '@mui/material/Button';
-import Link                               from '@mui/material/Link';
-import Typography                         from '@mui/material/Typography';
-import { createTheme, 
-         ThemeProvider }                  from '@mui/material/styles';
-import MemberProfile                      from './MemberProfile';
-import MemberReview                       from './MemberReview';
-import { useHistory}                      from 'react-router';
-import app                                from "../../firebase";
-import { getAuth, 
-         createUserWithEmailAndPassword } from "firebase/auth";
-import store                              from '../../store/index';
-import URdialogs                          from './URdialogs'
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
-const steps = ['ユーザー登録', '内容確認'];
-
-function getStepContent(step) {
-  switch (step) {
-    case 0:
-      return <MemberProfile />;
-    case 1:
-      return <MemberReview />;
-    default:
-      throw new Error('Unknown step');
-  }
-}
+import React,
+     { useState  }       from 'react';
+import { useHistory ,
+      withRouter }       from 'react-router';
+import { createTheme,
+      ThemeProvider }    from '@mui/material/styles';
+import CssBaseline       from '@mui/material/CssBaseline';
+import Typography        from '@mui/material/Typography';
+import Container         from '@mui/material/Container';
+import FormControl       from '@mui/material/FormControl';
+import Grid              from '@mui/material/Grid';
+import Avatar            from '@mui/material/Avatar';
+import URHeader          from './URHeader';
+import URFooter          from './URFooter';
+import {updateForm}      from '../../actions/memberAction';
+import { useFileUpload } from "use-file-upload";
+import store             from '../../store/index';
+import URTextField       from './URTextField';
+import URSelectBox       from './URSelectBox';
+import Button            from '@mui/material/Button';
 
 const theme = createTheme();
 
-export default function UserRegistration() {
-  const [activeStep, setActiveStep] = React.useState(0);
+function UserRegistration(props) {
 
-  const handleNext = () => {
-    setActiveStep(activeStep + 1);
-    console.log("activeStep => ",activeStep)
-    switch (activeStep){
-      case 0:
-        console.log("確認すること")
-        if(store.getState().nickname === ""){
-          console.log("ニックネーム未入力")
-        }
-        if(store.getState().location === ""){
-          console.log("所在地の未入力")
-        }
-        if(store.getState().password1 !== store.getState().password2){
-          console.log("パスワードの入力ミス")
-          console.log("パスワードは英数字6文字以上")
-        }
-        break  
-      case 1:
-        console.log("Firebaseに登録")
-        const auth = getAuth(app);
-        createUserWithEmailAndPassword(auth, 
-          store.getState().address, 
-          store.getState().password1)
-        .then((userCredential) => {
-          // Signed in 
-          console.log("userCredential => ",userCredential);
-          const user = userCredential.user;
-          console.log("Firebaseに登録されました");
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log("error        => ",error);
-          console.log("errorCode    => ",errorCode);
-          console.log("errorMessage => ",errorMessage);
-          console.log("登録失敗しました。");
-        });
-      }
+  const [form , setForm] = useState({ 
+    displayName      : store.getState().displayName     || '',
+    location         : store.getState().location        || '',
+    address          : store.getState().address         || '',
+    password1        : store.getState().password1       || '',
+    password2        : store.getState().password2       || '',
+    nicknameErrorMS  : store.getState().nicknameErrorMS,
+    locationErrorMS  : store.getState().locationErrorMS,
+    addressErrorMS   : store.getState().addressErrorMS ,
+    passwordErrorMS  : store.getState().passwordErrorMS,
+    photoURL         : store.getState().photoURL   ,
+  });
+
+  // ニックネームの入力チェック用変数
+  const [nicknameerr , setNickNameErr] = useState('')
+
+  // 所在地の入力チェック用変数
+  const [locationerr , setLocationErr] = useState('')
+ 
+  // メールアドレスの入力チェック用変数
+  const [addresserr , setAddressErr] = useState('')
+ 
+  // パスワードの入力チェック用変数
+  const [passworderr , setPasswordErr] = useState('')
+
+  // 画像の初期値
+  const defaultSrc =
+  "https://firebasestorage.googleapis.com/v0/b/myfirebasesample-c6d99.appspot.com/o/AddImage.png?alt=media&token=f9139d7f-d4d3-4be0-ae3c-2717f4ddeb45";
+  
+  // ファイルアップロード用変数
+  const [files, selectFiles] = useFileUpload();
+  const pushfiles = (source) => {
+    console.log("pushfilesを通過")
+
+    const name = "photoURL"
+    const fileURL = source
+    form[name] = fileURL
+    const data = form
+    setForm({
+      ...form,
+      name : source,
+    })
+    store.dispatch(updateForm(data))
+    console.log(form)
+  }
+ 
+  // リンク先に遷移
+  const history = useHistory();
+
+  // 登録ボタンクリック時のハンドル
+  const clickChange = (e) => {
+    var name = ""
+    var value = ""
+    var data = form
+    // ニックネームの入力チェック
+    if(store.getState().displayName === "")
+    {
+      name = "nicknameErrorMS"
+      value = "ニックネームを入力してください"
+      form[name] = value
+      data = form
+      setNickNameErr('error')
+      setForm({
+        ...form,
+        name : value,
+      });
+    }else{
+      name = "nicknameErrorMS"
+      value = ""
+      form[name] = value
+      data = form
+      setNickNameErr('')
+      setForm({
+        ...form,
+        name : value,
+      });
     }
 
-  const handleBack = () => {
-    setActiveStep(activeStep - 1);
-    history.push("/userregistration");
+    // 所在地の入力チェック
+    if(store.getState().location === "")
+    {
+      name = "locationErrorMS"
+      value = "所在地を入力してください"
+      form[name] = value
+      data = form
+      setLocationErr('error')
+      setForm({
+        ...form,
+        name : value,
+      });
+    }else{
+      name = "locationErrorMS"
+      value = ""
+      form[name] = value
+      data = form
+      setLocationErr('')
+      setForm({
+        ...form,
+        name : value,
+      });
+    }
+
+    // メールアドレスの入力チェック
+    if(store.getState().address === "")
+    {
+      name = "addressErrorMS"
+      value = "メールアドレスを入力してください"
+      form[name] = value
+      data = form
+      setAddressErr('error')
+      setForm({
+        ...form,
+        name : value,
+      });
+    }else{
+      name = "addressErrorMS"
+      value = ""
+      form[name] = value
+      data = form
+      setAddressErr('')
+      setForm({
+        ...form,
+        name : value,
+      });
+    }
+
+    // パスワードの入力チェック
+    if(store.getState().password1 === "")
+    {
+      name = "passwordErrorMS"
+      value = "パスワードを入力してください"
+      form[name] = value
+      data = form
+      setPasswordErr('error')
+      setForm({
+        ...form,
+        name : value,
+      });
+    }else if(store.getState().password1 != store.getState().password2){
+      name = "passwordErrorMS"
+      value = "入力したパスワードが一致していません"
+      form[name] = value
+      data = form
+      setPasswordErr('error')
+      setForm({
+        ...form,
+        name : value,
+      });
+
+    }else if(store.getState().password1.length < 6 ){
+      name = "passwordErrorMS"
+      value = "パスワードは6文字以上入力してください"
+      form[name] = value
+      data = form
+      setPasswordErr('error')
+      setForm({
+        ...form,
+        name : value,
+      });
+    }else{
+      name = "passwordErrorMS"
+      value = ""
+      form[name] = value
+      data = form
+      setPasswordErr('')
+      setForm({
+        ...form,
+        name : value,
+      });
+    }
+    store.dispatch(updateForm(data))
+    console.log(data)
+
+    // 入力内容のチェック
+    if (store.getState().nicknameErrorMS == "" &&
+        store.getState().locationErrorMS == "" &&
+        store.getState().addressErrorMS  == "" &&
+        store.getState().passwordErrorMS == "" )
+    {
+      console.log("OK")
+      history.push("/userregistration/Review")
+    }else{
+      console.log("NG")
+    }
+  }
+
+  const handleChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    form[name] = value;
+    const data = form;
+    setForm({
+      ...form,
+      [e.target.name] : e.target.value,
+  });
+  console.log("======以下handleChange内======")
+  console.log("name  => ",name);
+  console.log("value => ",value);
+  console.log("form  => ",form);
+  console.log("==============================")
+  store.dispatch(updateForm(data))
   };
-  const history = useHistory();
-  const toppage = (event) =>{
-    history.push("/");
-  };
-  const mypage = (event) =>{
-    history.push("/mypage");
-  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AppBar
-        position="absolute"
-        color="default"
-        elevation={0}
-        sx={{
-          position: 'relative',
-          borderBottom: (t) => `1px solid ${t.palette.divider}`,
-        }}
-      >
-        <Toolbar>
-          <Typography variant="h6" color="inherit" noWrap>
-            無料ユーザー登録をする
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
-        <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-          <Typography component="h1" variant="h4" align="center">
-            ユーザー登録
-          </Typography>
-          <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
-            {steps.map((label) => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-          <React.Fragment>
-            {activeStep === steps.length ? (
-              <React.Fragment>
-
-                <Typography variant="h5" gutterBottom>
-                  ようこそ！{store.getState().nickname}さん
-                </Typography>
-                <Typography variant="subtitle1">
-                  ユーザー登録が完了しました。
-                  あなたの素晴らしい作品をたくさん投稿して仲間とたくさんアイディアを共有して
-                  DIYを楽しみましょう！
-                </Typography>
-                <Button onClick={toppage} sx={{ mt: 3, ml: 1 }}>
-                      閲覧ページTOP
-                </Button>
-                <Button onClick={mypage} sx={{ mt: 3, ml: 1 }}>
-                      Myページへ
-                </Button>
-              </React.Fragment>
-            ) : (
-              <React.Fragment>
-                {getStepContent(activeStep)}
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  {activeStep === 0 && (
-                    <Button onClick={toppage} sx={{ mt: 3, ml: 1 }}>
-                          閲覧ページTOPに戻る
-                    </Button>
-                  )}
-                  {activeStep !== 0 && (
-                    <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
-                      戻る
-                    </Button>
-                  )}
-
-                  <Button
-                    variant="contained"
-                    onClick={handleNext}
-                    sx={{ mt: 3, ml: 1 }}
-                  >
-                    {activeStep === steps.length - 1 ? '確定する' : '次へ'}
-                  </Button>
-                </Box>
-              </React.Fragment>
-            )}
-          </React.Fragment>
-        </Paper>
-        <Copyright />
+      <Container maxWidth>
+        <URHeader/>
       </Container>
+        <Container maxWidth="sm">
+          <br/>
+          <Typography variant="h4" gutterBottom align='center'>
+            ユーザー情報
+          </Typography>
+          <Container align='center'>
+            <Avatar
+              alt="preview"
+              src={files?.source || store.getState().photoURL}
+              padding ="1em"
+              sx={{ width: 150, height: 150 }}/>
+            <br/>
+            <Button
+              variant="outlined"
+              onClick={() =>
+                  selectFiles({ accept: "image/*" }, ({ name, size, source, file }) => {
+                  console.log("Files Selected", { name, size, source, file })
+                  pushfiles(source)
+              })}>
+              プロフィール画像選択
+            </Button>
+            <br/><br/>
+          </Container>
+
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+            <Typography variant="h7">
+              ニックネーム(公開されます)
+            </Typography>
+              <URTextField
+                label      = "入力してください"
+                name       = "displayName"
+                type       = "displayName"
+                error      = {nicknameerr}
+                helperText = {store.getState().nicknameErrorMS}
+                value      = {store.getState().displayName}
+                onChange   = {handleChange}/>
+            </Grid>
+            <Grid item xs={12}>
+              <FormControl fullWidth >
+                <Typography variant="h7">
+                  所在地(公開されます)
+                </Typography>
+                <URSelectBox
+                  labelId        = "location"
+                  id             = "location"
+                  name           = "location"
+                  type           = "location"
+                  error          = {locationerr}
+                  FormHelperText = {store.getState().locationErrorMS}
+                  value          = {store.getState().location}
+                  onChange       = {handleChange}/>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="h7">
+                メールアドレス(公開されません)
+              </Typography>
+              <URTextField
+                label      = "入力してください"
+                name       = "address"
+                type       = "address"
+                error      = {addresserr}
+                helperText = {store.getState().addressErrorMS}
+                value      = {store.getState().address}
+                onChange   = {handleChange}/>
+            </Grid>
+            <Grid item xs={12}>
+            <Typography variant="h7">
+              パスワード(公開されません)
+            </Typography>
+              <URTextField
+                label      = "入力してください"
+                name       = "password1"
+                type       = "password1"
+                error      = {passworderr}
+                helperText = {store.getState().passwordErrorMS}
+                value      = {store.getState().password1}
+                onChange   = {handleChange}
+                />
+            </Grid>
+            <Grid item xs={12}>
+            <Typography variant="h7">
+              パスワード(確認用)
+            </Typography>
+              <URTextField
+                label      = "入力してください" 
+                name       = "password2"
+                type       = "password2"
+                error      = {passworderr}
+                helperText = "パスワードを再度入力してください。"
+                value      = {store.getState().password2}
+                onChange   = {handleChange}/>
+            </Grid>
+          </Grid>
+          <Typography align='center'>
+            <Button
+              id      = "inputcheck"
+              variant = "contained"
+              sx={{ mt: 3, ml: 1 }}
+              onClick= {clickChange}>この内容で登録する
+            </Button>
+          </Typography>
+        </Container>
+      {/* Footer */}
+      <URFooter/>
+      {/* End footer */}
     </ThemeProvider>
   );
 }
+
+export default withRouter(UserRegistration);

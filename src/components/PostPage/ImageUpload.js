@@ -4,11 +4,8 @@ import { useFileUpload }  from "use-file-upload";
 import PhotoCamera        from '@mui/icons-material/PhotoCamera';
 import { styled }         from '@mui/material/styles';
 import app                from "../../firebase";
-import { getStorage, 
-         ref as sRef, 
-         uploadBytesResumable, 
-         getDownloadURL } from "firebase/storage";
-import store from '../../store';
+import { getStorage }     from "firebase/storage";
+import store              from '../../store';
 
 const Input = styled('input')({
   display: 'none',
@@ -53,13 +50,10 @@ const ImageUpload = (props) => {
             onClick={() =>
                 selectFiles({ accept: "image/*" }, ({ name, size, source, file }) => {
                 console.log("Files Selected", { name, size, source, file })
-                pushfiles(file)
-            })
-          }
-          endIcon={<PhotoCamera />}
-        >
-          画像を追加する
-      </Button>
+                pushfiles(file)})}
+            endIcon={<PhotoCamera />}>
+            画像を追加する
+        </Button>
     </div>
   );
 }

@@ -56,6 +56,10 @@ const handleSignIn = (event) => {
         event.preventDefault();
         history.push("/");
         console.log("ログイン成功")
+        console.log(auth.currentUser.email)
+        console.log(auth.currentUser.password)
+        console.log(auth.currentUser.displayName)
+        console.log(auth.currentUser.photoURL)
     }).catch((e) => {
         console.log(e)
         console.log("ログイン失敗")

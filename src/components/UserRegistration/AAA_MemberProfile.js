@@ -2,24 +2,25 @@ import React,
      { useState  }     from 'react';
 import Grid            from '@mui/material/Grid';
 import Typography      from '@mui/material/Typography';
-import IconButton      from '@mui/material/IconButton';
-import InputAdornment  from '@mui/material/InputAdornment';
 import { withRouter  } from "react-router-dom";
 import store           from '../../store/index';
 import {updateForm}    from '../../actions/memberAction';
 import FormControl     from '@mui/material/FormControl';
 import URTextField     from './URTextField';
 import URSelectBox     from './URSelectBox';
-import Visibility      from '@mui/icons-material/Visibility';
-import VisibilityOff  from '@mui/icons-material/VisibilityOff';
 
 function MemberProfile() {
   const [form , setForm] = useState({ 
-     address     : store.getState().address,
-     password1   : store.getState().password1,
-     password2   : store.getState().password2,
-     nickname    : store.getState().nickname,
-     location    : store.getState().location
+    displayName      : store.getState().displayName     || '',
+    location         : store.getState().location        || '',
+    address          : store.getState().address         || '',
+    password1        : store.getState().password1       || '',
+    password2        : store.getState().password2       || '',
+    nicknameErrorMS  : store.getState().nicknameErrorMS ,
+    locationErrorMS  : store.getState().locationErrorMS ,
+    addressErrorMS   : store.getState().addressErrorMS  ,
+    passwordErrorMS  : store.getState().passwordErrorMS ,
+    mypageImgURL     : store.getState().mypageImgURL    ,
   });
   const handleChange = (e) => {
     const name = e.target.name;
@@ -35,18 +36,7 @@ function MemberProfile() {
   console.log("value => ",value);
   console.log("form  => ",form);
   console.log("==============================")
-  store.dispatch(updateForm(data))  
-  };
-
-  const handleClickShowPassword = () => {
-    setForm({
-      ...form,
-      showPassword: !form.showPassword,
-    });
-  };
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
+  store.dispatch(updateForm(data))
   };
 
   return (
@@ -55,13 +45,14 @@ function MemberProfile() {
         ユーザー情報
       </Typography>
       <Grid container spacing={3}>
+
         <Grid item xs={12} sm={6}>
           <URTextField
-            label="ニックネーム(公開されます)"
-            name = "nickname"
-            type = "nickname"
-            value = {store.getState().nickname}
-            onChange={handleChange}/>
+            label    ="ニックネーム(公開されます)"
+            name     = "displayName"
+            type     = "displayName"
+            value    = {store.getState().displayName}
+            onChange = {handleChange}/>
         </Grid>
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth>
@@ -91,18 +82,6 @@ function MemberProfile() {
             helperText="英数字6文字以上を入力してください"
             value={store.getState().password1}
             onChange={handleChange}
-            // endAdornment={
-            //   <InputAdornment position="end">
-            //     <IconButton
-            //       aria-label="toggle password visibility"
-            //       onClick={handleClickShowPassword}
-            //       onMouseDown={handleMouseDownPassword}
-            //       edge="end"
-            //     >
-            //       {form.showPassword ? <VisibilityOff /> : <Visibility />}
-            //     </IconButton>
-            //   </InputAdornment>
-            // }
             />
         </Grid>
         <Grid item xs={12} sm={6}>
