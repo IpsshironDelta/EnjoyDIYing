@@ -17,13 +17,23 @@ import { createTheme,
 import { useHistory,
          withRouter  }                from "react-router-dom";
 import app                            from "../firebase";
+import store                          from '../store/index';
+import {updateForm}                   from '../actions/memberAction';
 import { getAuth, 
          signInWithEmailAndPassword } from "firebase/auth";
 import Alert                          from '@mui/material/Alert';
 import IconButton                     from '@mui/material/IconButton';
 import Collapse                       from '@mui/material/Collapse';
 import CloseIcon                      from '@mui/icons-material/Close';
+import HeaderTitle                    from "../components/HeaderTitle";
 
+//////////
+// 定数 //
+//////////
+const strAddress     = "address"
+const strDisplayName = "displayName"
+const strPhotoURL    = "photoURL"
+const strPhoneNumber = "phoneNumber"
 
 function Copyright(props) {
     return (
@@ -45,8 +55,13 @@ function SignInSide() {
   const [open, setOpen] = React.useState(false);
 
   const [formData, setFormData] = useState({
-    email: "",
-    password: ""
+    email    : "",
+    password : ""
+});
+const [form , setForm] = useState({ 
+  displayName : store.getState().displayName || '',
+  address     : store.getState().address          ,
+  photoURL    : store.getState().photoURL         ,
 });
 const history = useHistory();
 const auth = getAuth(app)
@@ -56,16 +71,32 @@ const handleSignIn = (event) => {
         event.preventDefault();
         history.push("/");
         console.log("ログイン成功")
-        console.log(auth.currentUser.email)
-        console.log(auth.currentUser.password)
-        console.log(auth.currentUser.displayName)
-        console.log(auth.currentUser.photoURL)
+        console.log("アドレス",auth.currentUser.email)
+        console.log("ニックネーム",auth.currentUser.displayName)
+        console.log("画像URL",auth.currentUser.photoURL)
+        storeUpdate(strAddress , auth.currentUser.email)
+        storeUpdate(strDisplayName , auth.currentUser.displayName)
+        storeUpdate(strPhotoURL , auth.currentUser.photoURL)
     }).catch((e) => {
         console.log(e)
         console.log("ログイン失敗")
         setOpen(true)
     })
 }
+  // formの内容を入替(更新)する
+  const storeUpdate = (orgFile , orgDataInfo ) => {
+    console.log("storeUpdate")
+    const photo        = orgFile     // サムネイル用の画像表示
+    const fileURL      = orgDataInfo // サムネイル用の画像表示
+    form[photo]        = fileURL
+    const data = form
+    setForm({
+      ...form,
+      photo : orgDataInfo,
+    })
+    store.dispatch(updateForm(data))
+    console.log("form:",form)
+  }
 
 const handleChange = (e) => {
     e.preventDefault();
@@ -124,9 +155,10 @@ const handleChange = (e) => {
             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
               <LockOutlinedIcon />
             </Avatar>
-            <Typography component="h1" variant="h5">
-            これ、考えた人すごいね。にログイン
-            </Typography>
+            <HeaderTitle
+              component = "h1"
+              variant   = "h5"
+              text      = "にログイン"/>
             {/* <Box component="form" noValidate onSubmit={handleSignIn} sx={{ mt: 1 }}> */}
               <TextField
                 margin="normal"

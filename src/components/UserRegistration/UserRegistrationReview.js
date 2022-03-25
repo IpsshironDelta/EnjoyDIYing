@@ -10,6 +10,8 @@ import URHeader          from './URHeader';
 import URFooter          from './URFooter';
 import store             from '../../store/index';
 import URButton          from './URButton';
+import Avatar            from '@mui/material/Avatar';
+import { useFileUpload } from "use-file-upload";
 
 const theme = createTheme();
 
@@ -18,6 +20,9 @@ function UserRegistration(props) {
   const handleCheck = (e) =>{
     console.log("handleCheck通過")
   }
+  // ファイルアップロード用変数
+  const [files, selectFiles] = useFileUpload();
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -27,13 +32,23 @@ function UserRegistration(props) {
         <Container maxWidth="sm">
           <br/>
           <Typography variant="h4" gutterBottom align='center'>
-            ユーザー情報
+            アカウント情報入力
           </Typography>
           <Typography variant="h5" gutterBottom align='center'>
             以下の内容で登録します。よろしいですか？
           </Typography>
           <Grid container spacing={3}>
             <Grid item xs={12}>
+
+            {/* <Container align='center'>
+              <Avatar
+                alt="preview"
+                src={files?.source || store.getState().photoURL}
+                padding ="1em"
+                sx={{ width: 150, height: 150 }}/>
+              <br/>
+            </Container> */}
+
             <Typography variant="h6">
               ニックネーム
             </Typography>

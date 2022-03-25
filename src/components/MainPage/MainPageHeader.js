@@ -5,7 +5,6 @@ import AppBar            from '@mui/material/AppBar';
 import Box               from '@mui/material/Box';
 import Toolbar           from '@mui/material/Toolbar';
 import IconButton        from '@mui/material/IconButton';
-import Typography        from '@mui/material/Typography';
 import InputBase         from '@mui/material/InputBase';
 import Badge             from '@mui/material/Badge';
 import MenuItem          from '@mui/material/MenuItem';
@@ -16,6 +15,7 @@ import MailIcon          from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useHistory }    from "react-router-dom";
 import MainPageButton    from './MainPageButton';
+import HeaderTitle       from '../HeaderTitle';
 
 const Input = styled('input')({
     display: 'none',
@@ -175,14 +175,11 @@ export default function PrimarySearchAppBar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <Typography
+          <HeaderTitle
             variant="h6"
             noWrap
             component="div"
-            sx={{ display: { xs: 'none', sm: 'block' } }}
-          >
-            これ、考えた人すごいね。
-          </Typography>
+            sx={{ display: { xs: 'none', sm: 'block' } }}/>
           <Search>
             <SearchIconWrapper>
               <SearchIcon />

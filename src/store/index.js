@@ -18,6 +18,8 @@ const initialState = {
   productionPeriod : "",
   memo             : "",
   photoURL         : "",
+  photoFileData    : "",
+  phoneNumber      : "",
 };
 
 const reducer = (state = initialState ,action) => {

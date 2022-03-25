@@ -9,7 +9,6 @@ import Typography        from '@mui/material/Typography';
 import Container         from '@mui/material/Container';
 import FormControl       from '@mui/material/FormControl';
 import Grid              from '@mui/material/Grid';
-import Avatar            from '@mui/material/Avatar';
 import URHeader          from './URHeader';
 import URFooter          from './URFooter';
 import {updateForm}      from '../../actions/memberAction';
@@ -33,7 +32,8 @@ function UserRegistration(props) {
     locationErrorMS  : store.getState().locationErrorMS,
     addressErrorMS   : store.getState().addressErrorMS ,
     passwordErrorMS  : store.getState().passwordErrorMS,
-    photoURL         : store.getState().photoURL   ,
+    photoURL         : store.getState().photoURL       ,
+    photoFileData    : store.getState().photoFileData  ,
   });
 
   // ニックネームの入力チェック用変数
@@ -47,27 +47,30 @@ function UserRegistration(props) {
  
   // パスワードの入力チェック用変数
   const [passworderr , setPasswordErr] = useState('')
-
-  // 画像の初期値
-  const defaultSrc =
-  "https://firebasestorage.googleapis.com/v0/b/myfirebasesample-c6d99.appspot.com/o/AddImage.png?alt=media&token=f9139d7f-d4d3-4be0-ae3c-2717f4ddeb45";
   
   // ファイルアップロード用変数
-  const [files, selectFiles] = useFileUpload();
-  const pushfiles = (source) => {
-    console.log("pushfilesを通過")
+  // const [files, selectFiles] = useFileUpload();
+  // const pushfiles = (source , file) => {
+  //   console.log("pushfilesを通過")
 
-    const name = "photoURL"
-    const fileURL = source
-    form[name] = fileURL
-    const data = form
-    setForm({
-      ...form,
-      name : source,
-    })
-    store.dispatch(updateForm(data))
-    console.log(form)
-  }
+  //   const photo        = "photoURL"      // サムネイル用の画像表示
+  //   const filedata     = "photoFileData" // ファイルアップロード用画像データ一式
+  //   const fileURL      = source          // サムネイル用の画像表示
+  //   const fileDataInfo = file            // ファイルアップロード用画像データ一式
+  //   form[photo]        = fileURL
+  //   form[filedata]     = fileDataInfo
+  //   const data = form
+  //   setForm({
+  //     ...form,
+  //     photo : source,
+  //   })
+  //   setForm({
+  //     ...form,
+  //     filedata : file
+  //   })
+  //   store.dispatch(updateForm(data))
+  //   console.log(form)
+  // }
  
   // リンク先に遷移
   const history = useHistory();
@@ -235,9 +238,9 @@ function UserRegistration(props) {
         <Container maxWidth="sm">
           <br/>
           <Typography variant="h4" gutterBottom align='center'>
-            ユーザー情報
+            アカウント情報入力
           </Typography>
-          <Container align='center'>
+          {/* <Container align='center'>
             <Avatar
               alt="preview"
               src={files?.source || store.getState().photoURL}
@@ -249,12 +252,12 @@ function UserRegistration(props) {
               onClick={() =>
                   selectFiles({ accept: "image/*" }, ({ name, size, source, file }) => {
                   console.log("Files Selected", { name, size, source, file })
-                  pushfiles(source)
+                  pushfiles(source , file)
               })}>
               プロフィール画像選択
             </Button>
             <br/><br/>
-          </Container>
+          </Container> */}
 
           <Grid container spacing={3}>
             <Grid item xs={12}>

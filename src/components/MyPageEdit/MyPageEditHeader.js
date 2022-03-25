@@ -2,7 +2,7 @@ import * as React   from 'react';
 import AppBar       from '@mui/material/AppBar';
 import Box          from '@mui/material/Box';
 import Toolbar      from '@mui/material/Toolbar';
-import Typography   from '@mui/material/Typography';
+import HeaderTitle from '../HeaderTitle';
 
 export default function MyPageHeaderAppBar() {
 
@@ -10,14 +10,11 @@ export default function MyPageHeaderAppBar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <Typography
+          <HeaderTitle
             variant="h6"
             noWrap
             component="div"
-            sx={{ display: { xs: 'none', sm: 'block' } }}
-          >
-            これ、考えた人すごいね。
-          </Typography>
+            sx={{ display: { xs: 'none', sm: 'block' } }}/>
         </Toolbar>
       </AppBar>
     </Box>

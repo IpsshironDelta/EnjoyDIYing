@@ -9,6 +9,7 @@ import InputBase    from '@mui/material/InputBase';
 import Menu         from '@mui/material/Menu';
 import SearchIcon   from '@mui/icons-material/Search';
 import MyPageButton from './MyPageButton';
+import HeaderTitle  from '../HeaderTitle';
 
 const Input = styled('input')({
     display: 'none',
@@ -122,14 +123,11 @@ const menuId = 'primary-search-account-menu';
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <Typography
+          <HeaderTitle
             variant="h6"
             noWrap
             component="div"
-            sx={{ display: { xs: 'none', sm: 'block' } }}
-          >
-            これ、考えた人すごいね。
-          </Typography>
+            sx={{ display: { xs: 'none', sm: 'block' } }}/>
           <Search>
             <SearchIconWrapper>
               <SearchIcon />

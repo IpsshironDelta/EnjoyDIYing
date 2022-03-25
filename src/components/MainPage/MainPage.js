@@ -34,8 +34,10 @@ function Album(props) {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Container maxWidth="lg">
+      <Container maxWidth>
         <MainPageHeader/>
+      </Container>
+      <Container maxWidth = "lg">
         <main>
           <Box
             sx={{

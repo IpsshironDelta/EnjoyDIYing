@@ -1,5 +1,7 @@
 import React,
      { useState  }       from 'react';
+import app               from "../../firebase";
+import { getAuth }       from "firebase/auth";
 import CssBaseline       from '@mui/material/CssBaseline';
 import Container         from '@mui/material/Container';
 import { createTheme, 
@@ -12,25 +14,23 @@ import store             from '../../store/index';
 import MyPageButton      from './MyPageButton';
 import Stack             from '@mui/material/Stack';
 import Avatar            from '@mui/material/Avatar';
-import Grid              from '@mui/material/Grid';
-import { TextField }     from '@mui/material';
 
 const theme = createTheme();
   
-function MyPage() {
-  console.log(store.getState())
+function MyPage(props) {
+  const auth = getAuth(app)
   const [form , setForm] = useState({ 
-    displayName         : store.getState().displayName        || '',
-    location         : store.getState().location        || '',
-    address          : store.getState().address         || '',
-    password1        : store.getState().password1       || '',
-    password2        : store.getState().password2       || '',
-    nicknameErrorMS  : store.getState().nicknameErrorMS,
-    locationErrorMS  : store.getState().locationErrorMS,
-    addressErrorMS   : store.getState().addressErrorMS ,
-    passwordErrorMS  : store.getState().passwordErrorMS,
-    photoURL         : store.getState().photoURL       ,
+    displayName      : store.getState().displayName     ,
+    location         : store.getState().location        ,
+    nicknameErrorMS  : store.getState().nicknameErrorMS ,
+    locationErrorMS  : store.getState().locationErrorMS ,
+    addressErrorMS   : store.getState().addressErrorMS  ,
+    passwordErrorMS  : store.getState().passwordErrorMS ,
+    photoFileData    : store.getState().photoFileData   ,
+    photoURL         : store.getState().photoURL        ,
+    phoneNumber      : store.getState().phoneNumber     ,
   });
+  console.log(store.getState())
   
   return (
     <ThemeProvider theme={theme}>
@@ -43,11 +43,11 @@ function MyPage() {
           <br/>
           <Container align= "center">
             <Avatar
-              alt="Remy Sharp"
-              src={store.getState().photoURL}
+              alt="preview"
+              src={auth.currentUser.photoURL}
               sx={{ width: 150, height: 150 }}/>
           <Typography variant="body1" gutterBottom align='center'>
-            {store.getState().displayName}
+            {form.displayName}
           </Typography>
           </Container>
 
@@ -55,7 +55,7 @@ function MyPage() {
             所在地：{store.getState().location}
           </Typography>
           <Typography variant="h5" gutterBottom align='left'>
-            メールアドレス：{store.getState().address}
+            メールアドレス：{auth.currentUser.email}
           </Typography>
           
           <Typography variant="h5" gutterBottom align='center'>
