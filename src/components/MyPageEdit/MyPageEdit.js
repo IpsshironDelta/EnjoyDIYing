@@ -174,7 +174,7 @@ const MyPageEdit = (props) => {
   // 画像削除処理
   const DelImage = (file) =>{
     if (!file)return
-    const desertRef = ref(storage, `files/${file.name}`);
+    const desertRef = ref(storage, `USER_PROFILE_IMG/${file.name}`);
     console.log("deserRef =>",desertRef)
     // Firebaseから指定の画像を削除
     deleteObject(desertRef).then(() => {
@@ -190,7 +190,7 @@ const MyPageEdit = (props) => {
   // 画像アップロード処理
   const uploadImage = (file) => { 
     if (!file) return
-    const storageRef = sRef(storage, `files/${file.name}`);
+    const storageRef = sRef(storage, `USER_PROFILE_IMG/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file)
     uploadTask.on('state_changed',(snapshot) => {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;

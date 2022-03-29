@@ -10,7 +10,7 @@ function HeaderTitle(props) {
       sx        = {props.sx}
       noWrap    = {props.noWrap}
       gutterBottom>
-      タイトル考案中。。{props.text}
+      これ、考えた人すごいね。{props.text}
     </Typography>
   );
 }

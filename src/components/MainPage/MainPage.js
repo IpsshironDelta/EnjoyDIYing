@@ -83,7 +83,7 @@ function Album(props) {
               color="text.primary"
               gutterBottom
             >
-              ＜ユーザー名＞さんの過去の作品
+              さんの過去の作品
           </Typography>
           <MainPageImageList/>
           </Box>
