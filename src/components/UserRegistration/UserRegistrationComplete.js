@@ -6,12 +6,27 @@ import { createTheme,
          ThemeProvider } from '@mui/material/styles';
 import { withRouter }    from 'react-router';
 import URHeader          from './URHeader';
-import URFooter          from './URFooter';
 import store             from '../../store/index';
 import URButton          from './URButton';
-import { getAuth } from "firebase/auth";
+import EditIcon       from '@mui/icons-material/Edit';
+import PersonIcon     from '@mui/icons-material/Person';
 
-const theme = createTheme();
+const theme = createTheme({
+  palette: {
+    // ボタンのカラー設定
+    primary: {
+      main: '#E64545',
+      contrastText: '#ffffff',
+    },
+    // 背景のカラー設定
+    background: {
+      default: '#ffffff',
+    },
+
+    // テキストのカラー設定
+    text: { primary: '#000000' },
+  },
+});
 
 function UserRegistrationComplete(props) {
 
@@ -35,19 +50,18 @@ function UserRegistrationComplete(props) {
             DIYを楽しみましょう！
           </Typography>
           <URButton
-            variant ="outlined"
-            link    = "/" 
-            sx      = {{ mt: 3, ml: 1 }}
-            text    = "閲覧ページTOP"/>                
+            variant   ="outlined"
+            link      = "/post" 
+            sx        = {{ mt: 3, ml: 1 }}
+            text      = "投稿する"
+            startIcon = {<EditIcon/>}/>                
           <URButton 
-            variant ="outlined"
-            link    = "/mypage" 
-            sx      = {{ mt: 3, ml: 1 }}
-            text    = "Myページへ"/>
+            variant   ="outlined"
+            link      = "/mypage" 
+            sx        = {{ mt: 3, ml: 1 }}
+            text      = "マイページ"
+            startIcon = {<PersonIcon/>}/>
         </Container>
-      {/* Footer */}
-      <URFooter/>
-      {/* End footer */}
     </ThemeProvider>
   );
 }

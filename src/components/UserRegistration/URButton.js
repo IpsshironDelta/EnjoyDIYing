@@ -107,11 +107,12 @@ export default function URButton(props){
     return(
 
         <Button 
-            size    = {props.size}
-            variant = {props.variant}
-            sx      = {props.sx}
-            id      = {props.id}
-            link    = {props.link}
+            size      = {props.size}
+            variant   = {props.variant}
+            sx        = {props.sx}
+            id        = {props.id}
+            link      = {props.link}
+            startIcon = {props.startIcon}
             disableElevation
             onClick={() => {
                 handleClick()

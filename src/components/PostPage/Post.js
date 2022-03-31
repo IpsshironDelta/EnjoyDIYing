@@ -7,7 +7,6 @@ import Stepper           from '@mui/material/Stepper';
 import Step              from '@mui/material/Step';
 import StepLabel         from '@mui/material/StepLabel';
 import Button            from '@mui/material/Button';
-import Link              from '@mui/material/Link';
 import Typography        from '@mui/material/Typography';
 import { createTheme,
          ThemeProvider } from '@mui/material/styles';
@@ -23,19 +22,9 @@ import {getStorage,
         ref as sRef, 
         uploadBytesResumable, 
         getDownloadURL } from "firebase/storage";
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import EditIcon          from '@mui/icons-material/Edit';
+import HomeIcon          from '@mui/icons-material/Home';
+import PersonIcon        from '@mui/icons-material/Person';
 
 const steps = ['DIY作品の内容を書く',
                '完了'];
@@ -53,7 +42,22 @@ function getStepContent(step) {
   }
 }
 
-const theme = createTheme();
+const theme = createTheme({
+  palette: {
+    // ボタンのカラー設定
+    primary: {
+      main: '#ff3838',
+      contrastText: '#ffffff',
+    },
+    // 背景のカラー設定
+    background: {
+      default: '#ffffff',
+    },
+
+    // テキストのカラー設定
+    text: { primary: '#000000' },
+  },
+});
 
 export default function Post() {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -148,28 +152,23 @@ export default function Post() {
                   </Typography>
                   <Box sx={{ '& button': { m: 1 } }}>
                     <PostPageButton
-                      text = "Myページに戻る"
+                      text = "マイページに戻る"
                       link = "/mypage"
                       size = "medium"
-                      variant = "outlined"/>
+                      variant = "outlined"
+                      startIcon = {<PersonIcon/>}/>
                     <PostPageButton
-                      text ="閲覧ページTOPに戻る"
+                      text ="ホームに戻る"
                       link ="/"
                       size = "medium"
                       variant = "outlined"
-                      />
+                      startIcon = {<HomeIcon/>}/>
                     <PostPageButton
-                      text ="出品した作品を見る"
-                      link ="/"
-                      size = "medium"
-                      variant = "outlined"
-                      />
-                    <PostPageButton
-                      text ="続けて出品する"
+                      text ="続けて投稿する"
                       link ="/post"
                       size = "medium"
                       variant = "contained"
-                      />
+                      startIcon = {<EditIcon/>}/>
                   </Box>
                 </React.Fragment>
               ) : (
@@ -199,7 +198,6 @@ export default function Post() {
               )}
             </React.Fragment>
           </Paper>
-          <Copyright />
         </Container>
       </Container>
     </ThemeProvider>

@@ -11,6 +11,7 @@ export default function MyPageButton(props){
             sx       = {props.sx}
             id       = {props.id}
             link     = {props.link}
+            startIcon= {props.startIcon}
             disableElevation
             onClick={() => {
                 history.push(props.link);

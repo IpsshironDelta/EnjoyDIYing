@@ -14,3 +14,5 @@
      - パスワード不一致
      - パスワードは英数字6文字以上を使用
    - トップ画像登録
+
+【かなり参考になりそう】https://www.azukipan.com/posts/firebase-react-firestore-storage-avatar/

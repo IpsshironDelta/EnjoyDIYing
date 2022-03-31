@@ -9,8 +9,9 @@ function HeaderTitle(props) {
       variant   = {props.variant} 
       sx        = {props.sx}
       noWrap    = {props.noWrap}
+      color     = {props.color}
       gutterBottom>
-      これ、考えた人すごいね。{props.text}
+      {props.front_text}これ、考えた人すごいね。{props.text}
     </Typography>
   );
 }

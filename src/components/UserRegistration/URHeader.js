@@ -4,6 +4,7 @@ import Box         from '@mui/material/Box';
 import Toolbar     from '@mui/material/Toolbar';
 import URButton    from './URButton';
 import HeaderTitle from '../HeaderTitle';
+import HomeIcon    from '@mui/icons-material/Home';
 
 export default function URHeader() {
 
@@ -19,10 +20,11 @@ export default function URHeader() {
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <URButton
-              text    = "閲覧トップ" 
+              text    = "ホーム" 
               link    = "/"
               size    = "large"
-              variant = "contained"/>
+              variant = "contained"
+              startIcon = {<HomeIcon/>}/>
           </Box>
         </Toolbar>
       </AppBar>

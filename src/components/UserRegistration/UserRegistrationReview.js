@@ -7,13 +7,28 @@ import { createTheme,
 import Grid              from '@mui/material/Grid';
 import { withRouter }    from 'react-router';
 import URHeader          from './URHeader';
-import URFooter          from './URFooter';
 import store             from '../../store/index';
 import URButton          from './URButton';
-import Avatar            from '@mui/material/Avatar';
 import { useFileUpload } from "use-file-upload";
+import PersonAddIcon     from '@mui/icons-material/PersonAdd';
+import ReplyIcon         from '@mui/icons-material/Reply';
 
-const theme = createTheme();
+const theme = createTheme({
+  palette: {
+    // ボタンのカラー設定
+    primary: {
+      main: '#E64545',
+      contrastText: '#ffffff',
+    },
+    // 背景のカラー設定
+    background: {
+      default: '#ffffff',
+    },
+
+    // テキストのカラー設定
+    text: { primary: '#000000' },
+  },
+});
 
 function UserRegistration(props) {
 
@@ -83,22 +98,21 @@ function UserRegistration(props) {
           </Grid>
           <Typography align='center'>
            <URButton
-              id      = "registerChancel"
-              text    = "入力画面に戻る"
-              variant ="outlined"
-              link    = "/userregistration"
-              sx={{ mt: 3, ml: 1 }}/>
+              id        = "registerChancel"
+              text      = "入力画面に戻る"
+              variant   ="outlined"
+              link      = "/userregistration"
+              sx        = {{ mt: 3, ml: 1 }}
+              startIcon = {<ReplyIcon/>}/>
             <URButton
-              id      = "registerOk"
-              text    = "無料ユーザー登録"
-              variant = "contained"
-              link    = "/userregistration/Complete"
-              sx      = {{ mt: 3, ml: 1 }}/>
+              id        = "registerOk"
+              text      = "無料ユーザー登録"
+              variant   = "contained"
+              link      = "/userregistration/Complete"
+              sx        = {{ mt: 3, ml: 1 }}
+              startIcon = {<PersonAddIcon/>}/>
           </Typography>
         </Container>
-      {/* Footer */}
-      <URFooter/>
-      {/* End footer */}
     </ThemeProvider>
   );
 }

@@ -26,6 +26,8 @@ import IconButton                     from '@mui/material/IconButton';
 import Collapse                       from '@mui/material/Collapse';
 import CloseIcon                      from '@mui/icons-material/Close';
 import HeaderTitle                    from "../components/HeaderTitle";
+import LoginIcon                      from '@mui/icons-material/Login';
+import HomeIcon                       from '@mui/icons-material/Home';
 
 //////////
 // 定数 //
@@ -33,7 +35,6 @@ import HeaderTitle                    from "../components/HeaderTitle";
 const strAddress     = "address"
 const strDisplayName = "displayName"
 const strPhotoURL    = "photoURL"
-const strPhoneNumber = "phoneNumber"
 
 function Copyright(props) {
     return (
@@ -48,7 +49,22 @@ function Copyright(props) {
     );
 }
 
-const theme = createTheme();
+const theme = createTheme({
+  palette: {
+    // ボタンのカラー設定
+    primary: {
+      main: '#E64545',
+      contrastText: '#ffffff',
+    },
+    // 背景のカラー設定
+    background: {
+      default: '#ffffff',
+    },
+
+    // テキストのカラー設定
+    text: { primary: '#000000' },
+  },
+});
 
 function SignInSide() {
   // アラート表示
@@ -65,6 +81,11 @@ const [form , setForm] = useState({
 });
 const history = useHistory();
 const auth = getAuth(app)
+
+const handleHome = () =>{
+  history.push("/");
+}
+
 const handleSignIn = (event) => {
     signInWithEmailAndPassword(auth, formData.email, formData.password).then((v) => {
         console.log(v);
@@ -159,7 +180,6 @@ const handleChange = (e) => {
               component = "h1"
               variant   = "h5"
               text      = "にログイン"/>
-            {/* <Box component="form" noValidate onSubmit={handleSignIn} sx={{ mt: 1 }}> */}
               <TextField
                 margin="normal"
                 required
@@ -194,8 +214,20 @@ const handleChange = (e) => {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
                 onClick={handleSignIn}
-              >
+                startIcon = {<LoginIcon/>}>
                   ログイン
+              </Button>
+              <Typography variant="body2" >
+              or
+              </Typography>
+              <Button
+                type="submit"
+                fullWidth
+                variant="outlined"
+                sx={{ mt: 3, mb: 2 }}
+                onClick={handleHome}
+                startIcon = {<HomeIcon/>}>
+                  ホーム
               </Button>
 
               <Grid container>

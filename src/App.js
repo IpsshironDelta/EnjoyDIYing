@@ -17,6 +17,7 @@ import FirebaseTest             from './components/test/test';
 
 function App() {
   const history = useHistory();
+
   return (
     <BrowserRouter history={history}>
       <Switch>

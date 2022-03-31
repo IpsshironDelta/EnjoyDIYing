@@ -10,15 +10,29 @@ import Container         from '@mui/material/Container';
 import FormControl       from '@mui/material/FormControl';
 import Grid              from '@mui/material/Grid';
 import URHeader          from './URHeader';
-import URFooter          from './URFooter';
 import {updateForm}      from '../../actions/memberAction';
-import { useFileUpload } from "use-file-upload";
 import store             from '../../store/index';
 import URTextField       from './URTextField';
 import URSelectBox       from './URSelectBox';
 import Button            from '@mui/material/Button';
+import PersonAddIcon     from '@mui/icons-material/PersonAdd';
 
-const theme = createTheme();
+const theme = createTheme({
+  palette: {
+    // ボタンのカラー設定
+    primary: {
+      main: '#E64545',
+      contrastText: '#ffffff',
+    },
+    // 背景のカラー設定
+    background: {
+      default: '#ffffff',
+    },
+
+    // テキストのカラー設定
+    text: { primary: '#000000' },
+  },
+});
 
 function UserRegistration(props) {
 
@@ -332,16 +346,14 @@ function UserRegistration(props) {
           </Grid>
           <Typography align='center'>
             <Button
-              id      = "inputcheck"
-              variant = "contained"
-              sx={{ mt: 3, ml: 1 }}
-              onClick= {clickChange}>この内容で登録する
+              id        = "inputcheck"
+              variant   = "contained"
+              sx        = {{ mt: 3, ml: 1 }}
+              onClick   = {clickChange}
+              startIcon = {<PersonAddIcon/>}>この内容で登録する
             </Button>
           </Typography>
         </Container>
-      {/* Footer */}
-      <URFooter/>
-      {/* End footer */}
     </ThemeProvider>
   );
 }

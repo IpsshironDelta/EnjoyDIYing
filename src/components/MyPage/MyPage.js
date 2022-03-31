@@ -15,9 +15,24 @@ import MyPageButton      from './MyPageButton';
 import Stack             from '@mui/material/Stack';
 import Avatar            from '@mui/material/Avatar';
 
-const theme = createTheme();
+const theme = createTheme({
+  palette: {
+    // ボタンのカラー設定
+    primary: {
+      main: '#E64545',
+      contrastText: '#ffffff',
+    },
+    // 背景のカラー設定
+    background: {
+      default: '#ffffff',
+    },
+
+    // テキストのカラー設定
+    text: { primary: '#ffffff' },
+  },
+});
   
-function MyPage(props) {
+function MyPage() {
   const auth = getAuth(app)
   const [form , setForm] = useState({ 
     displayName      : store.getState().displayName     ,
@@ -38,7 +53,6 @@ function MyPage(props) {
       <Container maxWidth>
         <MyPageHeader/>
       </Container>
-
       <Container maxWidth="sm">
           <br/>
           <Container align= "center">
@@ -46,36 +60,33 @@ function MyPage(props) {
               alt="preview"
               src={auth.currentUser.photoURL}
               sx={{ width: 150, height: 150 }}/>
-          <Typography variant="body1" gutterBottom align='center'>
+          <Typography variant="body1" gutterBottom align='center' color="#000000">
             {form.displayName}
           </Typography>
           </Container>
 
-          <Typography variant="h5" gutterBottom align='left'>
+          <Typography variant="h5" gutterBottom align='left' color="#000000">
             所在地：{store.getState().location}
           </Typography>
-          <Typography variant="h5" gutterBottom align='left'>
+          <Typography variant="h5" gutterBottom align='left' color="#000000">
             メールアドレス：{auth.currentUser.email}
           </Typography>
           
           <Typography variant="h5" gutterBottom align='center'>
             <Stack spacing={2} direction='column'>
               <MyPageButton
-                variant = "outlined"
+                variant = "contained"
                 text = "お気に入り"></MyPageButton>
               <MyPageButton
-                variant = "outlined"
+                variant = "contained"
                 link    = "/mypage/edit"
                 text = "プロフィール編集"></MyPageButton>
             </Stack>
           </Typography>
 
       </Container>
-      <Footer
-        title="Footer"
-        description="Something here to give the footer a purpose!"
-      />
-    </ThemeProvider>
+      <Footer/>
+      </ThemeProvider>
   );
 }
 

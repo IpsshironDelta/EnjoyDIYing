@@ -28,6 +28,7 @@ import { getStorage ,
 import { getAuth, 
           updateProfile}    from "firebase/auth";
 
+
 //////////
 // 定数 //
 //////////
@@ -37,7 +38,22 @@ const strPhotoFileDataBuff = "photoFileDataBuff"
 const strMyPage            = "/mypage"
 const strNicknameErrorMS   = "nicknameErrorMS"
 
-const theme = createTheme();  
+const theme = createTheme({
+  palette: {
+    // ボタンのカラー設定
+    primary: {
+      main: '#E64545',
+      contrastText: '#ffffff',
+    },
+    // 背景のカラー設定
+    background: {
+      default: '#ffffff',
+    },
+
+    // テキストのカラー設定
+    text: { primary: '#000000' },
+  },
+});
 
 const MyPageEdit = (props) => {
   const storage = getStorage(app)
@@ -294,7 +310,7 @@ const MyPageEdit = (props) => {
 
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
-          <Typography variant="h6" gutterBottom>
+          <Typography variant="h5" gutterBottom color="#000000">
               所在地：
           </Typography>
         </Grid>
@@ -319,10 +335,7 @@ const MyPageEdit = (props) => {
         </Stack>
       </Typography>
     </Container>
-
-    <Footer
-      title="Footer"
-      description="Something here to give the footer a purpose!"/>
+    <Footer/>
     </ThemeProvider>
   );
 }
