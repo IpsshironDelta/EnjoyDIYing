@@ -15,4 +15,9 @@
      - パスワードは英数字6文字以上を使用
    - トップ画像登録
 
-【かなり参考になりそう】https://www.azukipan.com/posts/firebase-react-firestore-storage-avatar/
+
+【かなり参考になりそう】
+https://www.azukipan.com/posts/firebase-react-firestore-storage-avatar/
+
+【kanaToRomaの詳細】
+https://shanabrian.com/web/javascript/kana-to-roman.php

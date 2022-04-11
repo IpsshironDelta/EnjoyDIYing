@@ -59,7 +59,7 @@ export default function AddressForm() {
       });
     }).then(()=>{
       setcategorys([...array])
-    })},[]);
+    })},[]);    
 
     return (
     <React.Fragment>

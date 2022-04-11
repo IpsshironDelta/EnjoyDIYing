@@ -2,10 +2,15 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import { getDatabase, ref, set } from "firebase/database";
+import firebase from 'firebase/compat/app';
+import "firebase/compat/firestore"
+
 
 function Chat() {
   const addChat = () => {
-    const db = getDatabase();
+//    const db = getDatabase();
+    const db = firebase.firestore()
+
     const userName = prompt("Please enter the chat user name");
 
   if (userName) {
@@ -27,7 +32,7 @@ function Chat() {
       <Button 
         variant ="contained"
         sx={"background-color:mediumpurple;"}
-        onClick={addChat}>ボタン</Button>
+        onClick={addChat}>スタート</Button>
 
     </Stack>
   );

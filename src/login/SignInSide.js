@@ -17,7 +17,7 @@ import { createTheme,
 import { useHistory,
          withRouter  }                from "react-router-dom";
 import app                            from "../firebase";
-import store                          from '../store/index';
+import store                          from '../store/';
 import {updateForm}                   from '../actions/memberAction';
 import { getAuth, 
          signInWithEmailAndPassword } from "firebase/auth";
@@ -95,6 +95,7 @@ const handleSignIn = (event) => {
         console.log("アドレス",auth.currentUser.email)
         console.log("ニックネーム",auth.currentUser.displayName)
         console.log("画像URL",auth.currentUser.photoURL)
+        console.log("uid=>",auth.currentUser.uid)
         storeUpdate(strAddress , auth.currentUser.email)
         storeUpdate(strDisplayName , auth.currentUser.displayName)
         storeUpdate(strPhotoURL , auth.currentUser.photoURL)

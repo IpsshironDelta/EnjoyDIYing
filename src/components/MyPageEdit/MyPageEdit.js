@@ -16,9 +16,9 @@ import MyPageEditHeader     from './MyPageEditHeader';
 import Footer               from '../Footer';
 import store                from '../../store/index';
 import {updateForm}         from '../../actions/memberAction';
-import app                  from "../../firebase";
 import MyPageTextField      from './MyPageTextField'
 import MyPageEditSelectBox  from './MyPageEditSelectBox'
+import app                  from "../../firebase";
 import { getStorage ,
          deleteObject ,
          ref as sRef, 
@@ -169,6 +169,7 @@ const MyPageEdit = (props) => {
       }
       
       // 変更後の画像をアップロード
+      console.log("★",store.getState().photoFileDataBuff)
       uploadImage(store.getState().photoFileDataBuff) //画像をアップロード
       
       // photoFileData,photoFileDataBuffの値を更新

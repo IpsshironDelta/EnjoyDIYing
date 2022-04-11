@@ -10,10 +10,10 @@ import MainPageHeader    from './MainPageHeader';
 import MainPageImageList from './MainPageImageList';
 import Footer            from '../Footer';
 import Grid              from '@mui/material/Grid';
-import Stack from '@mui/material/Stack';
+import Stack             from '@mui/material/Stack';
 import LoginIcon         from '@mui/icons-material/Login';
 import PersonAddIcon     from '@mui/icons-material/PersonAdd';
-import MainPageButton from './MainPageButton';
+import MainPageButton    from './MainPageButton';
 
 const theme = createTheme({
   palette: {
