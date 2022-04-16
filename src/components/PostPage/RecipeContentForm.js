@@ -7,7 +7,7 @@ import TextField       from '@mui/material/TextField';
 import InputLabel      from '@mui/material/InputLabel';
 import MenuItem        from '@mui/material/MenuItem';
 import FormControl     from '@mui/material/FormControl';
-import app             from "../../firebase";
+import { db }  from "../../firebase";
 import { collection, 
          getDocs,
         getFirestore } from "firebase/firestore";
@@ -35,7 +35,6 @@ export default function AddressForm() {
     memo             : '',
     }]);
   const array = [];
-  const db = getFirestore(app);
 
   const handleChange = (e) =>{
     const name = e.target.name;

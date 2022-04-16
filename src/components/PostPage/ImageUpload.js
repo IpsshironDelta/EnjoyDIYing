@@ -3,8 +3,6 @@ import React              from 'react'
 import { useFileUpload }  from "use-file-upload";
 import PhotoCamera        from '@mui/icons-material/PhotoCamera';
 import { styled }         from '@mui/material/styles';
-import app                from "../../firebase";
-import { getStorage }     from "firebase/storage";
 import store              from '../../store';
 
 const Input = styled('input')({
@@ -27,7 +25,6 @@ const ImageUpload = (props) => {
   const defaultSrc =
     "https://firebasestorage.googleapis.com/v0/b/myfirebasesample-c6d99.appspot.com/o/AddImage.png?alt=media&token=f9139d7f-d4d3-4be0-ae3c-2717f4ddeb45";
   const [files, selectFiles] = useFileUpload();
-  const storage = getStorage(app)
 
   const pushfiles = (file) => {
     console.log("pushfilesを通過")

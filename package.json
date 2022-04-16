@@ -16,6 +16,7 @@
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "chakra-ui": "^0.3.9",
+    "date-fns": "^2.28.0",
     "firebase": "^9.6.10",
     "framer-motion": "^4.1.17",
     "markdown-to-jsx": "^7.1.3",

@@ -1,7 +1,5 @@
 import React,
      { useState  }       from 'react';
-import app               from "../../firebase";
-import { getAuth }       from "firebase/auth";
 import CssBaseline       from '@mui/material/CssBaseline';
 import Container         from '@mui/material/Container';
 import { createTheme, 
@@ -33,7 +31,6 @@ const theme = createTheme({
 });
   
 function MyPage() {
-  const auth = getAuth(app)
   const [form , setForm] = useState({ 
     displayName      : store.getState().displayName     ,
     location         : store.getState().location        ,
@@ -58,7 +55,7 @@ function MyPage() {
           <Container align= "center">
             <Avatar
               alt="preview"
-              src={auth.currentUser.photoURL}
+//              src={auth.currentUser.photoURL}
               sx={{ width: 150, height: 150 }}/>
           <Typography variant="body1" gutterBottom align='center' color="#000000">
             {form.displayName}
@@ -69,7 +66,7 @@ function MyPage() {
             所在地：{store.getState().location}
           </Typography>
           <Typography variant="h5" gutterBottom align='left' color="#000000">
-            メールアドレス：{auth.currentUser.email}
+            メールアドレス：
           </Typography>
           
           <Typography variant="h5" gutterBottom align='center'>

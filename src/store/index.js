@@ -24,16 +24,6 @@ const initialState = {
 
 const reducer = (state = initialState ,action) => {
     switch (action.type) {
-        // case UPDATE_NAME:
-        //     let nameState = {...state};
-        //     nameState.name = action.payload;
-        //     return nameState;
-
-        // case UPDATE_AGE:
-        //     let ageState = {...state};
-        //     ageState.age = action.payload;
-        //     return ageState;
-
         case UPDATE_FORM:
             let formState = {...state};
             formState = action.payload;

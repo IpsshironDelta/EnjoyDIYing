@@ -1,16 +1,11 @@
-import React,
-     { useState  }    from 'react';
+import React    from 'react';
 import { useHistory } from "react-router-dom";
 import Button         from '@mui/material/Button';
-import { getAuth, 
-    createUserWithEmailAndPassword , 
-    updateProfile}    from "firebase/auth";
-import app            from "../../firebase";
+import {createUserWithEmailAndPassword}    from "firebase/auth";
+import { firebaseApp } from "../../firebase";
 import store          from '../../store/index';
-import {getStorage,
-    ref as sRef, 
-    uploadBytesResumable, 
-    getDownloadURL }  from "firebase/storage";
+
+const fireauth = firebaseApp.fireauth
 
 export default function URButton(props){
 
@@ -22,10 +17,9 @@ export default function URButton(props){
         console.log(props.id)
         if(props.id == "registerOk"){
             console.log("Firebaseに登録")
-            const auth = getAuth(app);
 
             // メールアドレスとパスワード登録
-            createUserWithEmailAndPassword(auth, 
+            createUserWithEmailAndPassword(fireauth, 
                 store.getState().address, 
                 store.getState().password1)
                 .then((userCredential) => {
@@ -59,7 +53,6 @@ export default function URButton(props){
         }
 
     // 画像アップロード処理
-    const storage = getStorage(app)
     // const uploadImage = (file) => {
     //     const auth = getAuth(app)
     //     if (!file) return

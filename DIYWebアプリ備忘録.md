@@ -19,5 +19,11 @@
 【かなり参考になりそう】
 https://www.azukipan.com/posts/firebase-react-firestore-storage-avatar/
 
-【kanaToRomaの詳細】
-https://shanabrian.com/web/javascript/kana-to-roman.php
+ヘッダーが隠れる問題
+https://tanomasaki.com/tech/headernav-fixed/
+
+これも
+https://zenn.dev/knknk98/articles/10b2f071ad2bc1
+
+
+

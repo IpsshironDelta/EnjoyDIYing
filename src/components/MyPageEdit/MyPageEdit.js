@@ -18,15 +18,7 @@ import store                from '../../store/index';
 import {updateForm}         from '../../actions/memberAction';
 import MyPageTextField      from './MyPageTextField'
 import MyPageEditSelectBox  from './MyPageEditSelectBox'
-import app                  from "../../firebase";
-import { getStorage ,
-         deleteObject ,
-         ref as sRef, 
-         uploadBytesResumable, 
-         getDownloadURL, 
-         ref}   from "firebase/storage";
-import { getAuth, 
-          updateProfile}    from "firebase/auth";
+import { getAuth, }    from "firebase/auth";
 
 
 //////////
@@ -56,8 +48,8 @@ const theme = createTheme({
 });
 
 const MyPageEdit = (props) => {
-  const storage = getStorage(app)
-  const auth = getAuth(app)
+  // const storage = getStorage(firebaseConfig)
+   const auth = getAuth()
       
   // ファイルアップロード用変数
   const [files, selectFiles] = useFileUpload();
@@ -74,7 +66,6 @@ const MyPageEdit = (props) => {
     passwordErrorMS  : store.getState().passwordErrorMS   || '',
     photoFileData    : store.getState().photoFileData     || '',
     photoFileDataBuff: store.getState().photoFileDataBuff || '',
-    photoURL         : auth.currentUser.photoURL          ,
     phoneNumber      : store.getState().phoneNumber       ,
   });
   // リンク先に遷移
@@ -170,7 +161,7 @@ const MyPageEdit = (props) => {
       
       // 変更後の画像をアップロード
       console.log("★",store.getState().photoFileDataBuff)
-      uploadImage(store.getState().photoFileDataBuff) //画像をアップロード
+//      uploadImage(store.getState().photoFileDataBuff) //画像をアップロード
       
       // photoFileData,photoFileDataBuffの値を更新
       pushfiles(strPhotoFileData     , 
@@ -191,61 +182,61 @@ const MyPageEdit = (props) => {
   // 画像削除処理
   const DelImage = (file) =>{
     if (!file)return
-    const desertRef = ref(storage, `USER_PROFILE_IMG/${file.name}`);
-    console.log("deserRef =>",desertRef)
+//    const desertRef = ref(storage, `USER_PROFILE_IMG/${file.name}`);
+//    console.log("deserRef =>",desertRef)
     // Firebaseから指定の画像を削除
-    deleteObject(desertRef).then(() => {
+//    deleteObject(desertRef).then(() => {
       // 削除成功
       console.log(file.name," をFirebaseから削除しました")
-    }).catch((error) => {
+//    }).catch((error) => {
       // 削除失敗
       console.log(file.name," の削除に失敗しました。")
-    });
+//    });
   }
 
 
-  // 画像アップロード処理
-  const uploadImage = (file) => { 
-    if (!file) return
-    const storageRef = sRef(storage, `USER_PROFILE_IMG/${file.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, file)
-    uploadTask.on('state_changed',(snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log('Upload is ' + progress + '% done');
-        switch (snapshot.state) {
-        case 'paused':
-            console.log('Upload is paused');
-            break;
-        case 'running':
-            console.log('Upload is running');
-            break;
-        default:
-            break
-        }},
-        (error) => {
-            console.log("アップロードできませんでした。")
-            console.log(error)
-        }, () => {
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                console.log(file.name," の画像アップロード完了")
-                console.log('File available at', downloadURL);
-                // ニックネーム(ユーザー名)と画像URL更新
-                updateProfile(auth.currentUser ,{
-                    displayName : store.getState().displayName,
-                    photoURL    : downloadURL,
-                    }).then(() => {
-                        console.log("更新完了")
-                        console.log("displayName => ", store.getState().displayName)
-                        console.log("photoURL    => ", auth.currentUser.photoURL)
-                        console.log("address     => ", store.getState().address)
-                        console.log("password    => ", store.getState().password1)
-                        history.push(strMyPage)
-                    }).catch((error) => {
-                        console.log("更新失敗")
-                    })
-                });
-            });
-        }
+  // // 画像アップロード処理
+  // const uploadImage = (file) => { 
+  //   if (!file) return
+  //   const storageRef = sRef(storage, `USER_PROFILE_IMG/${file.name}`);
+  //   const uploadTask = uploadBytesResumable(storageRef, file)
+  //   uploadTask.on('state_changed',(snapshot) => {
+  //       const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+  //       console.log('Upload is ' + progress + '% done');
+  //       switch (snapshot.state) {
+  //       case 'paused':
+  //           console.log('Upload is paused');
+  //           break;
+  //       case 'running':
+  //           console.log('Upload is running');
+  //           break;
+  //       default:
+  //           break
+  //      }},
+  //      (error) => {
+  //           console.log("アップロードできませんでした。")
+  //           console.log(error)
+  //       }, () => {
+  //           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+  //               console.log(file.name," の画像アップロード完了")
+  //               console.log('File available at', downloadURL);
+  //               // ニックネーム(ユーザー名)と画像URL更新
+  //               updateProfile(auth.currentUser ,{
+  //                   displayName : store.getState().displayName,
+  //                   photoURL    : downloadURL,
+  //                   }).then(() => {
+  //                       console.log("更新完了")
+  //                       console.log("displayName => ", store.getState().displayName)
+  //                       console.log("photoURL    => ", auth.currentUser.photoURL)
+  //                       console.log("address     => ", store.getState().address)
+  //                       console.log("password    => ", store.getState().password1)
+  //                       history.push(strMyPage)
+  //                   }).catch((error) => {
+  //                       console.log("更新失敗")
+  //                   })
+  //               });
+  //          });
+  //      }
 
   // テキストボックス&セレクトボックス変更のハンドル
   const handleChange = (e) => {

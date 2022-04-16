@@ -2,7 +2,9 @@ import { BrowserRouter,
          Route, 
          Switch,
          useHistory }           from "react-router-dom";
-import SignInSide               from "./login/SignInSide";
+import Login                    from "./components/Login/Login";
+import SignUp                   from "./components/SignUp/SignUp";
+import PasswordReset            from './components/PasswordReset/PasswordReset';
 import PastWork                 from "./components/PastWorks/PastWork";
 import MainPage                 from "./components/MainPage/MainPage";
 import Post                     from './components/PostPage/Post';
@@ -14,6 +16,7 @@ import UserRegistration         from './components/UserRegistration/UserRegistra
 import UserRegistrationReview   from './components/UserRegistration/UserRegistrationReview';
 import UserRegistrationComplete from './components/UserRegistration/UserRegistrationComplete';
 import FirebaseTest             from './components/test/test';
+import Profile                  from './components/Profile/Profile'
 
 function App() {
   const history = useHistory();
@@ -21,12 +24,15 @@ function App() {
   return (
     <BrowserRouter history={history}>
       <Switch>
-        <Route exact path="/login" component={SignInSide} />
         <Route exact path="/" component={MainTop} />
+        <Route exact path="/login" component={Login} />
+        <Route exact path="/signup" component={SignUp} />
+        <Route exact path="/passwordreset" component={PasswordReset} />
         <Route exact path="/pastwork" component={PastWork} />
         <Route exact path="/post" component={Post} />
         <Route exact path="/mainpage" component={MainPage} />
         <Route exact path="/mypage" component={MyPage} />
+        <Route exact path="/profile" component={Profile} />
         <Route exact path="/mypage/edit" component={MyPageEdit} />
         <Route exact path="/recipedetails" component={RecipeDetails} />
         <Route exact path="/userregistration" component={UserRegistration} />

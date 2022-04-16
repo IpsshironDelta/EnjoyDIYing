@@ -8,6 +8,9 @@ import EditIcon       from '@mui/icons-material/Edit';
 import HomeIcon       from '@mui/icons-material/Home';
 import PersonIcon     from '@mui/icons-material/Person';
 import PersonAddIcon  from '@mui/icons-material/PersonAdd';
+import BugReportIcon from '@mui/icons-material/BugReport';
+import AppSettingsAltIcon from '@mui/icons-material/AppSettingsAlt';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 export default function PrimarySearchAppBar() {
   return (
@@ -23,6 +26,12 @@ export default function PrimarySearchAppBar() {
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <MainPageButton
+              text      ="テスト画面" 
+              link      = "/test"
+              size      = "large"
+              variant   = "contained"
+              startIcon = {<BugReportIcon/>}/>
+            <MainPageButton
               text      ="投稿する" 
               link      = "/post"
               size      = "large"
@@ -35,11 +44,24 @@ export default function PrimarySearchAppBar() {
               variant   = "contained"
               startIcon = {<HomeIcon/>}/>
             <MainPageButton
+              text      = "プロフィール編集" 
+              link      = "/profile"
+              size      = "large"
+              variant   = "contained"
+              startIcon = {<AppSettingsAltIcon/>}/>
+            <MainPageButton
+              id        = "logout"
+              text      = "ログアウト" 
+              link      = "/"
+              size      = "large"
+              variant   = "contained"
+              startIcon = {<LogoutIcon/>}/>
+            {/* <MainPageButton
               text      = "マイページ" 
               link      = "/mypage"
               size      = "large"
               variant   = "contained"
-              startIcon = {<PersonIcon/>}/>
+              startIcon = {<PersonIcon/>}/> */}
             <MainPageButton
               text    = "新規登録" 
               link    = "/login"
