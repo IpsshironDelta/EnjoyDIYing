@@ -1,6 +1,5 @@
 import React, { useState } from "react"
 import {Avatar,
-        Alert,
         Paper,
         Typography,
         CssBaseline,
@@ -8,89 +7,39 @@ import {Avatar,
         TextField,
         Button,
         Container,} from "@mui/material"
-import {firebaseApp } from "../../firebase"
-import {ref,
-        uploadBytes,
-        getDownloadURL,} from "firebase/storage"
-import useUser from "../../components/hooks/getuseAuth"
-import {addDoc,
-        collection,
-        doc,
-        updateDoc, } from "firebase/firestore"
+import { useHistory}    from 'react-router';
 import ProfileHeader from "./ProfileHeader"
 import {createTheme, 
     ThemeProvider } from '@mui/material/styles';
 import useProfile from "../../components/hooks/useProfile"
+import store                from '../../store/index';
 
 const theme = createTheme();
 
 const Profile = () => {
   const [name, setName] = useState("")
+  const [location , setLocation] = useState("")
+  const [selfintroduction , setSelfIntroduction] = useState("")
   const [image, setImage] = useState()
-  const firestorage = firebaseApp.firestorage
-  const [error, setError] = useState(false)
-  const [success, setSuccess] = useState(false)
-  const { user } = useUser()
-  const firestore = firebaseApp.firestore
   const profileData = useProfile()
   const profile = profileData.profile
-
-  const handleChange = (e) => {
-    console.log(e.target.files)
-    if (e.target.files !== null) {
-        setImage(e.target.files[0])
-      }
-  }
+  const history = useHistory()
+  const [form , setForm] = useState({
+    displayName : store.getState().displayName || name,
+    location    : store.getState().location    || location,
+    memo        : store.getState().memo        || selfintroduction,
+  })
+  console.log("displayName => " , store.getState().displayName)
+  console.log("location => " , store.getState().location)
+  console.log("memo => " , store.getState().memo)
+  console.log(store.getState())
 
   const handleSubmit = (event) => {
-    event.preventDefault()
-    // アラートが出ている場合は一旦消す
-    setError(false)
-    setSuccess(false)
-    try {
-        const uid = user.uid
-        const docRef = collection(firestore, "users");
- 
-        if(image){
-            const imageRef = ref(firestorage, 'USER_PROFILE_IMG/' + image.name)
-            // firebase strageへ画像をアップロード
-            uploadBytes(imageRef, image).then(() => {
-                // getDownloadURLの中で、profileがある場合はupdateDocを指定
-                // profileがない場合はaddDocを指定
-                // imageがない場合も同様に指定
-                getDownloadURL(imageRef).then(url => {
-                  console.log(url)
-                  if (profile) {
-                    const userRef = doc(firestore, "users", profile?.id)
-                    updateDoc(userRef, {
-                      name,
-                      image: url,})
-                  }else{
-                    // firestoreに名前、画像URL、uidを追加する
-                    addDoc(docRef, {
-                        name,
-                        image: url,
-                        uid,
-                      })
-                    }
-                })
-              })
-              }else{
-                if (profile) {
-                  const userRef = doc(firestore, "users", profile?.id)
-                  updateDoc(userRef, { name })
-              } else {
-                addDoc(docRef, { name, image: "", uid })
-              }}
-              console.log("画像アップロード完了!")
-              // 成功したアラート表示
-              setSuccess(true)
-            } catch (err) {
-              console.log(err)
-              // 失敗したアラート表示
-              setError(true)
-            }
-          }
+    store.getState().displayName = profile.name
+    store.getState().location = profile.location
+    store.getState().memo = profile.selfintroduction
+    history.push("/profile/edit")
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -100,41 +49,69 @@ const Profile = () => {
         <Container maxWidth="sm">
         <CssBaseline />
             <Paper sx={{ m: 4, p: 4 }}>
-                <Typography align="center">プロフィール編集</Typography>
+                <Typography align="center" variant="h5">
+                  {store.getState().displayName} さん<br/>
+                  のプロフィール</Typography>
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 4 }}>
-                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Avatar
-                  src={image ? URL.createObjectURL(image) : profile ? profile.image : ""}alt=""/>
-                    <div>
-                        <input
-                            id="image"
-                            type="file"
-                            accept="image/*"
-                            onChange={handleChange}
-                            style={{ display: "none" }}/>
-                        <label htmlFor="image">
-                        <Button variant="contained" color="primary" component="span">
-                            画像を選択
-                        </Button>
-                        </label>
-                    </div>
-                </Box>
-                    <TextField
-                      margin="normal"
-                      required
-                      fullWidth
-                      id="name"
-                      label="ユーザー名"
-                      name="name"
-                      autoComplete="name"
-                      autoFocus
-                      value={name ? name : profile ? profile.name : ""}
-                      onChange={e => setName(e.target.value)}/>
+                <Container align = "center">
+                    <Avatar
+                      sx={{ width: 100, height: 100 }}
+                      src={image ? URL.createObjectURL(image) : profile ? profile.image : ""}alt=""/>
+                  <input
+                      id     = "image"
+                      type   = "file"
+                      accept = "image/*"
+                      style  = {{ display: "none" }}/>
+                </Container>
+                    <Container align="left">
+                      <Typography >ユーザー名</Typography>
+                      <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id           = "name"
+                        name         = "name"
+                        autoComplete = "name"
+                        autoFocus
+                        defaultValue = {name}
+                        value        = {name ? name : profile ? profile.name : ""}
+                        InputProps   = {{readOnly: true,}}
+                        variant      = "standard"/>
+                    </Container>
+                    <br/>
+                    <Container align="left">
+                      <Typography>所在地</Typography>
+                      <TextField
+                        margin       = "normal"
+                        fullWidth
+                        id           = "location"
+                        name         = "location"
+                        autoComplete = "location"
+                        autoFocus
+                        defaultValue = {location}
+                        value        = {location ? location : profile ? profile.location : ""}
+                        InputProps   = {{readOnly: true,}}
+                        variant      = "standard"/>
+                      </Container>
+                      <br/>
+                      <Container align="left">
+                        <Typography>自己紹介</Typography>
+                        <TextField
+                          margin       = "normal"
+                          id           = "selfintroduction"
+                          fullWidth
+                          name         = "selfintroduction"
+                          autoComplete = "selfintroduction"
+                          multiline
+                          defaultValue = {selfintroduction}
+                          rows         = {6}
+                          value        = {selfintroduction ? selfintroduction : profile ? profile.selfintroduction : "よろしくお願いします。"}
+                          InputProps   = {{readOnly: true,}}
+                          variant      = "standard"/>
+                      </Container>
                     <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-                      {profile ? "更新" : "作成"}
+                      編集する
                     </Button>
-                    {error && (<Alert severity="error">{profile ? "更新" : "作成"}できませんでした</Alert>)}
-                    {success && (<Alert severity="success"> {profile ? "更新" : "作成"}しました</Alert>)}
                 </Box>
             </Paper>
         </Container>

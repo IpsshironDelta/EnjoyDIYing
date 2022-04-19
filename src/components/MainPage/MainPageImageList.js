@@ -41,9 +41,9 @@ export default function TitlebarImageList() {
 
 const itemData = [
   {
-    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-    title: '作品タイトル',
-    author: '@ユーザー名',
+    img: 'https://firebasestorage.googleapis.com/v0/b/myfirebasesample-c6d99.appspot.com/o/PAGE_USE_IMG%2F002_mainpage_img.jpg?alt=media&token=760a42db-f2e1-4e5a-a7f9-d485693e1e01',
+    title: 'タイトルが入る編集',
+    author: 'ガブリアス',
     rows: 2,
     cols: 2,
     featured: true,

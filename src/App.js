@@ -17,6 +17,7 @@ import UserRegistrationReview   from './components/UserRegistration/UserRegistra
 import UserRegistrationComplete from './components/UserRegistration/UserRegistrationComplete';
 import FirebaseTest             from './components/test/test';
 import Profile                  from './components/Profile/Profile'
+import ProfileEdit              from './components/ProfileEdit/ProfileEdit'
 
 function App() {
   const history = useHistory();
@@ -33,6 +34,7 @@ function App() {
         <Route exact path="/mainpage" component={MainPage} />
         <Route exact path="/mypage" component={MyPage} />
         <Route exact path="/profile" component={Profile} />
+        <Route exact path="/profile/edit" component={ProfileEdit} />
         <Route exact path="/mypage/edit" component={MyPageEdit} />
         <Route exact path="/recipedetails" component={RecipeDetails} />
         <Route exact path="/userregistration" component={UserRegistration} />

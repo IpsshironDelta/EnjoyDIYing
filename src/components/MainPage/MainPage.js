@@ -10,10 +10,11 @@ import MainPageHeader    from './MainPageHeader';
 import MainPageImageList from './MainPageImageList';
 import Footer            from '../Footer';
 import Grid              from '@mui/material/Grid';
-import LoginIcon         from '@mui/icons-material/Login';
-import PersonAddIcon     from '@mui/icons-material/PersonAdd';
+import PersonIcon     from '@mui/icons-material/Person';
+import EditIcon          from '@mui/icons-material/Edit';
 import MainPageButton    from './MainPageButton';
-import { firebaseApp } from "../../firebase";
+import { firebaseApp }   from "../../firebase";
+import useProfile        from "../../components/hooks/useProfile"
 
 const theme = createTheme({
   palette: {
@@ -50,6 +51,8 @@ function MainPage(props) {
       history.push("/login")
     }
   })
+  const profileData = useProfile()
+  const profile = profileData.profile
 
   const mypage = (event) =>{
     history.push("/mypage");
@@ -76,16 +79,18 @@ function MainPage(props) {
                 <Grid item xs={6} align = "right">
                   <MainPageButton
                     variant   = 'contained'
-                    startIcon = {<PersonAddIcon/>}
+                    link      = "/post"
+                    startIcon = {<EditIcon/>}
                     sx        = {"background-color:#3D85CC"}
-                    text      = "新規登録"/>
+                    text      = "投稿する"/>
                 </Grid>
                 <Grid item xs={6} align = "left">
                   <MainPageButton
                       variant   = 'contained'
-                      startIcon = {<LoginIcon/>}
+                      link      = "/profile"
+                      startIcon = {<PersonIcon/>}
                       sx        = {"background-color:#3D85CC"}
-                      text      = "ログイン"/>
+                      text      = "プロフィール編集"/>
                 </Grid>
               </Grid>
             </Grid>
@@ -189,7 +194,7 @@ function MainPage(props) {
               align="left"
               color="text.primary"
               gutterBottom>
-              お気に入りの投稿
+               さんのお気に入り投稿
             </Typography>
             <MainPageImageList/>
             <Typography
@@ -198,7 +203,7 @@ function MainPage(props) {
               align="left"
               color="text.primary"
               gutterBottom>
-              さんの過去の作品
+               さんの過去の作品
             </Typography>
             <MainPageImageList/>
           </Box>

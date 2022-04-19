@@ -7,25 +7,20 @@ import { Select }      from '@mui/material';
 import { withRouter }  from 'react-router-dom';
 import FormHelperText  from '@mui/material/FormHelperText';
 
-function MyPageEditSelectBox(props) {
+function ProfileSelectBox(props) {
 
   return (
     <Box sx={{ minWidth: 120 }}>
       <FormControl fullWidth error={props.error}>
         <InputLabel id="location-label"/>
         <Select
-          margin       = {props.margin}
-          required     = {props.required}
-          fullWidth    = {props.fullWidth}
-          id           = {props.id}
-          label        = {props.label}
-          name         = {props.name}
-          autoComplete = {props.autoComplete}
-          autoFocus    = {props.autoFocus}
-          labelId      = {props.labelId}
-          type         = {props.type}
-          value        = {props.value}
-          onChange     = {props.onChange}>
+          labelId  = {props.labelId}
+          id       = {props.id}
+          label    = {props.label}
+          name     = {props.name}
+          type     = {props.type}
+          value    = {props.value}
+          onChange = {props.onChange}>
             <MenuItem value="北海道">北海道</MenuItem>
             <MenuItem value="青森県">青森県</MenuItem>
             <MenuItem value="岩手県">岩手県</MenuItem>
@@ -80,4 +75,4 @@ function MyPageEditSelectBox(props) {
   );
 }
 
-export default withRouter(MyPageEditSelectBox);
+export default withRouter(ProfileSelectBox);

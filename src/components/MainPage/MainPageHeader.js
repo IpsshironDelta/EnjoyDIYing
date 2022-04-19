@@ -1,18 +1,21 @@
 import * as React     from 'react';
-import AppBar         from '@mui/material/AppBar';
-import Box            from '@mui/material/Box';
-import Toolbar        from '@mui/material/Toolbar';
+import {Avatar,
+        AppBar,
+        Toolbar,
+        Box,}         from "@mui/material"
 import MainPageButton from './MainPageButton';
 import HeaderTitle    from '../HeaderTitle';
 import EditIcon       from '@mui/icons-material/Edit';
 import HomeIcon       from '@mui/icons-material/Home';
-import PersonIcon     from '@mui/icons-material/Person';
 import PersonAddIcon  from '@mui/icons-material/PersonAdd';
-import BugReportIcon from '@mui/icons-material/BugReport';
-import AppSettingsAltIcon from '@mui/icons-material/AppSettingsAlt';
-import LogoutIcon from '@mui/icons-material/Logout';
+import BugReportIcon  from '@mui/icons-material/BugReport';
+import PersonIcon     from '@mui/icons-material/Person';
+import LogoutIcon     from '@mui/icons-material/Logout';
+import useProfile     from "../../components/hooks/useProfile"
 
 export default function PrimarySearchAppBar() {
+  const profileData = useProfile()
+  const profile = profileData.profile
   return (
     <Box sx={{ flexGrow: 1 }} >
       <AppBar position="fixed">
@@ -48,7 +51,7 @@ export default function PrimarySearchAppBar() {
               link      = "/profile"
               size      = "large"
               variant   = "contained"
-              startIcon = {<AppSettingsAltIcon/>}/>
+              startIcon = {<PersonIcon/>}/>
             <MainPageButton
               id        = "logout"
               text      = "ログアウト" 
@@ -56,18 +59,14 @@ export default function PrimarySearchAppBar() {
               size      = "large"
               variant   = "contained"
               startIcon = {<LogoutIcon/>}/>
-            {/* <MainPageButton
-              text      = "マイページ" 
-              link      = "/mypage"
-              size      = "large"
-              variant   = "contained"
-              startIcon = {<PersonIcon/>}/> */}
-            <MainPageButton
-              text    = "新規登録" 
-              link    = "/login"
-              size    = "large"
-              variant = "contained"
-              startIcon = {<PersonAddIcon/>}/>
+            {profile ? 
+              <Avatar src={profile ? profile.image : ""} alt="" />
+                : <MainPageButton
+                  text    = "新規登録" 
+                  link    = "/login"
+                  size    = "large"
+                  variant = "contained"
+                  startIcon = {<PersonAddIcon/>}/>}
           </Box>
         </Toolbar>
       </AppBar>
