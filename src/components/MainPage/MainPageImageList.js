@@ -1,13 +1,11 @@
 import React ,
       { useEffect,
         useState,
-        useRef ,
-        useLayoutEffect, } from "react";
+        useRef , } from "react";
 import { db }       from '../../firebase';
 import { collection,
          getDocs ,}  from 'firebase/firestore';
-import { Avatar ,
-         Typography , 
+import { Typography , 
          Box ,
          Grid,
          createTheme , 
@@ -16,20 +14,27 @@ import { format ,
          formatDistance,  } from "date-fns"
 import { ja } from "date-fns/locale"
 import useProfile from "../hooks/useProfile"
+import Divider from '@mui/material/Divider';
+import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
+import { styled } from '@mui/material/styles';
 
-const collectionName = "message"
+const collectionName = "recipe"
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
 const theme = createTheme()
 
 export default function MainPageImageList() {
-  const [message, setMessage] = useState([]);
+  const [recipe, setMessage] = useState([]);
   const profileData = useProfile()
   const profile = profileData.profile
   const bottomRef = useRef(null)
   const array = [];
-  // 一番下の画面までスクロールする
-  // useLayoutEffect(() => {
-  //   bottomRef?.current?.scrollIntoView()
-  // })
 
   // タイムスタンプ
   const time = (date) => {
@@ -72,42 +77,52 @@ export default function MainPageImageList() {
   return (
     <ThemeProvider theme={theme}>
       <Grid item xs={12}>
-        {message ? (
-          message.map((message) => (
+        {recipe ? (
+          recipe.map((recipe) => (
             <Box 
-              key={message.id} 
+              key={recipe.id} 
               sx={{
                 display: "flex",
-                flexDirection:profile && profile.uid === message.user.uid ? "row" : "row-reverse",
                 my: 2,
                 gap: 2,
                 flexGrow: 1, m: 2,}}>
               <Box>
-                <Avatar src={message.user.image ? message.user.image : ""} alt="" />
+                <img src={recipe.image.url ? recipe.image.url : ""} width = "200px" alt="" />
               </Box>
               <Box sx={{ ml: 2 }}>
+                <Typography sx={{ fontSize: 22 ,color:"#000000"}}>
+                  <strong>{recipe.title}</strong>
+                </Typography>
                 <Typography sx={{ fontSize: 12 ,color:"#000000"}}>
-                  {message.user.name}
+                  {recipe.image.name}
                 </Typography>
-                <Typography sx={{ p: 1, background: "#dddddd", borderRadius: 1 ,color:"#000000"}}>
-                  {message.text}
+                <Typography sx={{ p: 1, fontSize: 14 , width : 600 , background: "#dddddd", borderRadius: 1 ,color:"#000000"}}>
+                  {recipe.memo}
                 </Typography>
-                <Grid container spacing={1}>
+                <Stack
+                  direction="row"
+                  divider={<Divider orientation="vertical" flexItem />}
+                  spacing={2}>
+                  <Item>投稿した日：{format(recipe.createdAt.toDate(), "yyyy年MM月dd日")}</Item>
+                  <Item>{recipe.image.user}</Item>
+                  <Item>制作費用：<strong>{Number(recipe.productioncost).toLocaleString()}</strong> 円</Item>
+                </Stack>
+                {/* <Grid container spacing={1}>
                   <Grid item xs={8} align = "left">
-                    <Typography sx={{ fontSize: 12 ,color:"#000000"}}>
-                      {format(message.createdAt.toDate(), "yyyy年MM月dd日hh:mm")}
+                    <Typography sx={{ fontSize: 18 ,color:"#000000"}}>
+                      投稿した日：{format(recipe.createdAt.toDate(), "yyyy年MM月dd日")}
                     </Typography>
                   </Grid>
                   <Grid item xs={4} align = "right">
-                    <Typography sx={{ fontSize: 12 ,color:"#000000" }}>
-                      {time(message.createdAt)}
+                    <Typography sx={{ fontSize: 18 ,color:"#000000" }}>
+                      制作費用：<strong>{Number(recipe.productioncost).toLocaleString()}</strong> 円
                     </Typography>
                   </Grid>
-                </Grid>
+                </Grid> */}
               </Box>
             </Box>
           ))) : (
-          <p>メッセージが存在しません</p>)}
+          <p>投稿が存在しません</p>)}
           <div ref={bottomRef}></div>
       </Grid>
     </ThemeProvider>
