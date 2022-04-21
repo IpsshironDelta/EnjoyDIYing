@@ -18,7 +18,22 @@ import {createTheme,
   ThemeProvider } from '@mui/material/styles';
 import LoginIcon from '@mui/icons-material/Login';
 
-const theme = createTheme();
+const theme = createTheme({
+  shadows: ["none"],
+  palette: {
+    // ボタンのカラー設定
+    primary: {
+      main: '#E64545',
+      contrastText: '#ffffff',
+    },
+    // 背景のカラー設定
+    background: {
+      default: '#ffffff',
+    },
+    // テキストのカラー設定
+    text: { primary: '#000000' },
+  },
+});
 
 export default function Login() {
   const [email, setEmail] = useState("")
@@ -46,7 +61,7 @@ export default function Login() {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <Avatar sx={{ m: 1, bgcolor: "#E64545" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -86,12 +101,8 @@ export default function Login() {
             >
               ログイン
             </Button>
-              {
-                  error && <Alert severity="error">ログインできませんでした</Alert>
-              }
-              {
-                  success && <Alert severity="success">ログインしました</Alert>
-              }
+              {error && <Alert severity="error">ログインできませんでした</Alert>}
+              {success && <Alert severity="success">ログインしました</Alert>}
             <Grid container>
               <Grid item xs>
                 <Link href="passwordreset" variant="body2">

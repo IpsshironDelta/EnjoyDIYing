@@ -48,7 +48,7 @@ const ImageUpload = (props) => {
                 selectFiles({ accept: "image/*" }, ({ name, size, source, file }) => {
                 console.log("Files Selected", { name, size, source, file })
                 pushfiles(file)})}
-            endIcon={<PhotoCamera />}>
+            startIcon={<PhotoCamera />}>
             画像を追加する
         </Button>
     </div>

@@ -13,6 +13,7 @@ export default function ProfileButton(props){
             fullWidth = {props.fullWidth}
             disableElevation
             sx        = {props.sx}
+            padding   = {props.padding}
             onClick={() => {
                 history.push(props.link);
                 }}>

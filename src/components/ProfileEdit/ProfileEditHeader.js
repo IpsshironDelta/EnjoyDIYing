@@ -25,7 +25,7 @@ export default function ProfileEditHeader() {
 
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <ProfileButton
+            {/* <ProfileButton
               text      ="操作説明" 
               link      = "/operation"
               size      = "large"
@@ -43,7 +43,7 @@ export default function ProfileEditHeader() {
               link      = "/"
               size      = "large"
               variant   = "contained"
-              startIcon = {<LogoutIcon/>}/>
+              startIcon = {<LogoutIcon/>}/> */}
             <Avatar src={profile ? profile.image : ""} alt="" />
           </Box>
         </Toolbar>

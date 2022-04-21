@@ -25,25 +25,25 @@ export default function MainpageHeader() {
 
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <ProfileButton
+            {/* <ProfileButton
               text      ="操作説明" 
               link      = "/operation"
               size      = "large"
               variant   = "contained"
-              startIcon = {<FeedIcon/>}/>
+              startIcon = {<FeedIcon/>}/> */}
             <ProfileButton
               text      ="ホーム" 
               link      = "/"
               size      = "large"
               variant   = "contained"
               startIcon = {<HomeIcon/>}/>
-            <ProfileButton
+            {/* <ProfileButton
               id        = "logout"
               text      = "ログアウト" 
               link      = "/"
               size      = "large"
               variant   = "contained"
-              startIcon = {<LogoutIcon/>}/>
+              startIcon = {<LogoutIcon/>}/> */}
             <Avatar src={profile ? profile.image : ""} alt="" />
           </Box>
         </Toolbar>

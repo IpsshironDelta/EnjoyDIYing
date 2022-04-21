@@ -14,6 +14,7 @@ import Stack             from '@mui/material/Stack';
 import Avatar            from '@mui/material/Avatar';
 
 const theme = createTheme({
+  shadows: ["none"],
   palette: {
     // ボタンのカラー設定
     primary: {

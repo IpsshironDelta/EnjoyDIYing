@@ -18,17 +18,31 @@ import SignUpHeader from "./SignUpHeader";
 import {createTheme, 
         ThemeProvider } from '@mui/material/styles';
 
-const theme = createTheme();
+const theme = createTheme({
+  shadows: ["none"],
+  palette: {
+    // ボタンのカラー設定
+    primary: {
+      main: '#E64545',
+      contrastText: '#ffffff',
+    },
+    // 背景のカラー設定
+    background: {
+      default: '#ffffff',
+    },
+    // テキストのカラー設定
+    text: { primary: '#000000' },
+  },
+});
 
 export default function Signup() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [nickname, setNickname] = useState("")
-
   const { signup, error , success } = useSignup()
 
   const handleSubmit = (event) => {
     event.preventDefault()
+    // Authenticationを登録する
     signup(email, password )
   }
 
@@ -45,26 +59,13 @@ export default function Signup() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",}}>
-        <Avatar sx={{ m: 1, bgcolor: "success.main" }}>
+        <Avatar sx={{ m: 1, bgcolor: "#E64545" }}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
           新規ユーザー登録
         </Typography>
         <Box component="form" noValidate sx={{ mt: 1 }}>
-        <Typography variant="h7">
-            ニックネーム
-          </Typography>
-          <TextField
-            margin       = "normal"
-            fullWidth
-            id           = "nickname"
-            label        = "ニックネーム"
-            name         = "nickname"
-            autoComplete = "nickname"
-            autoFocus
-            value        = {nickname}
-            onChange     = {e => setNickname(e.target.value)}/>
           <Typography variant="h7">
             メールアドレス(公開されません)
           </Typography>
@@ -97,7 +98,7 @@ export default function Signup() {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2, bgcolor: "success.main" }}
+            sx={{ mt: 3, mb: 2,}}
             link = "/"
             startIcon = {<PersonAddIcon/>}
             onClick = {handleSubmit}>

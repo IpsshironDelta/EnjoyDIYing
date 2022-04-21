@@ -1,24 +1,38 @@
 import React, { useState } from "react"
-import {
-  Avatar,
-  Alert,
-  Button,
-  CssBaseline,
-  TextField,
-  Box,
-  Typography,
-  Container,
-  Grid,
-  Link,
-} from "@mui/material"
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined"
-import usePasswordReset from "../hooks/passWordReSetting"
+import {Avatar,
+        Alert,
+        Button,
+        CssBaseline,
+        TextField,
+        Box,
+        Typography,
+        Container,
+        Grid,}             from "@mui/material"
+import LockOutlinedIcon    from "@mui/icons-material/LockOutlined"
+import usePasswordReset    from "../hooks/passWordReSetting"
 import PasswordResetHeader from "./PasswordResetHeader"
 import {createTheme, 
-    ThemeProvider } from '@mui/material/styles';
-import SendIcon from '@mui/icons-material/Send';  
+        ThemeProvider }    from '@mui/material/styles';
+import SendIcon            from '@mui/icons-material/Send';  
+import PasswordResetButton from "./PasswordResetButton"
+import ArrowBackIcon       from '@mui/icons-material/ArrowBack';
 
-const theme = createTheme();
+const theme = createTheme({
+    shadows: ["none"],
+    palette: {
+        // ボタンのカラー設定
+        primary: {
+          main: '#E64545',
+          contrastText: '#ffffff',
+        },
+        // 背景のカラー設定
+        background: {
+          default: '#ffffff',
+        },
+        // テキストのカラー設定
+        text: { primary: '#000000' },
+      },
+});
 
 export default function PasswordReset() {
     const { success, error, passwordReset } = usePasswordReset()
@@ -43,7 +57,7 @@ export default function PasswordReset() {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",}}>
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+            <Avatar sx={{ m: 1, bgcolor: "#E64545" }}>
             <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
@@ -67,14 +81,15 @@ export default function PasswordReset() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
                 startIcon = {<SendIcon/>}>
-                送信
+                メールを送信する
             </Button>
             <Grid container sx={{ justifyContent: "center" }}>
-                <Grid item>
-                <Link href="login" variant="body2">
-                    戻る
-                </Link>
-                </Grid>
+                <PasswordResetButton
+                    fullWidth
+                    text = "ログイン画面へ戻る"
+                    variant = "outlined"
+                    link    = "login"
+                    startIcon = {<ArrowBackIcon/>}/>
             </Grid>
             </Box>
         </Box>

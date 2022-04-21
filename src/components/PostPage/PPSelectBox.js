@@ -13,8 +13,9 @@ export default function BasicSelect() {
 
   return (
       <FormControl>
-        <InputLabel id="demo-simple-select-label"
-        size="small">期間</InputLabel>
+        <InputLabel 
+          id="demo-simple-select-label"
+          size="small">期間</InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"

@@ -26,12 +26,12 @@ export default function PrimarySearchAppBar() {
               size    = ""
               variant = ""
               startIcon = {<HomeIcon/>}/>
-            <PostPageButton
+            {/* <PostPageButton
               text    = "マイページ" 
               link    = "/mypage"
               size    = ""
               variant = ""
-              startIcon = {<PersonIcon/>}/>
+              startIcon = {<PersonIcon/>}/> */}
           </Box>
         </Toolbar>
       </AppBar>

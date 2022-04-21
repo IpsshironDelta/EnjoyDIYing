@@ -63,20 +63,20 @@ function Footer() {
             </Grid>
           </Grid>
         </Box>
-      <Box component="footer" sx={{backgroundColor:"#ffffff", py: 3}}>
-        <Container maxWidth="lg">
-          <Typography variant="body2" align="center" color = {textColor}>
-            <HeaderTitle
-                variant    = "body2"
-                noWrap
-                component  = "div"
-                front_text = {'© ' + new Date().getFullYear() + ' '}
-                color     = {textColor}/>
-            画像出典元:Illustration by Freepik Storyset
-          </Typography>
-        </Container>
-      </Box>
-    </Container>
+        <Box component="footer" sx={{backgroundColor:"#ffffff", py: 3}}>
+          <Container maxWidth="lg">
+            <Typography variant="body2" align="center" color = {textColor}>
+              <HeaderTitle
+                  variant    = "body2"
+                  noWrap
+                  component  = "div"
+                  front_text = {'© ' + new Date().getFullYear() + ' '}
+                  color     = {textColor}/>
+              画像出典元:Illustration by Freepik Storyset
+            </Typography>
+          </Container>
+        </Box>
+      </Container>
     </ThemeProvider>
   );
 }

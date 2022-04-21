@@ -14,7 +14,22 @@ import {createTheme,
 import useProfile from "../../components/hooks/useProfile"
 import store                from '../../store/index';
 
-const theme = createTheme();
+const theme = createTheme({
+  shadows: ["none"],
+  palette: {
+    // ボタンのカラー設定
+    primary: {
+      main: '#E64545',
+      contrastText: '#ffffff',
+    },
+    // 背景のカラー設定
+    background: {
+      default: '#ffffff',
+    },
+    // テキストのカラー設定
+    text: { primary: '#000000' },
+  },
+});
 
 const Profile = () => {
   const [name, setName] = useState("")

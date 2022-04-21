@@ -1,4 +1,5 @@
-import * as React        from 'react';
+import React, 
+      {useState,}        from "react";
 import Box               from '@mui/material/Box';
 import Typography        from '@mui/material/Typography';
 import Container         from '@mui/material/Container';
@@ -10,13 +11,15 @@ import MainPageHeader    from './MainPageHeader';
 import MainPageImageList from './MainPageImageList';
 import Footer            from '../Footer';
 import Grid              from '@mui/material/Grid';
-import PersonIcon     from '@mui/icons-material/Person';
+import PersonIcon        from '@mui/icons-material/Person';
 import EditIcon          from '@mui/icons-material/Edit';
 import MainPageButton    from './MainPageButton';
 import { firebaseApp }   from "../../firebase";
 import useProfile        from "../../components/hooks/useProfile"
+import {ref ,}           from "firebase/storage"
 
 const theme = createTheme({
+  shadows: ["none"],
   palette: {
     // ボタンのカラー設定
     primary: {
@@ -27,7 +30,6 @@ const theme = createTheme({
     background: {
       default: '#ffffff',
     },
-
     // テキストのカラー設定
     text: { primary: '#000000' },
   },
@@ -41,7 +43,8 @@ const subImg_002 =
 "https://firebasestorage.googleapis.com/v0/b/myfirebasesample-c6d99.appspot.com/o/PAGE_USE_IMG%2F004_mainpage_img.jpg?alt=media&token=af24a603-0191-42e2-8b13-dad349aa58a4"
 const subImg_003 = 
 "https://firebasestorage.googleapis.com/v0/b/myfirebasesample-c6d99.appspot.com/o/PAGE_USE_IMG%2F003_mainpage_img.jpg?alt=media&token=f824c05e-93c4-4bbe-9e10-0ac95f6d47af"
-
+const filename       = "001_mainpage_img.png"
+const filepath       = "gs://myfirebasesample-c6d99.appspot.com/PAGE_USE_IMG/"
 
 function MainPage(props) {
   const history = useHistory()
@@ -54,17 +57,21 @@ function MainPage(props) {
   const profileData = useProfile()
   const profile = profileData.profile
 
-  const mypage = (event) =>{
-    history.push("/mypage");
-  };
+  const [image, setImage] = useState()
+  const firestorage = firebaseApp.firestorage
+  const gsReference = ref(
+    firestorage,
+    filepath + filename
+  )
+  
   return (
     <ThemeProvider theme={theme}>
       <Container maxWidth>
         <MainPageHeader/>
       </Container>
-      <Box sx={{ flexGrow: 1, m: 2, pt: 6, pb: 4 }}>
+      <Box sx={{ flexGrow: 1, m: 2, pt: 5, pb: 4 }}>
         <Container maxWidth>
-          <Grid container spacing={0} sx={{backgroundColor:'#E64545',height: '310px' }}>
+          <Grid container spacing={0} sx={{backgroundColor:'#E64545',height: '300px' }}>
             <Grid item xs={6}>
               <Typography variant="h4" align="center">
                 <strong><br/>その "アイディア" を "カタチ" に</strong>
@@ -79,7 +86,7 @@ function MainPage(props) {
                 <Grid item xs={6} align = "right">
                   <MainPageButton
                     variant   = 'contained'
-                    link      = "/post"
+                    link      = "/postpage"
                     startIcon = {<EditIcon/>}
                     sx        = {"background-color:#3D85CC"}
                     text      = "投稿する"/>
@@ -90,7 +97,7 @@ function MainPage(props) {
                       link      = "/profile"
                       startIcon = {<PersonIcon/>}
                       sx        = {"background-color:#3D85CC"}
-                      text      = "プロフィール編集"/>
+                      text      = "プロフィール"/>
                 </Grid>
               </Grid>
             </Grid>

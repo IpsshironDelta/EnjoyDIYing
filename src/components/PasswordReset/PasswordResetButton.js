@@ -11,6 +11,7 @@ export default function PasswordResetButton(props){
             startIcon = {props.startIcon}
             disabled  = {props.disabled}
             disableElevation
+            fullWidth = {props.fullWidth}
             sx        = {props.sx}
             onClick={() => {
                 history.push(props.link);

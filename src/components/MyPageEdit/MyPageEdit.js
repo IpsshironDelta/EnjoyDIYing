@@ -31,6 +31,7 @@ const strMyPage            = "/mypage"
 const strNicknameErrorMS   = "nicknameErrorMS"
 
 const theme = createTheme({
+  shadows: ["none"],
   palette: {
     // ボタンのカラー設定
     primary: {

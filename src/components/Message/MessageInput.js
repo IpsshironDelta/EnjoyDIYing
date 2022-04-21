@@ -10,7 +10,7 @@ import {firebaseApp } from "../../firebase"
 import {addDoc , 
         collection,
         Timestamp  } from "firebase/firestore"
-import useProfile from "../../components/hooks/useProfile"
+import useProfile from "../hooks/useProfile"
 
 export default function MessageInput() {
     const [message, setMessage] = useState("")
@@ -37,7 +37,8 @@ export default function MessageInput() {
                 user: {
                     name: profile?.name,
                     image: profile?.image,
-                    uid: profile?.uid,},
+                    uid: profile?.uid,
+                  },
               })
             console.log("書き込み成功")
             // 画面をリフレッシュする

@@ -12,10 +12,11 @@ const initialState = {
   nicknameErrorMS  : "",
   location         : "",
   locationErrorMS  : "",
-  recipetitle      : "",
-  category         : "",
-  productionCost   : "",
-  productionPeriod : "",
+  recipetitle      : "",  // 作品タイトル
+  category         : "",  // カテゴリー
+  productionCost   : "",  // 制作費用
+  productionPeriod : "",  // 制作期間
+  productionMemo   : "",  // 作品メモ
   memo             : "",
   photoURL         : "",
   photoFileData    : "",

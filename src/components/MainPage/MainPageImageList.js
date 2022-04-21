@@ -1,177 +1,115 @@
-import * as React       from 'react';
-import ImageList        from '@mui/material/ImageList';
-import ImageListItem    from '@mui/material/ImageListItem';
-import ImageListItemBar from '@mui/material/ImageListItemBar';
-import IconButton       from '@mui/material/IconButton';
-import FavoriteIcon     from '@mui/icons-material/Favorite';
-import ShareIcon        from '@mui/icons-material/Share';
+import React ,
+      { useEffect,
+        useState,
+        useRef ,
+        useLayoutEffect, } from "react";
+import { db }       from '../../firebase';
+import { collection,
+         getDocs ,}  from 'firebase/firestore';
+import { Avatar ,
+         Typography , 
+         Box ,
+         Grid,
+         createTheme , 
+         ThemeProvider ,} from "@mui/material"
+import { format ,
+         formatDistance,  } from "date-fns"
+import { ja } from "date-fns/locale"
+import useProfile from "../hooks/useProfile"
+
+const collectionName = "message"
+const theme = createTheme()
+
+export default function MainPageImageList() {
+  const [message, setMessage] = useState([]);
+  const profileData = useProfile()
+  const profile = profileData.profile
+  const bottomRef = useRef(null)
+  const array = [];
+  // 一番下の画面までスクロールする
+  // useLayoutEffect(() => {
+  //   bottomRef?.current?.scrollIntoView()
+  // })
+
+  // タイムスタンプ
+  const time = (date) => {
+    let timestamp = formatDistance(new Date(), date.toDate(), {
+      locale: ja,
+    })
+    if (timestamp.indexOf("未満") !== -1) {
+      return (timestamp = "たった今")
+    } else if (
+      timestamp.indexOf("か月") !== -1 ||
+      timestamp.indexOf("年") !== -1
+    ) {
+      return (timestamp = format(date.toDate(), "yyyy年M月d日", {
+        locale: ja,
+      }))
+    } else {
+      return (timestamp = timestamp + "前")
+    }
+  }
+
+  const fetchUsersData = () => {
+    getDocs(collection(db, collectionName)).then((querySnapshot)=>{
+      querySnapshot.forEach((doc) => {
+        console.log(doc.id,doc.data())
+        console.log(doc.data().text)
+        console.log(format(doc.data().createdAt.toDate(), "yyyy年MM月dd日hh:mm"))
+        array.push({
+          id : doc.id,
+          ...doc.data()
+        })})
+    }).then(()=>{
+      setMessage([...array])
+    })};
+
+  useEffect(() => {
+    fetchUsersData()
+  },[]);
 
 
-export default function TitlebarImageList() {
   return (
-    <ImageList maxWidth="lg">
-      <ImageListItem key="Subheader" cols={7} >
-      </ImageListItem>
-      {itemData.map((item) => (
-        <ImageListItem key={item.img}>
-          <img
-            src={`${item.img}?w=248&fit=crop&auto=format`}
-            srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-            alt={item.title}
-            loading="lazy"
-          />
-          <ImageListItemBar
-            title={item.title}
-            subtitle={item.author}
-            actionIcon={
-              <IconButton
-                sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                aria-label={`info about ${item.title}`}
-              >
-                <FavoriteIcon />
-                <ShareIcon />
-              </IconButton>
-              }
-          />
-        </ImageListItem>
-      ))}
-    </ImageList>
+    <ThemeProvider theme={theme}>
+      <Grid item xs={12}>
+        {message ? (
+          message.map((message) => (
+            <Box 
+              key={message.id} 
+              sx={{
+                display: "flex",
+                flexDirection:profile && profile.uid === message.user.uid ? "row" : "row-reverse",
+                my: 2,
+                gap: 2,
+                flexGrow: 1, m: 2,}}>
+              <Box>
+                <Avatar src={message.user.image ? message.user.image : ""} alt="" />
+              </Box>
+              <Box sx={{ ml: 2 }}>
+                <Typography sx={{ fontSize: 12 ,color:"#000000"}}>
+                  {message.user.name}
+                </Typography>
+                <Typography sx={{ p: 1, background: "#dddddd", borderRadius: 1 ,color:"#000000"}}>
+                  {message.text}
+                </Typography>
+                <Grid container spacing={1}>
+                  <Grid item xs={8} align = "left">
+                    <Typography sx={{ fontSize: 12 ,color:"#000000"}}>
+                      {format(message.createdAt.toDate(), "yyyy年MM月dd日hh:mm")}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={4} align = "right">
+                    <Typography sx={{ fontSize: 12 ,color:"#000000" }}>
+                      {time(message.createdAt)}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Box>
+            </Box>
+          ))) : (
+          <p>メッセージが存在しません</p>)}
+          <div ref={bottomRef}></div>
+      </Grid>
+    </ThemeProvider>
   );
 }
-
-const itemData = [
-  {
-    img: 'https://firebasestorage.googleapis.com/v0/b/myfirebasesample-c6d99.appspot.com/o/PAGE_USE_IMG%2F002_mainpage_img.jpg?alt=media&token=760a42db-f2e1-4e5a-a7f9-d485693e1e01',
-    title: 'タイトルが入る編集',
-    author: 'ガブリアス',
-    rows: 2,
-    cols: 2,
-    featured: true,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
-    title: '作品タイトル',
-    author: '@rollelflex_graphy726',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
-    title: '作品タイトル',
-    author: '@helloimnik',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
-    title: '作品タイトル',
-    author: '@nolanissac',
-    cols: 2,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1533827432537-70133748f5c8',
-    title: '作品タイトル',
-    author: '@hjrc33',
-    cols: 2,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62',
-    title: '作品タイトル',
-    author: '@ユーザー名',
-    rows: 2,
-    cols: 2,
-    featured: true,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6',
-    title: '作品タイトル',
-    author: '@tjdragotta',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1518756131217-31eb79b20e8f',
-    title: '作品タイトル',
-    author: '@katie_wasserman',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1597645587822-e99fa5d45d25',
-    title: '作品タイトル',
-    author: '@silverdalex',
-    rows: 2,
-    cols: 2,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af',
-    title: '作品タイトル',
-    author: '@shelleypauls',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1471357674240-e1a485acb3e1',
-    title: '作品タイトル',
-    author: '@peterlaster',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6',
-    title: '作品タイトル',
-    author: '@southside_customs',
-    cols: 2,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
-    title: '作品タイトル',
-    author: '@rollelflex_graphy726',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
-    title: '作品タイトル',
-    author: '@helloimnik',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
-    title: '作品タイトル',
-    author: '@nolanissac',
-    cols: 2,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1533827432537-70133748f5c8',
-    title: '作品タイトル',
-    author: '@hjrc33',
-    cols: 2,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62',
-    title: '作品タイトル',
-    author: '@ユーザー名',
-    rows: 2,
-    cols: 2,
-    featured: true,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6',
-    title: '作品タイトル',
-    author: '@tjdragotta',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1518756131217-31eb79b20e8f',
-    title: '作品タイトル',
-    author: '@katie_wasserman',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1597645587822-e99fa5d45d25',
-    title: '作品タイトル',
-    author: '@silverdalex',
-    rows: 2,
-    cols: 2,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af',
-    title: '作品タイトル',
-    author: '@shelleypauls',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1471357674240-e1a485acb3e1',
-    title: '作品タイトル',
-    author: '@peterlaster',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6',
-    title: '作品タイトル',
-    author: '@southside_customs',
-    cols: 2,
-  },
-];

@@ -18,6 +18,7 @@ import Button            from '@mui/material/Button';
 import PersonAddIcon     from '@mui/icons-material/PersonAdd';
 
 const theme = createTheme({
+  shadows: ["none"],
   palette: {
     // ボタンのカラー設定
     primary: {

@@ -20,7 +20,7 @@ export default function useSignup () {
         setSuccess(true)
         // 成功した場合はホーム画面へ遷移
         setTimeout(() => {
-          history.push("/")
+          history.push("/profile/edit")
         }, 2000)
       })
       .catch(err => {
