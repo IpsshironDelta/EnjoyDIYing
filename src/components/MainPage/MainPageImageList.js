@@ -1,25 +1,26 @@
 import React ,
       { useEffect,
         useState,
-        useRef , } from "react";
-import { db }       from '../../firebase';
+        useRef , }          from "react";
+import { db }               from '../../firebase';
 import { collection,
-         getDocs ,}  from 'firebase/firestore';
+         getDocs ,}         from 'firebase/firestore';
 import { Avatar,
          Typography , 
          Box ,
          Grid,
          createTheme , 
          ThemeProvider ,
-         Link} from "@mui/material"
+         Link}              from "@mui/material"
 import { format ,
          formatDistance,  } from "date-fns"
-import { ja } from "date-fns/locale"
-import useProfile from "../hooks/useProfile"
-import Divider from '@mui/material/Divider';
-import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
-import { styled } from '@mui/material/styles';
+import { ja }               from "date-fns/locale"
+import useProfile           from "../hooks/useProfile"
+import Divider              from '@mui/material/Divider';
+import Paper                from '@mui/material/Paper';
+import Stack                from '@mui/material/Stack';
+import { styled }           from '@mui/material/styles';
+import MainpageImgButton    from './MainPageImageButton'
 
 const collectionName = "recipe"
 const Item = styled(Paper)(({ theme }) => ({
@@ -89,7 +90,10 @@ export default function MainPageImageList() {
                 gap: 2,
                 flexGrow: 1, m: 2,}}>
               <Box>
-                <img src={recipe.image.url ? recipe.image.url : ""} width = "200px" alt="" />
+                <MainpageImgButton
+                    imgURL = {recipe.image.url}
+                    value  = {recipe.title}
+                    text   = "何か入れる"/>
               </Box>
               <Box sx={{ ml: 2 }}>
                 {/* 作品タイトルの表示 */}
