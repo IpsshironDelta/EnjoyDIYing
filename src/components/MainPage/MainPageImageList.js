@@ -5,11 +5,13 @@ import React ,
 import { db }       from '../../firebase';
 import { collection,
          getDocs ,}  from 'firebase/firestore';
-import { Typography , 
+import { Avatar,
+         Typography , 
          Box ,
          Grid,
          createTheme , 
-         ThemeProvider ,} from "@mui/material"
+         ThemeProvider ,
+         Link} from "@mui/material"
 import { format ,
          formatDistance,  } from "date-fns"
 import { ja } from "date-fns/locale"
@@ -90,35 +92,32 @@ export default function MainPageImageList() {
                 <img src={recipe.image.url ? recipe.image.url : ""} width = "200px" alt="" />
               </Box>
               <Box sx={{ ml: 2 }}>
-                <Typography sx={{ fontSize: 22 ,color:"#000000"}}>
-                  <strong>{recipe.title}</strong>
+                {/* 作品タイトルの表示 */}
+                <Typography sx={{ fontSize: 22}}>
+                  <Link href="#" color="#000000">
+                    <strong>{recipe.title}</strong>
+                  </Link>
                 </Typography>
-                <Typography sx={{ fontSize: 12 ,color:"#000000"}}>
-                  {recipe.image.name}
-                </Typography>
-                <Typography sx={{ p: 1, fontSize: 14 , width : 600 , background: "#dddddd", borderRadius: 1 ,color:"#000000"}}>
+                {/* 作品メモの表示 */}
+                <Typography 
+                  sx={{ p: 1, fontSize: 14 , width : 600 , background: "#dddddd", borderRadius: 1 ,color:"#000000"}}>
                   {recipe.memo}
                 </Typography>
                 <Stack
                   direction="row"
                   divider={<Divider orientation="vertical" flexItem />}
                   spacing={2}>
+                    {/* 投稿日時の表示 */}
                   <Item>投稿した日：{format(recipe.createdAt.toDate(), "yyyy年MM月dd日")}</Item>
-                  <Item>{recipe.image.user}</Item>
+                  <Item>
+                    {/* 投稿したユーザーの表示 */}
+                    <Link href="#" color="#000000">
+                      {recipe.image.user}
+                    </Link>
+                  </Item>
+                  {/* 制作費用の表示 */}
                   <Item>制作費用：<strong>{Number(recipe.productioncost).toLocaleString()}</strong> 円</Item>
                 </Stack>
-                {/* <Grid container spacing={1}>
-                  <Grid item xs={8} align = "left">
-                    <Typography sx={{ fontSize: 18 ,color:"#000000"}}>
-                      投稿した日：{format(recipe.createdAt.toDate(), "yyyy年MM月dd日")}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={4} align = "right">
-                    <Typography sx={{ fontSize: 18 ,color:"#000000" }}>
-                      制作費用：<strong>{Number(recipe.productioncost).toLocaleString()}</strong> 円
-                    </Typography>
-                  </Grid>
-                </Grid> */}
               </Box>
             </Box>
           ))) : (

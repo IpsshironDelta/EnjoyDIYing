@@ -1,8 +1,10 @@
 import React, 
       {useState,}        from "react";
-import Box               from '@mui/material/Box';
-import Typography        from '@mui/material/Typography';
-import Container         from '@mui/material/Container';
+import { Box ,
+         Typography,
+         Container , 
+         Grid , 
+         Paper, } from '@mui/material';
 import { createTheme,
          ThemeProvider } from '@mui/material/styles';
 import { useHistory,
@@ -10,7 +12,6 @@ import { useHistory,
 import MainPageHeader    from './MainPageHeader';
 import MainPageImageList from './MainPageImageList';
 import Footer            from '../Footer';
-import Grid              from '@mui/material/Grid';
 import PersonIcon        from '@mui/icons-material/Person';
 import EditIcon          from '@mui/icons-material/Edit';
 import MainPageButton    from './MainPageButton';
@@ -69,50 +70,52 @@ function MainPage(props) {
       <Container maxWidth>
         <MainPageHeader/>
       </Container>
-      <Box sx={{ flexGrow: 1, m: 2, pt: 5, pb: 4 }}>
-        <Container maxWidth>
-          <Grid container spacing={0} sx={{backgroundColor:'#E64545',height: '300px' }}>
-            <Grid item xs={6}>
-              <Typography variant="h4" align="center">
-                <strong><br/>その "アイディア" を "カタチ" に</strong>
-              </Typography>
-              <Typography variant="h6" align="center">
-                色、デザイン、工夫、アイディアetc...<br/>
-                自由な発想、自由なアイディア、自由な工夫を探し出し、<br/>
-                仲間が作った”これ、考えた人すごいね。”というような<br/>
-                アイディアを共有してDIYを楽しみましょう。<br/><br/>
-              </Typography>
-              <Grid container spacing={1}>
-                <Grid item xs={6} align = "right">
-                  <MainPageButton
-                    variant   = 'contained'
-                    link      = "/postpage"
-                    startIcon = {<EditIcon/>}
-                    sx        = {"background-color:#3D85CC"}
-                    text      = "投稿する"/>
-                </Grid>
-                <Grid item xs={6} align = "left">
-                  <MainPageButton
-                      variant   = 'contained'
-                      link      = "/profile"
-                      startIcon = {<PersonIcon/>}
-                      sx        = {"background-color:#3D85CC"}
-                      text      = "プロフィール"/>
-                </Grid>
-              </Grid>
+      <Grid 
+        container 
+        spacing={0} 
+        sx={{backgroundColor:'#E64545',height: '300px' , }}
+        marginTop = '30px'>
+        <Grid item xs={6}>
+          <Typography variant="h4" align="center">
+            <strong><br/>その "アイディア" を "カタチ" に</strong>
+          </Typography>
+          <Typography variant="h6" align="center">
+            色、デザイン、工夫、アイディアetc...<br/>
+            自由な発想、自由なアイディア、自由な工夫を探し出し、<br/>
+            仲間が作った”これ、考えた人すごいね。”というような<br/>
+            アイディアを共有してDIYを楽しみましょう。<br/><br/>
+          </Typography>
+          <Grid container spacing={1}>
+            <Grid item xs={6} align = "right">
+              <MainPageButton
+                variant   = 'contained'
+                link      = "/postpage"
+                startIcon = {<EditIcon/>}
+                sx        = {"background-color:#3D85CC"}
+                text      = "投稿する"/>
             </Grid>
-            <Grid item xs={6}>
-              <Typography variant="body2" align='center'>
-                <img 
-                  src     = {maipageImg}
-                  width   = "350px" 
-                  alt     = "preview"
-                  padding = "1em"/>
-              </Typography>
+            <Grid item xs={6} align = "left">
+              <MainPageButton
+                  variant   = 'contained'
+                  link      = "/profile"
+                  startIcon = {<PersonIcon/>}
+                  sx        = {"background-color:#3D85CC"}
+                  text      = "プロフィール"/>
             </Grid>
           </Grid>
-        </Container>
-
+        </Grid>
+        <Grid item xs={6}>
+          <Typography variant="body2" align='center'>
+            <img 
+              src     = {maipageImg}
+              width   = "350px" 
+              alt     = "preview"
+              padding = "1em"/>
+          </Typography>
+        </Grid>
+      </Grid>
+        
+      <Box sx={{ flexGrow: 1, m: 2, pt: 5, pb: 4 }}>
         <Container maxWidth>
         <Grid container spacing={0} >
           <Grid item xs={12}>

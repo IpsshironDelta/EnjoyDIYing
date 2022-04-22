@@ -11,7 +11,6 @@ import BugReportIcon  from '@mui/icons-material/BugReport';
 import PersonIcon     from '@mui/icons-material/Person';
 import LogoutIcon     from '@mui/icons-material/Logout';
 import useProfile     from "../../components/hooks/useProfile"
-import Header from '../Header';
 import HeaderTitle    from '../HeaderTitle'
 
 export default function PrimarySearchAppBar() {
