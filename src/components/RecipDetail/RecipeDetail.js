@@ -1,18 +1,19 @@
-import * as React        from 'react';
-import Button            from '@mui/material/Button';
-import Card              from '@mui/material/Card';
-import CardContent       from '@mui/material/CardContent';
-import CardMedia         from '@mui/material/CardMedia';
-import CssBaseline       from '@mui/material/CssBaseline';
-import Grid              from '@mui/material/Grid';
-import Stack             from '@mui/material/Stack';
-import Box               from '@mui/material/Box';
-import Typography        from '@mui/material/Typography';
-import Container         from '@mui/material/Container';
+import * as React         from 'react';
+import {Avatar,
+        Box,
+        Grid,
+        Stack,
+        Typography,
+        Container,
+        CssBaseline,}     from "@mui/material"
 import { createTheme, 
-         ThemeProvider } from '@mui/material/styles';
+         ThemeProvider }  from '@mui/material/styles';
 import RecipeDetailHeader from "./RecipeDetailHeader"
-import RecipeDetailButton from "./RecipeDetailButton"
+import Footer             from '../Footer';
+import ThumbUpAltIcon     from '@mui/icons-material/ThumbUpAlt';
+import StarsIcon          from '@mui/icons-material/Stars';
+import CardMedia          from '@mui/material/CardMedia';
+import useProfile         from "../../components/hooks/useProfile"
 
 const theme = createTheme({
   shadows: ["none"],
@@ -32,6 +33,9 @@ const theme = createTheme({
 });
 
 export default function RecipDetail() {
+  const profileData = useProfile()
+  const profile = profileData.profile
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -53,64 +57,123 @@ export default function RecipDetail() {
                 color:"#a0522d"}}>
               <strong>作品タイトル</strong>
             </Typography>
-            <Stack
-              sx={{ pt: 1 }}
-              direction="row"
-              spacing={2}
-              justifyContent="center">
-                <Typography 
-                  sx={{ 
-                    p: 1, 
-                    fontSize: 14 , 
-                    width : 600 , 
-                    background: "#ffffff", 
-                    borderRadius: 1 ,
-                    color:"#000000"}}>
-                      これを考えた人：[アバターアイコン][作成者名]
-                </Typography>
-                <Typography 
-                  sx={{ 
-                    p: 1, 
-                    fontSize: 14 , 
-                    width : 600 , 
-                    background: "#ffffff", 
-                    borderRadius: 1 ,
-                    color:"#000000"}}>
-                  投稿した日時：[投稿日]
-                </Typography>
-            </Stack>
+            <Box
+              sx={{
+                pt : 1,
+                pl : 4,
+                pr : 4,}}>
+              <Grid container spacing={4}>
+                <Grid item xs={1}>
+                  <Avatar src={profile ? profile.image : ""} alt="" />
+                </Grid>
+                <Grid item xs={5}>
+                  <Typography 
+                    sx={{ 
+                      p: 1, 
+                      fontSize: 14 , 
+                      width : 600 , 
+                      color:"#000000"}}>
+                    [作成者名]さん
+                  </Typography>
+                </Grid>
+                <Grid item xs={6} align="center">
+                  <Typography 
+                    sx={{ 
+                      p: 1, 
+                      fontSize: 14 , 
+                      width : 600 , 
+                      color:"#000000"}}>
+                    投稿した日時：[投稿日]
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Box>
           </Container>
         </Box>
         <Container sx={{ py: 1 }} maxWidth="md">
+        <Box
+          sx={{
+            bgcolor: '#eeeeee',
+            pb : 4,
+            pl : 4,
+            pr : 4,}}>
           <Grid container spacing={4}>
-              <Grid item xs={12} sm={6} md={4}>
-                <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                  <CardMedia
-                    component="img"
-                    image="https://source.unsplash.com/random"
-                    alt="random"/>
-                  <CardContent sx={{ flexGrow: 1 }}>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      手順
-                    </Typography>
-                    <Typography>
-                      手順に関する説明
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
+            <Grid item xs={4}>
+              <Typography variant="body2" align='left'>
+                <CardMedia
+                  component = "img"
+                  height    = "250"
+                  image     = "https://source.unsplash.com/random"
+                  alt       = "Paella dish"/>
+              </Typography>
+            </Grid>
+            <Grid item xs={8}>
               {/* 作品コメント表示欄 */}
               <Typography 
                 sx={{ 
                   p: 1, 
-                  fontSize: 24 , 
+                  fontSize: 16 , 
                   background: "#ffffff", 
                   borderRadius: 1 ,
                   color:"#000000"}}>
-                作品に関するコメント欄
+                作品に関するコメント欄作品に関するコメント欄作品に関するコメント欄
+                作品に関するコメント欄作品に関するコメント欄作品に関するコメント欄
+                作品に関するコメント欄作品に関するコメント欄作品に関するコメント欄
               </Typography>
+              <br/>
+              <Typography 
+                sx={{ 
+                  p: 1, 
+                  fontSize: 16 , 
+                  background: "#ffffff", 
+                  borderRadius: 1 ,
+                  color:"#a0522d"}}>
+                かかった費用:
+              </Typography>
+              <br/>
+              <Typography 
+                sx={{ 
+                  p: 1, 
+                  fontSize: 16 , 
+                  background: "#ffffff", 
+                  borderRadius: 1 ,
+                  color:"#a0522d"}}>
+                所要時間:
+              </Typography>
+            </Grid>
           </Grid>
+        </Box>
+        <br/>
+        <Box
+          sx={{
+            bgcolor: '#eeeeee',
+            pl : 4,
+            pr : 4,}}>
+          <Grid container spacing={0} >
+            <Grid item xs={2}>
+              <Typography 
+                sx={{ 
+                  p: 1, 
+                  fontSize: 16 , 
+                  color:"#000000"}}>
+                <ThumbUpAltIcon/>いいね
+              </Typography>
+            </Grid>
+            <Grid item xs={2}>
+              <Typography 
+                sx={{ 
+                  p: 1, 
+                  fontSize: 16 , 
+                  color:"#000000"}}>
+                <StarsIcon/>お気に入り
+              </Typography>
+            </Grid>
+          </Grid>
+        </Box>
         </Container>
+      {/* Footer */}
+      <Footer/>
+      {/* End footer */}
       </main>
     </ThemeProvider>
   );

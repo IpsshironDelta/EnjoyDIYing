@@ -5,13 +5,13 @@ import React ,
 import { db }               from '../../firebase';
 import { collection,
          getDocs ,}         from 'firebase/firestore';
-import { Avatar,
-         Typography , 
+import { Typography , 
          Box ,
          Grid,
          createTheme , 
          ThemeProvider ,
-         Link}              from "@mui/material"
+         Link,
+         Button,}              from "@mui/material"
 import { format ,
          formatDistance,  } from "date-fns"
 import { ja }               from "date-fns/locale"
@@ -21,6 +21,8 @@ import Paper                from '@mui/material/Paper';
 import Stack                from '@mui/material/Stack';
 import { styled }           from '@mui/material/styles';
 import MainpageImgButton    from './MainPageImageButton'
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import StarsIcon from '@mui/icons-material/Stars';
 
 const collectionName = "recipe"
 const Item = styled(Paper)(({ theme }) => ({
@@ -34,6 +36,8 @@ const theme = createTheme()
 
 export default function MainPageImageList() {
   const [recipe, setMessage] = useState([]);
+  const [goodcount , setGoodCount] = useState(0)
+  const [bookmarkcount , setBookMarkCount] = useState(0)
   const profileData = useProfile()
   const profile = profileData.profile
   const bottomRef = useRef(null)
@@ -97,11 +101,35 @@ export default function MainPageImageList() {
               </Box>
               <Box sx={{ ml: 2 }}>
                 {/* 作品タイトルの表示 */}
-                <Typography sx={{ fontSize: 22}}>
-                  <Link href="#" color="#000000">
-                    <strong>{recipe.title}</strong>
-                  </Link>
-                </Typography>
+                <Grid container spacing={0} >
+                <Grid item xs= {6}>
+                  <Typography sx={{ fontSize: 22}}>
+                    <Link href="/recipedetail" color="#000000">
+                      <strong>{recipe.title}</strong>
+                    </Link>
+                  </Typography>
+                </Grid>
+                <Grid item xs= {3} >
+                  <Button
+                   onClick={() => {
+                    setGoodCount(goodcount +1)}}>
+                    <ThumbUpAltIcon/>
+                    <Typography color="#000000">
+                      イイね！{goodcount}
+                    </Typography>
+                  </Button>
+                </Grid>
+                <Grid item xs= {3}>
+                  <Button
+                    onClick={() =>{
+                      setBookMarkCount(bookmarkcount + 1)}}>
+                    <StarsIcon color="#ffffff"/>
+                    <Typography color="#000000">
+                      お気に入り{bookmarkcount}
+                    </Typography>
+                  </Button>                  
+                </Grid>
+                </Grid>
                 {/* 作品メモの表示 */}
                 <Typography 
                   sx={{ p: 1, fontSize: 14 , width : 600 , background: "#dddddd", borderRadius: 1 ,color:"#000000"}}>

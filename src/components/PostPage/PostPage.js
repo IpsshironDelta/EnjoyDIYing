@@ -138,6 +138,7 @@ export default function PostPage() {
 
       if(image){
           const imageRef = ref(firestorage, '/RECIPE_IMG/' + image.name)
+          const recipeNo = Math.floor(Math.random()* 1000000000000001)
           // firebase strageへ画像をアップロード
           uploadBytes(imageRef, image).then(() => {
             getDownloadURL(imageRef).then(url => {
@@ -150,6 +151,7 @@ export default function PostPage() {
                 productioncost : productioncost ,           // 制作費用を入力
                 productionperiod : productionperiod ,       // 制作期間を入力
                 title : recipetitle ,                       // 作品タイトルを入力
+                recipenum : recipeNo ,                      // レシピNoを入力
                 image: {
                   filename : image.name,                    // ファイル名
                   user: profile.name,                       // DIY作成者を入力
