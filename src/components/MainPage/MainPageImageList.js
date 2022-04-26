@@ -43,6 +43,11 @@ export default function MainPageImageList() {
   const bottomRef = useRef(null)
   const array = [];
 
+  // リンク先に遷移
+  const testmethod = (event) => {
+    console.log("TEST" , event)
+  }
+
   // タイムスタンプ
   const time = (date) => {
     let timestamp = formatDistance(new Date(), date.toDate(), {
@@ -83,7 +88,7 @@ export default function MainPageImageList() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Grid item xs={12}>
+      <Grid item xs={12} >
         {recipe ? (
           recipe.map((recipe) => (
             <Box 
@@ -92,19 +97,21 @@ export default function MainPageImageList() {
                 display: "flex",
                 my: 2,
                 gap: 2,
-                flexGrow: 1, m: 2,}}>
+                flexGrow: 1, m: 2,}}
+              onSubmit={testmethod}>
               <Box>
                 <MainpageImgButton
                     imgURL = {recipe.image.url}
-                    value  = {recipe.title}
-                    text   = "何か入れる"/>
+                    info   = {recipe}
+                    text   = "何か入れる"
+                    link   = "/recipedetail/"/>
               </Box>
               <Box sx={{ ml: 2 }}>
                 {/* 作品タイトルの表示 */}
                 <Grid container spacing={0} >
                 <Grid item xs= {6}>
                   <Typography sx={{ fontSize: 22}}>
-                    <Link href="/recipedetail" color="#000000">
+                    <Link href="#" color="#000000">
                       <strong>{recipe.title}</strong>
                     </Link>
                   </Typography>

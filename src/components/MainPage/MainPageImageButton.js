@@ -4,6 +4,7 @@ import { styled }     from '@mui/material/styles';
 import Box            from '@mui/material/Box';
 import ButtonBase     from '@mui/material/ButtonBase';
 import { useHistory } from "react-router-dom";
+import { PrivacyTipSharp } from "@mui/icons-material";
 
 
 const ImageButton = styled(ButtonBase)(({ theme }) => ({
@@ -72,17 +73,17 @@ const ImageMarked = styled('span')(({ theme }) => ({
 
 export default function MainPageImageButton(props) {
     // タイトル表示
-    const [title, setTitleName] = useState("");
-    const [collectionname, setCollectionName] = useState("");
-    var value = props.value
+    const [titlename, setTitleName] = useState("");
     var text  = props.text
+    var recipeNum = props.info.recipenum
+    var info = props.info
     const history = useHistory();
     // タイトル変更
     var changeTitle = (props) => {
-        setTitleName(value)
-        setCollectionName(text)
-        console.log("value =>" , value)
-        console.log("text =>" , text)    
+        setTitleName(info.title)
+        console.log("title =>" , info.title)
+        console.log("recipenum =>" , info.recipenum)
+        console.log("props => ",info)
   }
 
   return (
@@ -95,7 +96,9 @@ export default function MainPageImageButton(props) {
         text    = {props.text}
         onClick = {() => {
             changeTitle()
-            history.push(props.link)}}>
+            console.log(recipeNum)
+            // 作品番号(recepeNum)をアドレス末尾に付与
+            history.push(`/recipedetail/${recipeNum}`)}}>
         <ImageSrc style={{ backgroundImage: `url(${props.imgURL})` }} />
         <ImageBackdrop className="MuiImageBackdrop-root" />
         <Image>

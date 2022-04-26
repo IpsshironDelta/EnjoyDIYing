@@ -1,19 +1,19 @@
-import * as React         from 'react';
+import * as React          from 'react';
 import {Avatar,
         Box,
         Grid,
         Stack,
         Typography,
         Container,
-        CssBaseline,}     from "@mui/material"
+        CssBaseline,}      from "@mui/material"
 import { createTheme, 
-         ThemeProvider }  from '@mui/material/styles';
-import RecipeDetailHeader from "./RecipeDetailHeader"
-import Footer             from '../Footer';
-import ThumbUpAltIcon     from '@mui/icons-material/ThumbUpAlt';
-import StarsIcon          from '@mui/icons-material/Stars';
-import CardMedia          from '@mui/material/CardMedia';
-import useProfile         from "../../components/hooks/useProfile"
+         ThemeProvider }   from '@mui/material/styles';
+import RecipeDetailsHeader from "./RecipeDetailsHeader"
+import Footer              from '../Footer';
+import ThumbUpAltIcon      from '@mui/icons-material/ThumbUpAlt';
+import StarsIcon           from '@mui/icons-material/Stars';
+import CardMedia           from '@mui/material/CardMedia';
+import useProfile          from "../hooks/useProfile"
 
 const theme = createTheme({
   shadows: ["none"],
@@ -39,7 +39,7 @@ export default function RecipDetail() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <RecipeDetailHeader/>
+      <RecipeDetailsHeader/>
       <main>
         <Box
           sx={{

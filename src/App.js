@@ -1,14 +1,15 @@
 import { BrowserRouter, 
          Route, 
          Switch,
-         useHistory }           from "react-router-dom";
+         useHistory,
+         useLocation }           from "react-router-dom";
 import Login                    from "./components/Login/Login";
 import SignUp                   from "./components/SignUp/SignUp";
 import PasswordReset            from './components/PasswordReset/PasswordReset';
 import MainPage                 from "./components/MainPage/MainPage";
 import PostPage                  from './components/PostPage/PostPage';
 import MainTop                  from './components/MainPage/MainPage';
-import RecipeDetail            from './components/RecipDetail/RecipeDetail';
+import RecipeDetails            from './components/RecipDetails/RecipeDetails';
 import UserRegistration         from './components/UserRegistration/UserRegistration';
 import UserRegistrationReview   from './components/UserRegistration/UserRegistrationReview';
 import UserRegistrationComplete from './components/UserRegistration/UserRegistrationComplete';
@@ -30,7 +31,7 @@ function App() {
         <Route exact path="/mainpage" component={MainPage} />
         <Route exact path="/profile" component={Profile} />
         <Route exact path="/profile/edit" component={ProfileEdit} />
-        <Route exact path="/recipedetail" component={RecipeDetail} />
+        <Route exact path="/recipedetails/" component={RecipeDetails} />
         <Route exact path="/userregistration" component={UserRegistration} />
         <Route exact path="/userregistration/Review" component={UserRegistrationReview} />
         <Route exact path="/userregistration/Complete" component={UserRegistrationComplete} />

@@ -3,12 +3,12 @@ import {Avatar,
         AppBar,
         Toolbar,
         Box,} from "@mui/material"
-import RecipeDetailButton from './RecipeDetailButton';
+import RecipeDetailButton from './RecipeDetailsButton';
 import HeaderTitle    from '../HeaderTitle';
 import FeedIcon from '@mui/icons-material/Feed';
 import LogoutIcon from '@mui/icons-material/Logout';
 import HomeIcon from '@mui/icons-material/Home';
-import useProfile from "../../components/hooks/useProfile"
+import useProfile from "../hooks/useProfile"
 
 export default function MainpageHeader() {
   const profileData = useProfile()
