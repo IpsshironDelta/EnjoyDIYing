@@ -10,6 +10,7 @@ import MainPage                 from "./components/MainPage/MainPage";
 import PostPage                  from './components/PostPage/PostPage';
 import MainTop                  from './components/MainPage/MainPage';
 import RecipeDetails            from './components/RecipDetails/RecipeDetails';
+import RecipeDetailsID            from './components/RecipDetails/RecipeDetails';
 import UserRegistration         from './components/UserRegistration/UserRegistration';
 import UserRegistrationReview   from './components/UserRegistration/UserRegistrationReview';
 import UserRegistrationComplete from './components/UserRegistration/UserRegistrationComplete';
@@ -32,6 +33,7 @@ function App() {
         <Route exact path="/profile" component={Profile} />
         <Route exact path="/profile/edit" component={ProfileEdit} />
         <Route exact path="/recipedetails/" component={RecipeDetails} />
+        <Route exact path="/recipedetails/:id" component={RecipeDetailsID} />
         <Route exact path="/userregistration" component={UserRegistration} />
         <Route exact path="/userregistration/Review" component={UserRegistrationReview} />
         <Route exact path="/userregistration/Complete" component={UserRegistrationComplete} />

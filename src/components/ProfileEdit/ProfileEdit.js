@@ -62,8 +62,6 @@ const ProfileEdit = () => {
     console.log(e.target.files)
     if (e.target.files !== null) {
         setImage(e.target.files[0])
-        console.log("handleChange ~> ",e.target.files[0])
-        console.log("image ~> ",image)
       }
   }
 
@@ -107,7 +105,6 @@ const ProfileEdit = () => {
                   console.log(url)
                   if (profile) {
                     const userRef = doc(firestore, "users", profile?.id)
-                    console.log("★")
                     updateDoc(userRef, {
                       name,
                       image: url,
@@ -129,7 +126,6 @@ const ProfileEdit = () => {
                 // 画像を選択する
                 if (profile) {
                   const userRef = doc(firestore, "users", profile?.id)
-                  console.log("koko")
                   updateDoc(userRef, { name })
                   updateDoc(userRef, { location })
                   updateDoc(userRef, { selfintroduction })

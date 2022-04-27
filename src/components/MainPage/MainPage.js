@@ -52,12 +52,12 @@ function MainPage(props) {
   // ユーザーが認証されていない場合、ログイン画面へ遷移する
   firebaseApp.fireauth.onAuthStateChanged(user => {
     if (!user) {
+      
       history.push("/login")
     }
   })
   const profileData = useProfile()
   const profile = profileData.profile
-
   const [image, setImage] = useState()
   const firestorage = firebaseApp.firestorage
   const gsReference = ref(
@@ -100,7 +100,7 @@ function MainPage(props) {
                   link      = "/profile"
                   startIcon = {<PersonIcon/>}
                   sx        = {"background-color:#3D85CC"}
-                  text      = "プロフィール"/>
+                  text      = "マイページ"/>
             </Grid>
           </Grid>
         </Grid>
@@ -186,7 +186,7 @@ function MainPage(props) {
               align="left"
               color="text.primary"
               gutterBottom>
-              注目のレシピ
+              注目のレシピ(お気に入り登録数が多い順に表示)
             </Typography>
             <MainPageImageList/>
             <Typography
@@ -195,7 +195,7 @@ function MainPage(props) {
               align="left"
               color="text.primary"
               gutterBottom>
-                新着レシピ
+                新着レシピ(投稿日付順に表示)
             </Typography>
             <MainPageImageList/>
             <Typography
@@ -204,16 +204,7 @@ function MainPage(props) {
               align="left"
               color="text.primary"
               gutterBottom>
-               さんのお気に入り投稿
-            </Typography>
-            <MainPageImageList/>
-            <Typography
-              component="h1"
-              variant="h4"
-              align="left"
-              color="text.primary"
-              gutterBottom>
-               さんの過去の作品
+               さんのお気に入り投稿(自分のお気に入りした作品を表示)
             </Typography>
             <MainPageImageList/>
           </Box>

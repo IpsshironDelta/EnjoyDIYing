@@ -71,7 +71,7 @@ const ImageMarked = styled('span')(({ theme }) => ({
   transition: theme.transitions.create('opacity'),
 }));
 
-export default function MainPageImageButton(props) {
+export default function ProfileImageButton(props) {
     // タイトル表示
     const [titlename, setTitleName] = useState("");
     var text  = props.text
@@ -95,7 +95,8 @@ export default function MainPageImageButton(props) {
             changeTitle()
             console.log(recipeNum)
             // 作品番号(recepeNum)をアドレス末尾に付与
-            history.push(`/recipedetails/${recipeNum}`)}}>
+            // history.push(`/recipedetail/${recipeNum}`)
+            }}>
         <ImageSrc style={{ backgroundImage: `url(${props.imgURL})` }} />
         <ImageBackdrop className="MuiImageBackdrop-root" />
         <Image>

@@ -1,8 +1,12 @@
-import * as React     from 'react';
+import React, 
+      {useState,}        from "react";
 import {Avatar,
         AppBar,
         Toolbar,
-        Box,}         from "@mui/material"
+        Box,
+        ListItemIcon,
+        MenuItem,
+        Menu ,}         from "@mui/material"
 import MainPageButton from './MainPageButton';
 import EditIcon       from '@mui/icons-material/Edit';
 import HomeIcon       from '@mui/icons-material/Home';
@@ -12,10 +16,22 @@ import PersonIcon     from '@mui/icons-material/Person';
 import LogoutIcon     from '@mui/icons-material/Logout';
 import useProfile     from "../../components/hooks/useProfile"
 import HeaderTitle    from '../HeaderTitle'
+import IconButton from '@mui/material/IconButton';
+import StarIcon from '@mui/icons-material/Star';
 
 export default function PrimarySearchAppBar() {
   const profileData = useProfile()
   const profile = profileData.profile
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
+  // アバターアイコンがクリックされた時
+  const handleClickAvatar = (event) =>{
+    setAnchorEl(event.currentTarget)
+  }
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   return (
       <Box sx={{ flexGrow: 1 }} >
         <AppBar position="fixed" >
@@ -46,7 +62,7 @@ export default function PrimarySearchAppBar() {
                 variant   = "contained"
                 startIcon = {<HomeIcon/>}/>
               <MainPageButton
-                text      = "プロフィール" 
+                text      = "マイページ" 
                 link      = "/profile"
                 size      = "large"
                 variant   = "contained"
@@ -59,16 +75,81 @@ export default function PrimarySearchAppBar() {
                 variant   = "contained"
                 startIcon = {<LogoutIcon/>}/>
               {profile ? 
-                <Avatar src={profile ? profile.image : ""} alt="" />
+                <IconButton onClick={handleClickAvatar}>
+                  <Avatar src={profile ? profile.image : ""} alt="" />
+                </IconButton>
                   : <MainPageButton
                     text    = "新規登録" 
                     link    = "/login"
                     size    = "large"
                     variant = "contained"
                     startIcon = {<PersonAddIcon/>}/>}
-            </Box>
+              </Box>
           </Toolbar>
         </AppBar>
+
+        // アバターアイコンをクリックしたときのメニュー表示
+        <Menu
+        anchorEl={anchorEl}
+        id="account-menu"
+        open={open}
+        onClose={handleClose}
+        onClick={handleClose}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            overflow: 'visible',
+            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+            mt: 1.5,
+            '& .MuiAvatar-root': {
+              width: 32,
+              height: 32,
+              ml: -0.5,
+              mr: 1,
+            },
+            '&:before': {
+              content: '""',
+              display: 'block',
+              position: 'absolute',
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: 'background.paper',
+              transform: 'translateY(-50%) rotate(45deg)',
+              zIndex: 0,
+            },
+          },
+        }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      >
+        <MenuItem>
+          <ListItemIcon>
+            <EditIcon fontSize="small" />
+          </ListItemIcon>
+          投稿した作品を確認する
+        </MenuItem>
+        <MenuItem>
+          <ListItemIcon>
+            <PersonIcon fontSize="small" />
+          </ListItemIcon>
+          マイページ
+        </MenuItem>
+        <MenuItem>
+          <ListItemIcon>
+            <StarIcon fontSize="small" />
+          </ListItemIcon>
+          お気に入り
+        </MenuItem>
+        <MenuItem>
+          <ListItemIcon>
+            <LogoutIcon fontSize="small" />
+          </ListItemIcon>
+          ログアウト
+        </MenuItem>
+      </Menu>
+
       </Box>
   );
 }
