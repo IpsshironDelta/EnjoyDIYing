@@ -25,7 +25,7 @@ import StarsIcon from '@mui/icons-material/Stars';
 import ProfilesImageButton from "./ProfilesImageButton";
 import { firebaseApp }   from "../../firebase";
 
-const collectionName = "recipe"
+const collectionRecipeName = "recipe"
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -36,13 +36,13 @@ const Item = styled(Paper)(({ theme }) => ({
 const theme = createTheme()
 
 export default function ProfileImageList() {
-  const [recipe, setMessage] = useState([]);
+  const [recipe, setRecipe] = useState([]);
   const [goodcount , setGoodCount] = useState(0)
   const [bookmarkcount , setBookMarkCount] = useState(0)
   const profileData = useProfile()             // プロフィール取得
   var profile = profileData.profile            // プロフィール取得
   const bottomRef = useRef(null)
-  const array = [];
+  const recipeAry = [];
   const firestorage = firebaseApp.firestorage  // 認証情報チェック用
 
   // リンク先に遷移
@@ -73,9 +73,8 @@ export default function ProfileImageList() {
     }
   }
 
-  const fetchUsersData = () => {
-
-    getDocs(collection(db, collectionName)).then((querySnapshot)=>{
+  const fetchRecipeData = () => {
+    getDocs(collection(db, collectionRecipeName)).then((querySnapshot)=>{
       querySnapshot.forEach((doc) => {
         // ログインしているユーザー情報を取得
         firebaseApp.fireauth.onAuthStateChanged(user => {
@@ -84,18 +83,18 @@ export default function ProfileImageList() {
             // ログインユーザーのuidとfirestore/recipe/image/uidの値が一致している場合のみ配列に追加
             // if(user.uid === doc.data().image.uid){
             if(getuid === doc.data().image.uid){
-                array.push({
+              recipeAry.push({
                 id : doc.id,
                 ...doc.data()
                 })
             }})
         })
     }).then(()=>{
-      setMessage([...array])    
+      setRecipe([...recipeAry])    
     })};
 
   useEffect(() => {
-    fetchUsersData()
+    fetchRecipeData()
   },[]);
 
   return (

@@ -24,7 +24,7 @@ import MainpageImgButton    from './MainPageImageButton'
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import StarsIcon from '@mui/icons-material/Stars';
 
-const collectionName = "recipe"
+const collectionRecipeName = "recipe"
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -35,13 +35,13 @@ const Item = styled(Paper)(({ theme }) => ({
 const theme = createTheme()
 
 export default function MainPageImageList() {
-  const [recipe, setMessage] = useState([]);
+  const [recipe, setRecipe] = useState([]);
   const [goodcount , setGoodCount] = useState(0)
   const [bookmarkcount , setBookMarkCount] = useState(0)
   const profileData = useProfile()
   const profile = profileData.profile
   const bottomRef = useRef(null)
-  const array = [];
+  const recipeAry = [];
 
   // リンク先に遷移
   const testmethod = (event) => {
@@ -68,22 +68,33 @@ export default function MainPageImageList() {
   }
 
   // firestoreからレシピ情報の取得
-  const fetchUsersData = () => {
-    getDocs(collection(db, collectionName)).then((querySnapshot)=>{
+  const fetchRecipeData = () => {
+    getDocs(collection(db, collectionRecipeName)).then((querySnapshot)=>{
       querySnapshot.forEach((doc) => {
-        console.log(doc.id,doc.data())
-        console.log(doc.data().text)
-        console.log(format(doc.data().createdAt.toDate(), "yyyy年MM月dd日hh:mm"))
-        array.push({
+        recipeAry.push({
           id : doc.id,
           ...doc.data()
         })})
     }).then(()=>{
-      setMessage([...array])
+      setRecipe([...recipeAry])
+      console.log("★" , recipeAry)
+      console.log("★0" , recipeAry[0].title , format(recipeAry[0].createdAt.toDate() , "yyyyMMdd"))
+      console.log("★1" , recipeAry[1].title , format(recipeAry[1].createdAt.toDate() , "yyyyMMdd"))
+      console.log("★2" , recipeAry[2].title , format(recipeAry[2].createdAt.toDate() , "yyyyMMdd"))
+      console.log("★3" , recipeAry[3].title , format(recipeAry[3].createdAt.toDate() , "yyyyMMdd"))
+      // オブジェクト内の日付(createdAt)をキーに昇順にソートする
+      recipeAry.sort(function(first , second){
+        return (format(first.createdAt.toDate() , "yyyyMMdd") < format(second.createdAt.toDate() , "yyyyMMdd")) ? -1 : 1
+      })
+      console.log("★★" , recipeAry)
+      console.log("★★0" , recipeAry[0].title , format(recipeAry[0].createdAt.toDate() , "yyyyMMdd"))
+      console.log("★★1" , recipeAry[1].title , format(recipeAry[1].createdAt.toDate() , "yyyyMMdd"))
+      console.log("★★2" , recipeAry[2].title , format(recipeAry[2].createdAt.toDate() , "yyyyMMdd"))
+      console.log("★★3" , recipeAry[3].title , format(recipeAry[3].createdAt.toDate() , "yyyyMMdd"))
     })};
 
   useEffect(() => {
-    fetchUsersData()
+    fetchRecipeData()
   },[]);
 
 
@@ -91,7 +102,7 @@ export default function MainPageImageList() {
     <ThemeProvider theme={theme}>
       <Grid item xs={12} >
         {recipe ? (
-          recipe.map((recipe) => (
+          recipe.sort().map((recipe) => (
             <Box 
               key={recipe.id} 
               sx={{

@@ -24,7 +24,8 @@ import { collection,
          getDocs ,}         from 'firebase/firestore';
 import { format } from "date-fns"
 
-const collectionName = "recipe"
+const collectionRecipeName = "recipe"
+const collectionUserName   = "users"
 const theme = createTheme({
   shadows: ["none"],
   palette: {
@@ -43,22 +44,24 @@ const theme = createTheme({
 });
 
 export default function RecipDetail() {
-  const [name, setName] = useState("")
   const [recipe, setRecipe] = useState([]);
-  const [location , setLocation] = useState("")
+  const [userinfo, setUserInfo] = useState([]);
+  const [getuid , setGetUID] = useState("")
+  const [getavatarurl , setGetAvatarURL] = useState("")
   const profileData = useProfile()
   const profile = profileData.profile
   const firestorage = firebaseApp.firestorage
   const history = useHistory()
-  const array = [];
+  const recipeAry = [];
+  const userDataAry = [];
 
   // pathnameから作品Noを取得
   var recipenumAry = window.location.pathname.split("/")
   const getrecipenum = recipenumAry[2]
 
   // firestoreからレシピ情報の取得
-  const fetchUsersData = () => {
-    getDocs(collection(db, collectionName)).then((querySnapshot)=>{
+  const fetchRecipeData = () => {
+    getDocs(collection(db, collectionRecipeName)).then((querySnapshot)=>{
       // recipenumと遷移元のレシピNoを比較する
       querySnapshot.forEach((doc) => {
         console.log(doc.id,doc.data())
@@ -67,19 +70,41 @@ export default function RecipDetail() {
         // 備忘録：文字列を比較する際、見た目は一緒なのになぜか一致しない現象が起きた。
         // ただし、文字列同士をString()で処理すると問題解決
         if(String(doc.data().recipenum) === String(getrecipenum)){
-          array.push({
+          recipeAry.push({
             id : doc.id,
             ...doc.data()
-        })
+          })
+          var testUID = doc.data().image.uid
+          setGetUID(testUID)
       }else{
     }})
     }).then(()=>{
-      setRecipe([...array])
+      setRecipe([...recipeAry])
+    })};
+
+  // firestoreからユーザー情報の取得
+  const fetchUsersData = () => {
+    getDocs(collection(db, collectionUserName)).then((querySnapshot)=>{
+      // recipenumと遷移元のレシピNoを比較する
+      querySnapshot.forEach((doc) => {
+        // 備忘録：文字列を比較する際、見た目は一緒なのになぜか一致しない現象が起きた。
+        // ただし、文字列同士をString()で処理すると問題解決        
+        if(String(doc.data().uid) === String(getuid)){
+          userDataAry.push({
+            id : doc.id,
+            ...doc.data()
+        })
+        setGetAvatarURL(doc.data().image)
+      }
+    })
+    }).then(()=>{
+      setUserInfo([...userDataAry])
     })};
 
   useEffect(() => {
+    fetchRecipeData()
     fetchUsersData()
-  },[]);
+  },[getuid]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -112,7 +137,7 @@ export default function RecipDetail() {
               <Grid container spacing={4}>
                 <Grid item xs={1}>
                   {/* 作成したユーザーのアバター画像表示 */}
-                  <Avatar src={recipe ? recipe.image.userimageurl : ""} alt="" />
+                  <Avatar src={getavatarurl} alt="" />
                 </Grid>
                 <Grid item xs={5}>
                   {/* 作成したユーザー名を表示 */}
@@ -124,7 +149,7 @@ export default function RecipDetail() {
                       color:"#000000"}}>
                     {/* uidをアドレスの末尾に付与して遷移する */}
                     <Link href={`/profiles/${recipe.image.uid}`} color="#000000">
-                      {name ? name : recipe ? recipe.image.user : ""}
+                      {recipe ? recipe.image.user : ""}
                     </Link>
                   </Typography>
                 </Grid>

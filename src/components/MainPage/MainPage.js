@@ -187,7 +187,7 @@ function MainPage(props) {
               align="left"
               color="text.primary"
               gutterBottom>
-              注目のレシピ(お気に入り登録数が多い順に表示)
+              新着レシピ(投稿日付順に表示)
             </Typography>
             <MainPageImageList/>
             <Typography
@@ -196,7 +196,7 @@ function MainPage(props) {
               align="left"
               color="text.primary"
               gutterBottom>
-                新着レシピ(投稿日付順に表示)
+              注目のレシピ(お気に入り登録数が多い順に表示)
             </Typography>
             <MainPageImageList/>
             <Typography

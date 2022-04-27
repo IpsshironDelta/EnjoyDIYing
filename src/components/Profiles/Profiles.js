@@ -75,7 +75,7 @@ const Profiles = () => {
   const profileData = useProfile()
   const profile = profileData.profile
   const history = useHistory()
-  const array = [];
+  const userDataAry = [];
 
   // pathnameからuidを取得
   const uidAry = window.location.pathname.split("/")
@@ -85,7 +85,6 @@ const Profiles = () => {
     store.getState().displayName = profile.name
     store.getState().location = profile.location
     store.getState().memo = profile.selfintroduction
-    console.log("handleSubmit")
     history.push("/profile/edit")
   }
 
@@ -99,20 +98,17 @@ const Profiles = () => {
     getDocs(collection(db, collectionName)).then((querySnapshot)=>{
       // recipenumと遷移元のレシピNoを比較する
       querySnapshot.forEach((doc) => {
-        console.log(doc.data())
-        console.log(doc.data().uid)
         // 備忘録：文字列を比較する際、見た目は一緒なのになぜか一致しない現象が起きた。
         // ただし、文字列同士をString()で処理すると問題解決
         if(String(doc.data().uid) === String(getuid)){
-          array.push({
+          userDataAry.push({
             id : doc.id,
             ...doc.data()
         })
       }
     })
     }).then(()=>{
-      setUserInfo([...array])
-      console.log(array)
+      setUserInfo([...userDataAry])
     })};
 
   useEffect(() => {

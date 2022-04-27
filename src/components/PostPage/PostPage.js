@@ -156,8 +156,7 @@ export default function PostPage() {
                   filename : image.name,                    // ファイル名
                   user: profile.name,                       // DIY作成者を入力
                   url:  url,                                // 画像のURLを入力
-                  uid: profile.uid,                         // 作成者のUIDを入力
-                  userimageurl : profile.image},            // 作成者のアバター画像を入力
+                  uid: profile.uid,},                       // 作成者のUIDを入力
                 })
               })
             console.log("画像アップロード完了!")
