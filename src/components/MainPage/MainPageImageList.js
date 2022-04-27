@@ -67,6 +67,7 @@ export default function MainPageImageList() {
     }
   }
 
+  // firestoreからレシピ情報の取得
   const fetchUsersData = () => {
     getDocs(collection(db, collectionName)).then((querySnapshot)=>{
       querySnapshot.forEach((doc) => {
@@ -111,7 +112,8 @@ export default function MainPageImageList() {
                 <Grid container spacing={0} >
                 <Grid item xs= {6}>
                   <Typography sx={{ fontSize: 22}}>
-                    <Link href="#" color="#000000">
+                    {/* 作品番号をアドレスの末尾に付与して遷移する */}
+                    <Link href={`/recipedetails/${recipe.recipenum}`} color="#000000">
                       <strong>{recipe.title}</strong>
                     </Link>
                   </Typography>
@@ -150,7 +152,8 @@ export default function MainPageImageList() {
                   <Item>投稿した日：{format(recipe.createdAt.toDate(), "yyyy年MM月dd日")}</Item>
                   <Item>
                     {/* 投稿したユーザーの表示 */}
-                    <Link href="#" color="#000000">
+                    {/* uidをアドレスの末尾に付与して遷移する */}
+                    <Link href={`/profiles/${recipe.image.uid}`} color="#000000">
                       {recipe.image.user}
                     </Link>
                   </Item>

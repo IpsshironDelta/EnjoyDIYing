@@ -1,11 +1,14 @@
-import * as React          from 'react';
+import React, 
+     { useEffect,
+       useState } from "react"
 import {Avatar,
         Box,
         Grid,
         Stack,
         Typography,
         Container,
-        CssBaseline,}      from "@mui/material"
+        CssBaseline,
+        Link ,}      from "@mui/material"
 import { createTheme, 
          ThemeProvider }   from '@mui/material/styles';
 import RecipeDetailsHeader from "./RecipeDetailsHeader"
@@ -14,7 +17,14 @@ import ThumbUpAltIcon      from '@mui/icons-material/ThumbUpAlt';
 import StarsIcon           from '@mui/icons-material/Stars';
 import CardMedia           from '@mui/material/CardMedia';
 import useProfile          from "../hooks/useProfile"
+import { firebaseApp }   from "../../firebase";
+import { useHistory }    from 'react-router';
+import { db }               from '../../firebase';
+import { collection,
+         getDocs ,}         from 'firebase/firestore';
+import { format } from "date-fns"
 
+const collectionName = "recipe"
 const theme = createTheme({
   shadows: ["none"],
   palette: {
@@ -33,14 +43,51 @@ const theme = createTheme({
 });
 
 export default function RecipDetail() {
+  const [name, setName] = useState("")
+  const [recipe, setRecipe] = useState([]);
+  const [location , setLocation] = useState("")
   const profileData = useProfile()
   const profile = profileData.profile
+  const firestorage = firebaseApp.firestorage
+  const history = useHistory()
+  const array = [];
+
+  // pathnameから作品Noを取得
+  var recipenumAry = window.location.pathname.split("/")
+  const getrecipenum = recipenumAry[2]
+
+  // firestoreからレシピ情報の取得
+  const fetchUsersData = () => {
+    getDocs(collection(db, collectionName)).then((querySnapshot)=>{
+      // recipenumと遷移元のレシピNoを比較する
+      querySnapshot.forEach((doc) => {
+        console.log(doc.id,doc.data())
+        console.log(doc.data().text)
+        console.log(format(doc.data().createdAt.toDate(), "yyyy年MM月dd日hh:mm"))
+        // 備忘録：文字列を比較する際、見た目は一緒なのになぜか一致しない現象が起きた。
+        // ただし、文字列同士をString()で処理すると問題解決
+        if(String(doc.data().recipenum) === String(getrecipenum)){
+          array.push({
+            id : doc.id,
+            ...doc.data()
+        })
+      }else{
+    }})
+    }).then(()=>{
+      setRecipe([...array])
+    })};
+
+  useEffect(() => {
+    fetchUsersData()
+  },[]);
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <RecipeDetailsHeader/>
-      <main>
+      {recipe ? ( 
+          recipe.map((recipe) => (
+      <Box>
         <Box
           sx={{
             bgcolor: 'background.paper',
@@ -55,7 +102,7 @@ export default function RecipDetail() {
                 background: "#faf0e6", 
                 borderRadius: 1 ,
                 color:"#a0522d"}}>
-              <strong>作品タイトル</strong>
+              <strong>{recipe.title}</strong>
             </Typography>
             <Box
               sx={{
@@ -64,26 +111,32 @@ export default function RecipDetail() {
                 pr : 4,}}>
               <Grid container spacing={4}>
                 <Grid item xs={1}>
-                  <Avatar src={profile ? profile.image : ""} alt="" />
+                  {/* 作成したユーザーのアバター画像表示 */}
+                  <Avatar src={recipe ? recipe.image.userimageurl : ""} alt="" />
                 </Grid>
                 <Grid item xs={5}>
+                  {/* 作成したユーザー名を表示 */}
                   <Typography 
                     sx={{ 
                       p: 1, 
                       fontSize: 14 , 
                       width : 600 , 
                       color:"#000000"}}>
-                    [作成者名]さん
+                    {/* uidをアドレスの末尾に付与して遷移する */}
+                    <Link href={`/profiles/${recipe.image.uid}`} color="#000000">
+                      {name ? name : recipe ? recipe.image.user : ""}
+                    </Link>
                   </Typography>
                 </Grid>
                 <Grid item xs={6} align="center">
+                  {/* 投稿した日時を表示 */}
                   <Typography 
                     sx={{ 
                       p: 1, 
                       fontSize: 14 , 
                       width : 600 , 
                       color:"#000000"}}>
-                    投稿した日時：[投稿日]
+                    投稿した日時：{format(recipe.createdAt.toDate(), "yyyy年MM月dd日")}
                   </Typography>
                 </Grid>
               </Grid>
@@ -103,24 +156,33 @@ export default function RecipDetail() {
                 <CardMedia
                   component = "img"
                   height    = "250"
-                  image     = "https://source.unsplash.com/random"
+                  image     = {recipe.image.url}
                   alt       = "Paella dish"/>
               </Typography>
             </Grid>
             <Grid item xs={8}>
               {/* 作品コメント表示欄 */}
-              <Typography 
-                sx={{ 
-                  p: 1, 
-                  fontSize: 16 , 
-                  background: "#ffffff", 
-                  borderRadius: 1 ,
-                  color:"#000000"}}>
-                作品に関するコメント欄作品に関するコメント欄作品に関するコメント欄
-                作品に関するコメント欄作品に関するコメント欄作品に関するコメント欄
-                作品に関するコメント欄作品に関するコメント欄作品に関するコメント欄
-              </Typography>
+              <Grid>
+                <Typography 
+                  sx={{ 
+                    fontSize: 14 , 
+                    color:"#a0522d"}}>
+                  作品のコメント
+                </Typography>
+              </Grid>
+              <Grid>
+                <Typography 
+                  sx={{ 
+                    p: 1, 
+                    fontSize: 16 , 
+                    background: "#ffffff", 
+                    borderRadius: 1 ,
+                    color:"#000000"}}>
+                  {recipe.memo}
+                </Typography>
+              </Grid>
               <br/>
+              {/* 制作費用の表示 */}
               <Typography 
                 sx={{ 
                   p: 1, 
@@ -128,9 +190,10 @@ export default function RecipDetail() {
                   background: "#ffffff", 
                   borderRadius: 1 ,
                   color:"#a0522d"}}>
-                かかった費用:
+                かかった費用 : <strong>{Number(recipe.productioncost).toLocaleString()}</strong> 円
               </Typography>
               <br/>
+              {/* 制作期間の表示 */}
               <Typography 
                 sx={{ 
                   p: 1, 
@@ -138,7 +201,7 @@ export default function RecipDetail() {
                   background: "#ffffff", 
                   borderRadius: 1 ,
                   color:"#a0522d"}}>
-                所要時間:
+                所要時間 :  <strong>約 {recipe.productionperiod}</strong>
               </Typography>
             </Grid>
           </Grid>
@@ -171,10 +234,12 @@ export default function RecipDetail() {
           </Grid>
         </Box>
         </Container>
+      </Box>
+      ))) : (
+        <p>投稿が存在しません</p>)}
       {/* Footer */}
       <Footer/>
       {/* End footer */}
-      </main>
     </ThemeProvider>
   );
 }

@@ -155,8 +155,9 @@ export default function PostPage() {
                 image: {
                   filename : image.name,                    // ファイル名
                   user: profile.name,                       // DIY作成者を入力
-                  url:  url,                                 // 画像のURLを入力
-                  uid: profile.uid,},                       // 作成者のUIDを入力
+                  url:  url,                                // 画像のURLを入力
+                  uid: profile.uid,                         // 作成者のUIDを入力
+                  userimageurl : profile.image},            // 作成者のアバター画像を入力
                 })
               })
             console.log("画像アップロード完了!")
@@ -183,8 +184,6 @@ export default function PostPage() {
       <Container maxWidth = "md">
         <Container component="main" maxWidth="lg" sx={{ mb: 4 }}>
           <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-            {/* 投稿が成功した場合はアラートを出す */}
-            {success && <Alert severity="success">投稿完了しました！</Alert>}
             <Typography component="h1" variant="h4" align="center">
               DIY作品を投稿する
             </Typography>
@@ -336,6 +335,8 @@ export default function PostPage() {
                 </Grid>
               </Grid>
             </Box>
+            {/* 投稿が成功した場合はアラートを出す */}
+            {success && <Alert severity="success">投稿完了しました！</Alert>}
             {/* 投稿が失敗した場合はアラートを出す */}
             {error && <Alert severity="error">{errormessage}</Alert>}
           </Paper>

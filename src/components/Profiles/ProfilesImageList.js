@@ -22,7 +22,7 @@ import Stack                from '@mui/material/Stack';
 import { styled }           from '@mui/material/styles';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import StarsIcon from '@mui/icons-material/Stars';
-import ProfileImageButton from "./ProfileImageButton";
+import ProfilesImageButton from "./ProfilesImageButton";
 import { firebaseApp }   from "../../firebase";
 
 const collectionName = "recipe"
@@ -49,6 +49,10 @@ export default function ProfileImageList() {
   const testmethod = (event) => {
     console.log("TEST" , event)
   }
+
+  // pathnameからuidを取得
+  const uidAry = window.location.pathname.split("/")
+  const getuid = uidAry[2]
 
   // タイムスタンプ
   const time = (date) => {
@@ -78,7 +82,8 @@ export default function ProfileImageList() {
             console.log("doc.data().image.uid : " , doc.data().image.uid)
             console.log("---")
             // ログインユーザーのuidとfirestore/recipe/image/uidの値が一致している場合のみ配列に追加
-            if(user.uid === doc.data().image.uid){
+            // if(user.uid === doc.data().image.uid){
+            if(getuid === doc.data().image.uid){
                 array.push({
                 id : doc.id,
                 ...doc.data()
@@ -107,7 +112,8 @@ export default function ProfileImageList() {
                 flexGrow: 1, m: 2,}}
               onSubmit={testmethod}>
               <Box>
-                <ProfileImageButton
+                  {/* 作品画像の表示 */}
+                <ProfilesImageButton
                     imgURL = {recipe.image.url}
                     info   = {recipe}
                     text   = "何か入れる"
@@ -118,7 +124,8 @@ export default function ProfileImageList() {
                 <Grid container spacing={0} >
                 <Grid item xs= {9}>
                   <Typography sx={{ fontSize: 18}}>
-                    <Link href="#" color="#000000">
+                    {/* 作品番号をアドレスの末尾に付与して遷移する */}
+                    <Link href={`/recipedetails/${recipe.recipenum}`} color="#000000">
                       <strong>{recipe.title}</strong>
                     </Link>
                   </Typography>

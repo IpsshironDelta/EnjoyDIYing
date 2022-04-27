@@ -7,7 +7,7 @@ import { Select }      from '@mui/material';
 import { withRouter }  from 'react-router-dom';
 import FormHelperText  from '@mui/material/FormHelperText';
 
-function ProfileSelectBox(props) {
+function ProfilesSelectBox(props) {
 
   return (
     <Box sx={{ minWidth: 120 }}>
@@ -75,4 +75,4 @@ function ProfileSelectBox(props) {
   );
 }
 
-export default withRouter(ProfileSelectBox);
+export default withRouter(ProfilesSelectBox);

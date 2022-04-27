@@ -223,7 +223,7 @@ const ProfileEdit = () => {
                     <ProfileEditButton 
                       id      = "profileeditback"
                       type    = "submit"
-                      link    = "/profile"
+                      link    = {profile ? "/profiles/"+profile.uid : ""} 
                       fullWidth 
                       variant = "outlined" 
                       sx={{ mt: 3, mb: 2 }}

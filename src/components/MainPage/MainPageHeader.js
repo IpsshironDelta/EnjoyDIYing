@@ -63,7 +63,7 @@ export default function PrimarySearchAppBar() {
                 startIcon = {<HomeIcon/>}/>
               <MainPageButton
                 text      = "マイページ" 
-                link      = "/profile"
+                link      = {profile ? "/profiles/"+profile.uid : ""} 
                 size      = "large"
                 variant   = "contained"
                 startIcon = {<PersonIcon/>}/>
@@ -88,7 +88,7 @@ export default function PrimarySearchAppBar() {
           </Toolbar>
         </AppBar>
 
-        // アバターアイコンをクリックしたときのメニュー表示
+        {/* アバターアイコンをクリックしたときのメニュー表示 */}
         <Menu
         anchorEl={anchorEl}
         id="account-menu"
@@ -149,7 +149,6 @@ export default function PrimarySearchAppBar() {
           ログアウト
         </MenuItem>
       </Menu>
-
       </Box>
   );
 }

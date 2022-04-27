@@ -51,8 +51,7 @@ function MainPage(props) {
   const history = useHistory()
   // ユーザーが認証されていない場合、ログイン画面へ遷移する
   firebaseApp.fireauth.onAuthStateChanged(user => {
-    if (!user) {
-      
+    if (!user) {      
       history.push("/login")
     }
   })
@@ -88,6 +87,7 @@ function MainPage(props) {
           <Grid container spacing={1}>
             <Grid item xs={6} align = "right">
               <MainPageButton
+                id        = "post"
                 variant   = 'contained'
                 link      = "/postpage"
                 startIcon = {<EditIcon/>}
@@ -96,11 +96,12 @@ function MainPage(props) {
             </Grid>
             <Grid item xs={6} align = "left">
               <MainPageButton
-                  variant   = 'contained'
-                  link      = "/profile"
-                  startIcon = {<PersonIcon/>}
-                  sx        = {"background-color:#3D85CC"}
-                  text      = "マイページ"/>
+                id        = "mypage"
+                variant   = 'contained'
+                link      = {profile ? "/profiles/"+profile.uid : ""} 
+                startIcon = {<PersonIcon/>}
+                sx        = {"background-color:#3D85CC"}
+                text      = "マイページ"/>
             </Grid>
           </Grid>
         </Grid>
@@ -204,7 +205,8 @@ function MainPage(props) {
               align="left"
               color="text.primary"
               gutterBottom>
-               さんのお気に入り投稿(自分のお気に入りした作品を表示)
+            {profile ? profile.name : ""}  さんの<br/>
+            お気に入り投稿(自分のお気に入りした作品を表示)
             </Typography>
             <MainPageImageList/>
           </Box>

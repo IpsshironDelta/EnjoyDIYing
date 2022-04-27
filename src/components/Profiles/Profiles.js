@@ -1,4 +1,6 @@
-import React, { useState } from "react"
+import React, 
+      { useEffect,
+        useState } from "react"
 import {Avatar,
         Paper,
         Typography,
@@ -10,14 +12,17 @@ import {Avatar,
         Tabs ,
         Tab , } from "@mui/material"
 import { useHistory}    from 'react-router';
-import ProfileHeader from "./ProfileHeader"
 import {createTheme, 
     ThemeProvider } from '@mui/material/styles';
-import useProfile from "../../components/hooks/useProfile"
+import useProfile from "../hooks/useProfile"
 import store                from '../../store/index';
-import ProfileImageList from "./ProfileImageList"
-import { firebaseApp }   from "../../firebase";
+import ProfilesImageList from "./ProfilesImageList"
+import ProfilesHeader from "./ProfilesHeader"
+import { db }               from '../../firebase';
+import { collection,
+         getDocs ,}         from 'firebase/firestore';
 
+const collectionName = "users"
 const theme = createTheme({
   shadows: ["none"],
   palette: {
@@ -61,19 +66,26 @@ function a11yProps(index) {
   };
 }
 
-const Profile = () => {
+const Profiles = () => {
   const [name, setName] = useState("")
   const [location , setLocation] = useState("")
+  const [userinfo, setUserInfo] = useState([]);
   const [selfintroduction , setSelfIntroduction] = useState("")
   const [image, setImage] = useState()
   const profileData = useProfile()
   const profile = profileData.profile
   const history = useHistory()
-  
+  const array = [];
+
+  // pathnameからuidを取得
+  const uidAry = window.location.pathname.split("/")
+  const getuid = uidAry[2]
+
   const handleSubmit = (event) => {
     store.getState().displayName = profile.name
     store.getState().location = profile.location
     store.getState().memo = profile.selfintroduction
+    console.log("handleSubmit")
     history.push("/profile/edit")
   }
 
@@ -82,33 +94,65 @@ const Profile = () => {
     setValue(newValue);
   };
 
+  // firestoreからユーザー情報の取得
+  const fetchUsersData = () => {
+    getDocs(collection(db, collectionName)).then((querySnapshot)=>{
+      // recipenumと遷移元のレシピNoを比較する
+      querySnapshot.forEach((doc) => {
+        console.log(doc.data())
+        console.log(doc.data().uid)
+        // 備忘録：文字列を比較する際、見た目は一緒なのになぜか一致しない現象が起きた。
+        // ただし、文字列同士をString()で処理すると問題解決
+        if(String(doc.data().uid) === String(getuid)){
+          array.push({
+            id : doc.id,
+            ...doc.data()
+        })
+      }
+    })
+    }).then(()=>{
+      setUserInfo([...array])
+      console.log(array)
+    })};
+
+  useEffect(() => {
+    fetchUsersData()
+  },[]);
+
   return (
     <ThemeProvider theme={theme}>
         <Container maxWidth>
-            <ProfileHeader/>
+            <ProfilesHeader/>
         </Container>
+        {userinfo ? ( 
+          userinfo.map((userinfo) => (
         <Container maxWidth="sm">
-        <CssBaseline />
-        {/* タブの文言 */}
+          <CssBaseline />
+          {/* タブの文言 */}
           <Box sx={{ width: '100%' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                 <Tab label="プロフィール情報" {...a11yProps(0)} />
                 <Tab label="投稿した作品" {...a11yProps(1)} />
-                <Tab label="お気に入り" {...a11yProps(2)} />
+                {/* お気に入りタブはログイン中のユーザーのみ表示する */}
+                {profile && profile.uid === getuid ? 
+                  <Tab label="お気に入り" {...a11yProps(2)} />
+                 : ""}
               </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
               {/* プロフィールタブの中身表示 */}
               <Paper sx={{ m: 1, p: 1 }}>
+                {/* ユーザー名表示 */}
                   <Typography align="center" variant="h5" >
-                    {name ? name : profile ? profile.name : ""} さん<br/>
+                    {name ? name : userinfo ? userinfo.name : ""} さん<br/>
                     のプロフィール</Typography>
                   <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 4 }}>
                   <Container align = "center">
+                    {/* アバター画像表示 */}
                       <Avatar
                         sx={{ width: 100, height: 100 }}
-                        src={image ? URL.createObjectURL(image) : profile ? profile.image : ""}alt=""/>
+                        src={image ? URL.createObjectURL(image) : userinfo ? userinfo.image : ""}alt=""/>
                     <input
                         id     = "image"
                         type   = "file"
@@ -117,6 +161,7 @@ const Profile = () => {
                   </Container>
                       <Container align="left">
                         <Typography >ユーザー名</Typography>
+                        {/* ユーザー名表示 */}
                         <TextField
                           margin="normal"
                           required
@@ -126,13 +171,14 @@ const Profile = () => {
                           autoComplete = "name"
                           autoFocus
                           defaultValue = {name}
-                          value        = {name ? name : profile ? profile.name : ""}
+                          value        = {name ? name : userinfo ? userinfo.name : ""}
                           InputProps   = {{readOnly: true,}}
                           variant      = "standard"/>
                       </Container>
                       <br/>
                       <Container align="left">
                         <Typography>所在地</Typography>
+                        {/* 所在地表示 */}
                         <TextField
                           margin       = "normal"
                           fullWidth
@@ -141,13 +187,14 @@ const Profile = () => {
                           autoComplete = "location"
                           autoFocus
                           defaultValue = {location}
-                          value        = {location ? location : profile ? profile.location : ""}
+                          value        = {location ? location : userinfo ? userinfo.location : ""}
                           InputProps   = {{readOnly: true,}}
                           variant      = "standard"/>
                         </Container>
                         <br/>
                         <Container align="left">
                           <Typography>自己紹介</Typography>
+                          {/* 自己紹介の表示 */}
                           <TextField
                             margin       = "normal"
                             id           = "selfintroduction"
@@ -157,13 +204,15 @@ const Profile = () => {
                             multiline
                             defaultValue = {selfintroduction}
                             rows         = {6}
-                            value        = {selfintroduction ? selfintroduction : profile ? profile.selfintroduction : "よろしくお願いします。"}
+                            value        = {selfintroduction ? selfintroduction : userinfo ? userinfo.selfintroduction : "よろしくお願いします。"}
                             InputProps   = {{readOnly: true,}}
                             variant      = "standard"/>
                         </Container>
+                        {/* 編集ボタンはログイン中のユーザーのみ表示 */}
+                      {profile && profile.uid === getuid ? 
                       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
                         プロフィールを編集する
-                      </Button>
+                      </Button> : ""}
                   </Box>
               </Paper>
             </TabPanel>
@@ -171,10 +220,10 @@ const Profile = () => {
               {/* 投稿した作品の中身表示 */}
               <Paper sx={{ m: 1, p: 1 }}>
                 <Typography align="center" variant="h5">
-                  {name ? name : profile ? profile.name : ""} さん<br/>
+                  {name ? name : userinfo ? userinfo.name : ""} さん<br/>
                   の投稿した作品
                 </Typography>
-                <ProfileImageList/>
+                <ProfilesImageList/>
               </Paper>
             </TabPanel>
             <TabPanel value={value} index={2}>
@@ -183,17 +232,14 @@ const Profile = () => {
                   <Typography align="center" variant="h5">
                   {name ? name : profile ? profile.name : ""} さん<br/>
                     がお気に入りした作品</Typography>
-                  <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 4 }}>
-                    <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-                      プロフィールを編集する
-                    </Button>
-                  </Box>
               </Paper>
             </TabPanel>
           </Box>
         </Container>
+        ))) : (
+          <p>投稿が存在しません</p>)}
     </ThemeProvider>
   )
 }
 
-export default Profile
+export default Profiles

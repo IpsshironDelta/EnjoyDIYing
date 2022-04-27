@@ -10,13 +10,14 @@ import MainPage                 from "./components/MainPage/MainPage";
 import PostPage                  from './components/PostPage/PostPage';
 import MainTop                  from './components/MainPage/MainPage';
 import RecipeDetails            from './components/RecipDetails/RecipeDetails';
-import RecipeDetailsID            from './components/RecipDetails/RecipeDetails';
+import RecipeDetailsID          from './components/RecipDetails/RecipeDetails';
+import Profiles                 from './components/Profiles/Profiles'
+import ProfileID                from './components/Profiles/Profiles'
+import ProfileEdit              from './components/ProfileEdit/ProfileEdit'
 import UserRegistration         from './components/UserRegistration/UserRegistration';
 import UserRegistrationReview   from './components/UserRegistration/UserRegistrationReview';
 import UserRegistrationComplete from './components/UserRegistration/UserRegistrationComplete';
 import Message                  from './components/Message/Message';
-import Profile                  from './components/Profile/Profile'
-import ProfileEdit              from './components/ProfileEdit/ProfileEdit'
 import Test                     from './components/test/test'
 
 function App() {
@@ -30,7 +31,8 @@ function App() {
         <Route exact path="/signup" component={SignUp} />
         <Route exact path="/passwordreset" component={PasswordReset} />
         <Route exact path="/mainpage" component={MainPage} />
-        <Route exact path="/profile" component={Profile} />
+        <Route exact path="/profiles" component={Profiles} />
+        <Route exact path="/profiles/:id" component={ProfileID} />
         <Route exact path="/profile/edit" component={ProfileEdit} />
         <Route exact path="/recipedetails/" component={RecipeDetails} />
         <Route exact path="/recipedetails/:id" component={RecipeDetailsID} />
