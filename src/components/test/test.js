@@ -1,201 +1,185 @@
-import * as React from 'react';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
-import ImageListItemBar from '@mui/material/ImageListItemBar';
-import ListSubheader from '@mui/material/ListSubheader';
-import IconButton from '@mui/material/IconButton';
-import InfoIcon from '@mui/icons-material/Info';
-import { Paper } from '@mui/material';
+import React ,
+      { useState,
+        useEffect,}          from "react";
+import { Typography , 
+  Card ,
+  CardHeader , 
+  CardMedia , 
+  CardContent , 
+  CardActions , 
+  Collapse ,
+  Avatar,
+  createTheme , 
+  ThemeProvider ,
+  IconButton,}              from "@mui/material"
+import { styled } from '@mui/material/styles';
+import { red } from '@mui/material/colors';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ShareIcon from '@mui/icons-material/Share';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import useProfile           from "../hooks/useProfile"
+import { format ,
+  formatDistance,  } from "date-fns"
+import { ja }               from "date-fns/locale"
+import { collection,
+  getDocs ,}         from 'firebase/firestore';
+import { db }               from '../../firebase';
 
-export default function TitlebarImageList() {
+const collectionRecipeName = "recipe"
+const theme = createTheme()
+const ExpandMore = styled((props) => {
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+  marginLeft: 'auto',
+  transition: theme.transitions.create('transform', {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
+
+export default function RecipeReviewCard() {
+  const [expanded, setExpanded] = React.useState(false);
+
+  // 作品情報を格納する配列
+  const [recipe, setRecipe] = useState([]);
+  const profileData = useProfile()
+  const profile = profileData.profile
+  const recipeAry = [];
+  // タイムスタンプ
+  const time = (date) => {
+    let timestamp = formatDistance(new Date(), date.toDate(), {
+      locale: ja,
+    })
+    if (timestamp.indexOf("未満") !== -1) {
+      return (timestamp = "たった今")
+    } else if (
+      timestamp.indexOf("か月") !== -1 ||
+      timestamp.indexOf("年") !== -1
+    ) {
+      return (timestamp = format(date.toDate(), "yyyy年M月d日", {
+        locale: ja,
+      }))
+    } else {
+      return (timestamp = timestamp + "前")
+    }
+  }
+  // firestoreからレシピ情報の取得
+  const fetchRecipeData = () => {
+    getDocs(collection(db, collectionRecipeName)).then((querySnapshot)=>{
+      querySnapshot.forEach((doc) => {
+        recipeAry.push({
+          id : doc.id,
+          ...doc.data()
+        })})
+    }).then(()=>{
+      setRecipe([...recipeAry])
+      console.log("★" , recipeAry)
+      console.log("★0" , recipeAry[0].title , format(recipeAry[0].createdAt.toDate() , "yyyyMMdd"))
+      console.log("★1" , recipeAry[1].title , format(recipeAry[1].createdAt.toDate() , "yyyyMMdd"))
+      console.log("★2" , recipeAry[2].title , format(recipeAry[2].createdAt.toDate() , "yyyyMMdd"))
+      console.log("★3" , recipeAry[3].title , format(recipeAry[3].createdAt.toDate() , "yyyyMMdd"))
+      // オブジェクト内の日付(createdAt)をキーに昇順にソートする
+      recipeAry.sort(function(first , second){
+        return (format(first.createdAt.toDate() , "yyyyMMdd") < format(second.createdAt.toDate() , "yyyyMMdd")) ? -1 : 1
+      })
+      console.log("★★" , recipeAry)
+      console.log("★★0" , recipeAry[0].title , format(recipeAry[0].createdAt.toDate() , "yyyyMMdd"))
+      console.log("★★1" , recipeAry[1].title , format(recipeAry[1].createdAt.toDate() , "yyyyMMdd"))
+      console.log("★★2" , recipeAry[2].title , format(recipeAry[2].createdAt.toDate() , "yyyyMMdd"))
+      console.log("★★3" , recipeAry[3].title , format(recipeAry[3].createdAt.toDate() , "yyyyMMdd"))
+    })};
+
+  useEffect(() => {
+    fetchRecipeData()
+  },[]);
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
+
   return (
-    <Paper style={{
-      flex: 1,
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'stretch',}}>
-        <Paper style={{height: 50, backgroundColor: 'powderblue'}} />
-        <Paper style={{height: 50, backgroundColor: 'skyblue'}} />
-        <Paper style={{height: 50, backgroundColor: 'steelblue'}} />
-    </Paper>
+    <ThemeProvider theme={theme}>
+    {recipe ? (
+      recipe.sort().map((recipe) => (
+    <Card sx={{ maxWidth: 345 }}>
+      <CardHeader
+        avatar={
+          // アバター画像を表示
+          <Avatar src={profile ? profile.image : ""} alt="" />
+        }
+        action={
+          <IconButton aria-label="settings">
+            <MoreVertIcon />
+          </IconButton>}
+        // 作品タイトルとサブタイトルを表示
+        title={recipe.title}
+        subheader={format(recipe.createdAt.toDate(), "yyyy年MM月dd日")}/>
+      {/* 作品画像を表示 */}
+      <CardMedia
+        component="img"
+        height="194"
+        image={recipe.image.url}
+        alt="Paella dish"
+      />
+      <CardContent>
+        {/* 作品メモを表示 */}
+        <Typography variant="body2" color="text.secondary">
+        {recipe.memo}
+        </Typography>
+      </CardContent>
+      <CardActions disableSpacing>
+        {/* お気に入りボタンを表示 */}
+        <IconButton aria-label="add to favorites">
+          <FavoriteIcon />
+        </IconButton>
+        {/* 共有ボタンを表示 */}
+        <IconButton aria-label="share">
+          <ShareIcon />
+        </IconButton>
+        <ExpandMore
+          expand={expanded}
+          onClick={handleExpandClick}
+          aria-expanded={expanded}
+          aria-label="show more"
+        >
+          <ExpandMoreIcon />
+        </ExpandMore>
+      </CardActions>
+      {/* ここから下はいらないかなー */}
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <CardContent>
+          <Typography paragraph>Method:</Typography>
+          <Typography paragraph>
+            Heat 1/2 cup of the broth in a pot until simmering, add saffron and set
+            aside for 10 minutes.
+          </Typography>
+          <Typography paragraph>
+            Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet over
+            medium-high heat. Add chicken, shrimp and chorizo, and cook, stirring
+            occasionally until lightly browned, 6 to 8 minutes. Transfer shrimp to a
+            large plate and set aside, leaving chicken and chorizo in the pan. Add
+            pimentón, bay leaves, garlic, tomatoes, onion, salt and pepper, and cook,
+            stirring often until thickened and fragrant, about 10 minutes. Add
+            saffron broth and remaining 4 1/2 cups chicken broth; bring to a boil.
+          </Typography>
+          <Typography paragraph>
+            Add rice and stir very gently to distribute. Top with artichokes and
+            peppers, and cook without stirring, until most of the liquid is absorbed,
+            15 to 18 minutes. Reduce heat to medium-low, add reserved shrimp and
+            mussels, tucking them down into the rice, and cook again without
+            stirring, until mussels have opened and rice is just tender, 5 to 7
+            minutes more. (Discard any mussels that don&apos;t open.)
+          </Typography>
+          <Typography>
+            Set aside off of the heat to let rest for 10 minutes, and then serve.
+          </Typography>
+        </CardContent>
+      </Collapse>
+    </Card>
+    ))) : (
+      <p>投稿が存在しません</p>)}
+      </ThemeProvider>
   );
 }
-
-const itemData = [
-  {
-    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-    title: 'Breakfast',
-    author: '@bkristastucchio',
-    rows: 2,
-    cols: 2,
-    featured: true,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
-    title: 'Burger',
-    author: '@rollelflex_graphy726',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
-    title: 'Camera',
-    author: '@helloimnik',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
-    title: 'Coffee',
-    author: '@nolanissac',
-    cols: 2,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1533827432537-70133748f5c8',
-    title: 'Hats',
-    author: '@hjrc33',
-    cols: 2,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62',
-    title: 'Honey',
-    author: '@arwinneil',
-    rows: 2,
-    cols: 2,
-    featured: true,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6',
-    title: 'Basketball',
-    author: '@tjdragotta',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1518756131217-31eb79b20e8f',
-    title: 'Fern',
-    author: '@katie_wasserman',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1597645587822-e99fa5d45d25',
-    title: 'Mushrooms',
-    author: '@silverdalex',
-    rows: 2,
-    cols: 2,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af',
-    title: 'Tomato basil',
-    author: '@shelleypauls',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1471357674240-e1a485acb3e1',
-    title: 'Sea star',
-    author: '@peterlaster',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6',
-    title: 'Bike',
-    author: '@southside_customs',
-    cols: 2,
-  },
-];
-
-
-// import React, 
-//       { useEffect,
-//         useState,
-//         useRef ,
-//         useLayoutEffect, } from "react";
-// import { db }              from '../../firebase';
-// import { collection,
-//          deleteDoc,
-//          doc ,
-//          getDocs ,
-//          addDoc ,}         from 'firebase/firestore';
-// import { Avatar ,
-//          Typography , 
-//          Box ,
-//          Grid,
-//          Container ,
-//          createTheme , 
-//          ThemeProvider ,
-//          CssBaseline , }   from "@mui/material"
-// import { format ,
-//          formatDistance, } from "date-fns"
-// import { ja }              from "date-fns/locale"
-// import MessageInput        from "./MessageInput";
-// import MainpageHeader      from '../MainPage/MainPageHeader';
-// import useProfile          from "../../components/hooks/useProfile"
-// import {ref ,
-//         getDownloadURL,
-//         setImage ,}   from "firebase/storage"
-// import {firebaseApp }      from "../../firebase"
-
-// const collectionName = "message"
-// const filepath       = "gs://myfirebasesample-c6d99.appspot.com/PAGE_USE_IMG/"
-// const filename       = "001_mainpage_img.png"
-// const titleName      = "TEST画面"
-// const theme = createTheme()
-
-// function App() {
-//   // 追加
-//   const [addKanji, setaddKanji] = useState("");
-//   const [addKana, setaddKana] = useState("");
-//   const [message, setMessage] = useState([]);
-//   const array = [];
-//   const bottomRef = useRef(null)
-//   const [image, setImage] = useState()
-
-//   const firestorage = firebaseApp.firestorage
-//   const gsReference = ref(
-//     firestorage,
-//     filepath + filename
-//   )
-
-//   useLayoutEffect(() => {
-//     bottomRef?.current?.scrollIntoView()
-//   })
-  
-//   const fetchUsersData = () => {
-//     getDocs(collection(db, collectionName)).then((querySnapshot)=>{
-//       querySnapshot.forEach((doc) => {
-//         console.log(doc.id,doc.data())
-//         console.log(doc.data().text)
-//         console.log(format(doc.data().createdAt.toDate(), "yyyy年MM月dd日hh:mm"))
-//         array.push({
-//           id : doc.id,
-//           ...doc.data()
-//         })})
-//     }).then(()=>{
-//       setMessage([...array])
-//     })};
-
-//   useEffect(() => {
-//     fetchUsersData()
-//   },[]);
-
-//   const handleAdd = () => {
-//     getDownloadURL(gsReference)
-//     .then(url => {
-//       setImage(url)
-//     })
-//     .catch(err => console.log(err))
-//   }
-
-//   return (
-//     <ThemeProvider theme={theme}>
-//       <Container maxWidth >
-//         <MainpageHeader/>
-//       </Container>
-//       <Container maxWidth="md">
-//         <CssBaseline />
-//         <Box sx={{ flexGrow: 1, m: 2, pt: 6, pb: 4 }}>
-//           <Typography align="center" variant="h4">
-//             {titleName}
-//           </Typography>
-//           <Typography align="center">
-//             <img src={image} alt="" />
-//             <button onClick={() => handleAdd()}>追加</button>
-//           </Typography>
-//         </Box>
-//       </Container>
-//     </ThemeProvider>
-//   );
-// }
-
-// export default App;

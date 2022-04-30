@@ -1,4 +1,6 @@
-import React, { useState } from "react"
+import React, 
+      { useEffect , 
+        useState } from "react"
 import { Alert , 
          Avatar ,
          Typography ,
@@ -11,7 +13,9 @@ import { Alert ,
          CssBaseline ,
          TextField , 
          Stack,
-         Button, }    from "@mui/material"
+         Button, 
+         FormControl,
+         InputLabel,}    from "@mui/material"
 import {firebaseApp } from "../../firebase"
 import useUser        from "../hooks/getuseAuth"
 import PostPageHeader from './PostPageHeader';
@@ -27,7 +31,14 @@ import {ref,
   getDownloadURL,}    from "firebase/storage"
 import {addDoc,
   collection,
-  Timestamp, }        from "firebase/firestore"
+  Timestamp,
+  getDocs , }        from "firebase/firestore"
+import Select      from '@mui/material/Select';
+import MenuItem    from '@mui/material/MenuItem';
+import { db }               from '../../firebase';
+
+const collectionName = "category"
+// ------セレクトボックスのテスト用------
 
 const defaultSrc =
     "https://firebasestorage.googleapis.com/v0/b/myfirebasesample-c6d99.appspot.com/o/PAGE_USE_IMG%2FAddImage.png?alt=media&token=d4acd7c6-5a2b-4f54-a4bb-0e6240d25f81";
@@ -56,6 +67,36 @@ const theme = createTheme({
 });
 
 export default function PostPage() {
+  const [detail, setDetail] = useState([]);
+  const detailAry = [];
+
+  // セレクトボックスの要素選択時
+  const handleSelectChange = (event) => {
+    console.log("handleSeledctChange通過" , event.target.value)
+    setCategory(event.target.value)
+  };
+
+    // firestoreからカテゴリーの取得
+    const fetchCategoryData = () => {
+      getDocs(collection(db, collectionName)).then((querySnapshot)=>{
+        // recipenumと遷移元のレシピNoを比較する
+        querySnapshot.forEach((doc) => {
+          detailAry.push(
+            //...doc.data()
+            doc.data().detail
+        )
+        console.log("pushする値 : " , doc.data())
+      })
+      }).then(()=>{
+        setDetail([...detailAry])
+        console.log("★:detail => ",detail)
+      })};
+  
+    useEffect(() => {
+      fetchCategoryData()
+    },[]);
+  // ------セレクトボックスのテスト用------
+
   const [name, setName] 
           = useState(store.getState().displayName)      // プロフィール名
   const [recipetitle, setRecipeTitle] 
@@ -145,18 +186,18 @@ export default function PostPage() {
               console.log(url)
               // firestoreへ投稿情報を書き込み
               addDoc(docRef,{
-                category : category,                        // カテゴリを入力
-                createdAt : Timestamp.fromDate(new Date()), // 投稿日
-                memo     : productionmemo ,                 // 作品メモを入力
-                productioncost : productioncost ,           // 制作費用を入力
-                productionperiod : productionperiod ,       // 制作期間を入力
-                title : recipetitle ,                       // 作品タイトルを入力
-                recipenum : recipeNo ,                      // レシピNoを入力
+                category         : category,                       // カテゴリを入力
+                createdAt        : Timestamp.fromDate(new Date()), // 投稿日
+                memo             : productionmemo ,                // 作品メモを入力
+                productioncost   : productioncost ,                // 制作費用を入力
+                productionperiod : productionperiod ,              // 制作期間を入力
+                title            : recipetitle ,                   // 作品タイトルを入力
+                recipenum        : recipeNo ,                      // レシピNoを入力
                 image: {
-                  filename : image.name,                    // ファイル名
-                  user: profile.name,                       // DIY作成者を入力
-                  url:  url,                                // 画像のURLを入力
-                  uid: profile.uid,},                       // 作成者のUIDを入力
+                  filename       : image.name,                     // ファイル名
+                  user           : profile.name,                   // DIY作成者を入力
+                  url            :  url,                           // 画像のURLを入力
+                  uid            : profile.uid,},                  // 作成者のUIDを入力
                 })
               })
             console.log("画像アップロード完了!")
@@ -210,21 +251,27 @@ export default function PostPage() {
                 <Typography variant="h6" gutterBottom>
                   カテゴリー
                 </Typography>
-                <Box
-                  sx={{
-                    width: 500,
-                    maxWidth: '100%',
-                    }}>
-                  <TextField
-                    fullWidth
-                    id           = "category"
-                    variant      = "outlined"
-                    name         = "category"
-                    label        = "入力してください"
-                    defaultValue = ""
-                    onChange={e => 
-                      setCategory(e.target.value)}/>
-                </Box>
+                <FormControl fullWidth >
+                  <InputLabel id="location-label">
+                    選択してください
+                  </InputLabel>
+                  {/* カテゴリー選択のセレクトボックス */}
+                  <Select
+                    labelId="demo-multiple-name-label"
+                    id="demo-multiple-name"
+                    value={category}
+                    onChange={handleSelectChange}
+                    label = "選択してください"
+                  >
+                    {detail.map((category) => (
+                      <MenuItem
+                        key   = {category}
+                        value = {category}>
+                        {category}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Grid>
               <Grid item xs={12} md={6}>
                 <Typography variant="h6" gutterBottom>

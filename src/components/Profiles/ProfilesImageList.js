@@ -27,7 +27,7 @@ import { firebaseApp }   from "../../firebase";
 
 const collectionRecipeName = "recipe"
 const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#ffffff',
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: 'center',
@@ -118,51 +118,47 @@ export default function ProfileImageList() {
                     text   = "何か入れる"
                     link   = "/recipedetail/"/>
               </Box>
-              <Box sx={{ ml: 2 }}>
+              <Box sx={{ ml: 2  }}>
                 {/* 作品タイトルの表示 */}
                 <Grid container spacing={0} >
-                <Grid item xs= {9}>
-                  <Typography sx={{ fontSize: 18}}>
-                    {/* 作品番号をアドレスの末尾に付与して遷移する */}
-                    <Link href={`/recipedetails/${recipe.recipenum}`} color="#000000">
-                      <strong>{recipe.title}</strong>
-                    </Link>
-                  </Typography>
-                </Grid>
-                <Grid item xs= {1} >
-                  <Button
-                   onClick={() => {
-                    setGoodCount(goodcount +1)}}>
-                    <ThumbUpAltIcon/>
-                    <Typography color="#000000">
-                        {goodcount}
+                  <Grid item xs= {9}>
+                    <Typography sx={{ fontSize: 18 , width : 380}}>
+                      {/* 作品番号をアドレスの末尾に付与して遷移する */}
+                      <Link href={`/recipedetails/${recipe.recipenum}`} color="#000000">
+                        <strong>{recipe.title}</strong>
+                      </Link>
                     </Typography>
-                  </Button>
+                  </Grid>
                 </Grid>
-                <Grid item xs= {1}>
-                  <Button
-                    onClick={() =>{
-                      setBookMarkCount(bookmarkcount + 1)}}>
-                    <StarsIcon color="#ffffff"/>
-                    <Typography color="#000000">
-                      {bookmarkcount}
-                    </Typography>
-                  </Button>                  
-                </Grid>
-                </Grid>
-                {/* 作品メモの表示 */}
-                <Typography 
-                  sx={{ p: 1, fontSize: 12 , width : 400 , background: "#dddddd", borderRadius: 1 ,color:"#000000"}}>
-                  {recipe.memo}
-                </Typography>
+
                 <Stack
                   direction="row"
                   divider={<Divider orientation="vertical" flexItem />}
-                  spacing={2}>
+                  spacing={1}>
+                    <Item>
+                      {/* いいねボタン表示 */}
+                      <Button
+                      onClick={() => {
+                        setGoodCount(goodcount +1)}}>
+                        <ThumbUpAltIcon fontSize = "small"/>
+                        <Typography color="#000000">
+                            {goodcount}
+                        </Typography>
+                      </Button>
+                    {/* お気に入りボタン表示 */}
+                      <Button
+                        onClick={() =>{
+                          setBookMarkCount(bookmarkcount + 1)}}>
+                        <StarsIcon color="#ffffff" fontSize = "small"/>
+                        <Typography color="#000000">
+                          {bookmarkcount}
+                        </Typography>
+                      </Button>
+                    </Item>
                     {/* 投稿日時の表示 */}
-                  <Item>投稿日：{format(recipe.createdAt.toDate(), "yyyy年MM月dd日")}</Item>
-                  {/* 制作費用の表示 */}
-                  <Item>制作費用：<strong>{Number(recipe.productioncost).toLocaleString()}</strong> 円</Item>
+                    <Item >
+                      投稿日：{format(recipe.createdAt.toDate(), "yyyy年MM月dd日")}
+                    </Item>
                 </Stack>
               </Box>
             </Box>
