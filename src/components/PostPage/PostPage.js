@@ -1,6 +1,6 @@
-import React, 
-      { useEffect , 
-        useState } from "react"
+import   React, 
+      {  useEffect , 
+         useState }      from "react"
 import { Alert , 
          Avatar ,
          Typography ,
@@ -15,30 +15,29 @@ import { Alert ,
          Stack,
          Button, 
          FormControl,
-         InputLabel,}    from "@mui/material"
-import {firebaseApp } from "../../firebase"
-import useUser        from "../hooks/getuseAuth"
-import PostPageHeader from './PostPageHeader';
-import PostPageButton from './PostPageButton';
-import { styled }     from '@mui/material/styles';
-import EditIcon       from '@mui/icons-material/Edit';
-import ArrowBackIcon  from '@mui/icons-material/ArrowBack';
-import store          from '../../store/index';
-import useProfile     from "../hooks/useProfile"
-import {useHistory}   from "react-router-dom";
-import {ref,
-  uploadBytes,
-  getDownloadURL,}    from "firebase/storage"
-import {addDoc,
-  collection,
-  Timestamp,
-  getDocs , }        from "firebase/firestore"
-import Select      from '@mui/material/Select';
-import MenuItem    from '@mui/material/MenuItem';
-import { db }               from '../../firebase';
+         InputLabel,
+         Select ,
+         MenuItem ,}      from "@mui/material"
+import { firebaseApp }    from "../../firebase"
+import   useUser          from "../hooks/getuseAuth"
+import   PostPageHeader   from './PostPageHeader';
+import   PostPageButton   from './PostPageButton';
+import { styled }         from '@mui/material/styles';
+import   EditIcon         from '@mui/icons-material/Edit';
+import   ArrowBackIcon    from '@mui/icons-material/ArrowBack';
+import   store            from '../../store/index';
+import   useProfile       from "../hooks/useProfile"
+import { useHistory}      from "react-router-dom";
+import { ref,
+         uploadBytes,
+         getDownloadURL,} from "firebase/storage"
+import { addDoc,
+         collection,
+         Timestamp,
+         getDocs , }      from "firebase/firestore"
+import { db }             from '../../firebase';
 
 const collectionName = "category"
-// ------セレクトボックスのテスト用------
 
 const defaultSrc =
     "https://firebasestorage.googleapis.com/v0/b/myfirebasesample-c6d99.appspot.com/o/PAGE_USE_IMG%2FAddImage.png?alt=media&token=d4acd7c6-5a2b-4f54-a4bb-0e6240d25f81";
@@ -67,6 +66,7 @@ const theme = createTheme({
 });
 
 export default function PostPage() {
+  // ------セレクトボックス用------
   const [detail, setDetail] = useState([]);
   const detailAry = [];
 
@@ -95,7 +95,7 @@ export default function PostPage() {
     useEffect(() => {
       fetchCategoryData()
     },[]);
-  // ------セレクトボックスのテスト用------
+  // ------セレクトボックス用------
 
   const [name, setName] 
           = useState(store.getState().displayName)      // プロフィール名
@@ -257,12 +257,11 @@ export default function PostPage() {
                   </InputLabel>
                   {/* カテゴリー選択のセレクトボックス */}
                   <Select
-                    labelId="demo-multiple-name-label"
-                    id="demo-multiple-name"
-                    value={category}
-                    onChange={handleSelectChange}
-                    label = "選択してください"
-                  >
+                    labelId  = "demo-multiple-name-label"
+                    id       = "demo-multiple-name"
+                    value    = {category}
+                    onChange = {handleSelectChange}
+                    label    = "選択してください">
                     {detail.map((category) => (
                       <MenuItem
                         key   = {category}

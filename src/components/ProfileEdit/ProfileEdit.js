@@ -43,6 +43,8 @@ const theme = createTheme({
   },
 });
 
+const collectionUserName = "users"
+
 const ProfileEdit = () => {
   const [name, setName] = useState(store.getState().displayName)                   // プロフィール名
   const [location , setLocation] = useState(store.getState().location)             // 所在地
@@ -60,6 +62,7 @@ const ProfileEdit = () => {
 
   const handleChange = (e) => {
     console.log(e.target.files)
+    console.log("handleChange 通過")
     if (e.target.files !== null) {
         setImage(e.target.files[0])
       }
@@ -92,7 +95,7 @@ const ProfileEdit = () => {
 
     try {
         const uid = user.uid
-        const docRef = collection(firestore, "users");
+        const docRef = collection(firestore, collectionUserName);
  
         if(image){
             const imageRef = ref(firestorage, 'USER_PROFILE_IMG/' + image.name)
@@ -104,7 +107,7 @@ const ProfileEdit = () => {
                 getDownloadURL(imageRef).then(url => {
                   console.log(url)
                   if (profile) {
-                    const userRef = doc(firestore, "users", profile?.id)
+                    const userRef = doc(firestore, collectionUserName , profile?.id)
                     updateDoc(userRef, {
                       name,
                       image: url,
@@ -125,7 +128,7 @@ const ProfileEdit = () => {
               }else{
                 // 画像を選択する
                 if (profile) {
-                  const userRef = doc(firestore, "users", profile?.id)
+                  const userRef = doc(firestore, collectionUserName, profile?.id)
                   updateDoc(userRef, { name })
                   updateDoc(userRef, { location })
                   updateDoc(userRef, { selfintroduction })

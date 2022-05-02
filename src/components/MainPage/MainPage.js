@@ -175,7 +175,7 @@ function MainPage(props) {
         </Grid>
         </Container>
 
-        <Container maxWidth = "lg">
+        <Container maxWidth = "md" >
           <Box
             sx={{
               bgcolor: 'background.paper',

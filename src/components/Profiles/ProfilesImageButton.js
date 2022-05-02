@@ -84,12 +84,13 @@ export default function ProfilesImageButton(props) {
   }
 
   return (
-    <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 100, width: '100%' }}>
+    <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 70, width: '70%' }}>
       <ImageButton
         focusRipple
         key     = {props.imgURL}
         style   = {{
-          width: "100px",}}
+          width  : "70px",
+          height : "70px"}}
         text    = {props.text}
         onClick = {() => {
             changeTitle()

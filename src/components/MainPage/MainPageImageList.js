@@ -23,6 +23,7 @@ import { styled }           from '@mui/material/styles';
 import MainpageImgButton    from './MainPageImageButton'
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import StarsIcon from '@mui/icons-material/Stars';
+import InsertCommentIcon from '@mui/icons-material/InsertComment';
 
 const collectionRecipeName = "recipe"
 const Item = styled(Paper)(({ theme }) => ({
@@ -121,7 +122,7 @@ export default function MainPageImageList() {
               <Box sx={{ ml: 2 }}>
                 {/* 作品タイトルの表示 */}
                 <Grid container spacing={0} >
-                <Grid item xs= {6}>
+                <Grid item xs= {9}>
                   <Typography sx={{ fontSize: 22}}>
                     {/* 作品番号をアドレスの末尾に付与して遷移する */}
                     <Link href={`/recipedetails/${recipe.recipenum}`} color="#000000">
@@ -129,23 +130,36 @@ export default function MainPageImageList() {
                     </Link>
                   </Typography>
                 </Grid>
-                <Grid item xs= {3} >
+                <Grid item xs= {1} >
+                  {/* いいねボタン表示/数表示 */}
                   <Button
                    onClick={() => {
                     setGoodCount(goodcount +1)}}>
-                    <ThumbUpAltIcon/>
+                    <ThumbUpAltIcon sx={{ color : "#ffa500" }}/>
                     <Typography color="#000000">
-                      イイね！{goodcount}
+                      {goodcount}
                     </Typography>
                   </Button>
                 </Grid>
-                <Grid item xs= {3}>
+                {/* お気に入りボタン表示/数表示 */}
+                <Grid item xs= {1}>
                   <Button
                     onClick={() =>{
                       setBookMarkCount(bookmarkcount + 1)}}>
-                    <StarsIcon color="#ffffff"/>
+                    <StarsIcon sx={{ color : "#a0522d" }}/>
                     <Typography color="#000000">
-                      お気に入り{bookmarkcount}
+                      {bookmarkcount}
+                    </Typography>
+                  </Button>                  
+                </Grid>
+                {/* コメント表示/数表示 */}
+                <Grid item xs= {1}>
+                  <Button
+                    onClick={() =>{
+                      setBookMarkCount(bookmarkcount + 1)}}>
+                    <InsertCommentIcon sx={{ color : "#1e90ff" }}/>
+                    <Typography color="#000000">
+                      {bookmarkcount}
                     </Typography>
                   </Button>                  
                 </Grid>

@@ -1,29 +1,30 @@
-import React ,
+import  React ,
       { useEffect,
         useState,
-        useRef , }          from "react";
-import { db }               from '../../firebase';
+        useRef , }           from "react";
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import StarsIcon from '@mui/icons-material/Stars';
+import InsertCommentIcon from '@mui/icons-material/InsertComment';
 import { collection,
-         getDocs ,}         from 'firebase/firestore';
+         getDocs ,}          from 'firebase/firestore';
 import { Typography , 
          Box ,
          Grid,
          createTheme , 
          ThemeProvider ,
          Link,
-         Button,}              from "@mui/material"
+         Button,}            from "@mui/material"
 import { format ,
-         formatDistance,  } from "date-fns"
-import { ja }               from "date-fns/locale"
-import useProfile           from "../hooks/useProfile"
-import Divider              from '@mui/material/Divider';
-import Paper                from '@mui/material/Paper';
-import Stack                from '@mui/material/Stack';
-import { styled }           from '@mui/material/styles';
-import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
-import StarsIcon from '@mui/icons-material/Stars';
-import ProfilesImageButton from "./ProfilesImageButton";
-import { firebaseApp }   from "../../firebase";
+         formatDistance,  }  from "date-fns"
+import { db }                from '../../firebase';
+import { useHistory}         from 'react-router';
+import { ja }                from "date-fns/locale"
+import   useProfile          from "../hooks/useProfile"
+import   Paper               from '@mui/material/Paper';
+import { styled }            from '@mui/material/styles';
+import   ProfilesImageButton from "./ProfilesImageButton";
+import { firebaseApp }       from "../../firebase";
+
 
 const collectionRecipeName = "recipe"
 const Item = styled(Paper)(({ theme }) => ({
@@ -43,11 +44,12 @@ export default function ProfileImageList() {
   var profile = profileData.profile            // プロフィール取得
   const bottomRef = useRef(null)
   const recipeAry = [];
+  const history = useHistory()
   const firestorage = firebaseApp.firestorage  // 認証情報チェック用
 
   // リンク先に遷移
-  const testmethod = (event) => {
-    console.log("TEST" , event)
+  const handleSubmit = (event) => {
+    history.push("/recipedetails/edit")
   }
 
   // pathnameからuidを取得
@@ -99,69 +101,69 @@ export default function ProfileImageList() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Grid item xs={12} >
+      <Grid container spacing={0} >
         {recipe ? ( 
           recipe.map((recipe) => (
-            <Box 
-              key={recipe.id} 
-              sx={{
-                display: "flex",
-                my: 2,
-                gap: 2,
-                flexGrow: 1, m: 2,}}
-              onSubmit={testmethod}>
+          <Box 
+            key={recipe.id} 
+            sx={{
+              display: "flex",
+              my: 2,
+              gap: 2,
+              flexGrow: 1, m: 2,}}>
+            <Grid item xs={2} align = "left">
               <Box>
-                  {/* 作品画像の表示 */}
+                {/* 作品画像の表示 */}
                 <ProfilesImageButton
-                    imgURL = {recipe.image.url}
-                    info   = {recipe}
-                    text   = "何か入れる"
-                    link   = "/recipedetail/"/>
+                  imgURL = {recipe.image.url}
+                  info   = {recipe}
+                  text   = "何か入れる"
+                  link   = "/recipedetail/"/>
               </Box>
-              <Box sx={{ ml: 2  }}>
-                {/* 作品タイトルの表示 */}
-                <Grid container spacing={0} >
-                  <Grid item xs= {9}>
-                    <Typography sx={{ fontSize: 18 , width : 380}}>
-                      {/* 作品番号をアドレスの末尾に付与して遷移する */}
-                      <Link href={`/recipedetails/${recipe.recipenum}`} color="#000000">
-                        <strong>{recipe.title}</strong>
-                      </Link>
+            </Grid>
+            <Grid item xs={10} align = "left">
+            {/* 作品タイトルの表示 */}
+              <Typography sx={{ fontSize: 18 , width : 380}}>
+                {/* 作品番号をアドレスの末尾に付与して遷移する */}
+                <Link href={`/recipedetails/${recipe.recipenum}`} color="#000000">
+                  <strong>{recipe.title}</strong>
+                </Link>
+              </Typography>
+              <Grid container spacing={0} >
+                <Grid item xs={6} align = "center">
+                  {/* いいねボタン表示 */}
+                  <Grid container spacing={0} >
+                  <Grid item xs={4} align = "left">
+                    <ThumbUpAltIcon sx={{ color : "#ffa500" , fontSize: 20 }}/>
+                    <Typography color="#000000" variant="caption" fontSize={15}>
+                        {goodcount}
                     </Typography>
+                    </Grid>
+                    <Grid item xs={4} align = "left">
+                    {/* お気に入りボタン表示 */}
+                    <StarsIcon color="#ffffff" sx={{ color : "#a0522d" , fontSize: 20 }}/>
+                    <Typography color="#000000" variant="caption" fontSize={15}>
+                      {bookmarkcount}
+                    </Typography>
+                    </Grid>
+                    <Grid item xs={4} align = "left">
+                    {/* </Button> */}
+                    <InsertCommentIcon sx={{ color : "#1e90ff" , fontSize: 20 }}/>
+                    <Typography color="#000000" variant="caption" fontSize={15}>
+                        {goodcount}
+                    </Typography>
+                    </Grid>
                   </Grid>
                 </Grid>
-
-                <Stack
-                  direction="row"
-                  divider={<Divider orientation="vertical" flexItem />}
-                  spacing={1}>
-                    <Item>
-                      {/* いいねボタン表示 */}
-                      <Button
-                      onClick={() => {
-                        setGoodCount(goodcount +1)}}>
-                        <ThumbUpAltIcon fontSize = "small"/>
-                        <Typography color="#000000">
-                            {goodcount}
-                        </Typography>
-                      </Button>
-                    {/* お気に入りボタン表示 */}
-                      <Button
-                        onClick={() =>{
-                          setBookMarkCount(bookmarkcount + 1)}}>
-                        <StarsIcon color="#ffffff" fontSize = "small"/>
-                        <Typography color="#000000">
-                          {bookmarkcount}
-                        </Typography>
-                      </Button>
-                    </Item>
-                    {/* 投稿日時の表示 */}
-                    <Item >
-                      投稿日：{format(recipe.createdAt.toDate(), "yyyy年MM月dd日")}
-                    </Item>
-                </Stack>
-              </Box>
-            </Box>
+                  {/* 投稿日時の表示 */}
+                <Grid item xs={6} align = "left">
+                  <Typography color="#000000" variant="body2">
+                    投稿日：{format(recipe.createdAt.toDate(), "yyyy年MM月dd日")}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Box>
           ))) : (
           <p>投稿が存在しません</p>)}
           <div ref={bottomRef}></div>

@@ -8,17 +8,18 @@ const initialState = {
   password1        : "",
   password2        : "",
   passwordErrorMS  : "",
-  displayName      : "",
   nicknameErrorMS  : "",
   location         : "",
   locationErrorMS  : "",
+  displayName      : "",  // ユーザー名
   recipetitle      : "",  // 作品タイトル
   category         : "",  // カテゴリー
   productionCost   : "",  // 制作費用
   productionPeriod : "",  // 制作期間
   productionMemo   : "",  // 作品メモ
+  createdAt        : "",  // 投稿日時
+  photoURL         : "",  // アバター画像
   memo             : "",
-  photoURL         : "",
   photoFileData    : "",
   phoneNumber      : "",
 };

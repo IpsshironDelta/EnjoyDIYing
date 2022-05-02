@@ -1,8 +1,7 @@
 import { BrowserRouter, 
          Route, 
          Switch,
-         useHistory,
-         useLocation }           from "react-router-dom";
+         useHistory,}           from "react-router-dom";
 import Login                    from "./components/Login/Login";
 import SignUp                   from "./components/SignUp/SignUp";
 import PasswordReset            from './components/PasswordReset/PasswordReset';
@@ -10,6 +9,7 @@ import MainPage                 from "./components/MainPage/MainPage";
 import PostPage                  from './components/PostPage/PostPage';
 import MainTop                  from './components/MainPage/MainPage';
 import RecipeDetails            from './components/RecipDetails/RecipeDetails';
+import RecipeDetailsEdit        from './components/RecipDetailsEdit/RecipeDetailsEdit';
 import RecipeDetailsID          from './components/RecipDetails/RecipeDetails';
 import Profiles                 from './components/Profiles/Profiles'
 import ProfileID                from './components/Profiles/Profiles'
@@ -35,6 +35,7 @@ function App() {
         <Route exact path="/profiles/:id" component={ProfileID} />
         <Route exact path="/profile/edit" component={ProfileEdit} />
         <Route exact path="/recipedetails/" component={RecipeDetails} />
+        <Route exact path="/recipedetails/:id/edit" component={RecipeDetailsEdit} />
         <Route exact path="/recipedetails/:id" component={RecipeDetailsID} />
         <Route exact path="/userregistration" component={UserRegistration} />
         <Route exact path="/userregistration/Review" component={UserRegistrationReview} />

@@ -1,26 +1,26 @@
-import   React, 
-      {  useEffect,
-         useState }       from "react"
-import { Avatar,
-         Paper,
-         Typography,
-         CssBaseline,
-         Box,
-         TextField,
-         Button,
-         Container,
-         Tabs ,
-         Tab , }           from "@mui/material"
-import { useHistory}       from 'react-router';
-import { createTheme, 
-         ThemeProvider }   from '@mui/material/styles';
-import   useProfile        from "../hooks/useProfile"
-import   store             from '../../store/index';
-import   ProfilesImageList from "./ProfilesImageList"
-import   ProfilesHeader    from "./ProfilesHeader"
-import { db }              from '../../firebase';
+import React, 
+      { useEffect,
+        useState } from "react"
+import {Avatar,
+        Paper,
+        Typography,
+        CssBaseline,
+        Box,
+        TextField,
+        Button,
+        Container,
+        Tabs ,
+        Tab , } from "@mui/material"
+import { useHistory}    from 'react-router';
+import ProfileHeader from "./ProfileHeader"
+import {createTheme, 
+    ThemeProvider } from '@mui/material/styles';
+import useProfile from "../hooks/useProfile"
+import store                from '../../store/index';
+import ProfileImageList from "./ProfileImageList"
+import { db }               from '../../firebase';
 import { collection,
-         getDocs ,}        from 'firebase/firestore';
+         getDocs ,}         from 'firebase/firestore';
 
 const collectionName = "users"
 const theme = createTheme({
@@ -66,7 +66,7 @@ function a11yProps(index) {
   };
 }
 
-const Profiles = () => {
+const Profile = () => {
   const [name, setName] = useState("")
   const [location , setLocation] = useState("")
   const [userinfo, setUserInfo] = useState([]);
@@ -75,7 +75,7 @@ const Profiles = () => {
   const profileData = useProfile()
   const profile = profileData.profile
   const history = useHistory()
-  const userDataAry = [];
+  const array = [];
 
   // pathnameからuidを取得
   const uidAry = window.location.pathname.split("/")
@@ -83,8 +83,9 @@ const Profiles = () => {
 
   const handleSubmit = (event) => {
     store.getState().displayName = profile.name
-    store.getState().location    = profile.location
-    store.getState().memo        = profile.selfintroduction
+    store.getState().location = profile.location
+    store.getState().memo = profile.selfintroduction
+    console.log("handleSubmit")
     history.push("/profile/edit")
   }
 
@@ -98,17 +99,20 @@ const Profiles = () => {
     getDocs(collection(db, collectionName)).then((querySnapshot)=>{
       // recipenumと遷移元のレシピNoを比較する
       querySnapshot.forEach((doc) => {
+        console.log(doc.data())
+        console.log(doc.data().uid)
         // 備忘録：文字列を比較する際、見た目は一緒なのになぜか一致しない現象が起きた。
         // ただし、文字列同士をString()で処理すると問題解決
         if(String(doc.data().uid) === String(getuid)){
-          userDataAry.push({
+          array.push({
             id : doc.id,
             ...doc.data()
         })
       }
     })
     }).then(()=>{
-      setUserInfo([...userDataAry])
+      setUserInfo([...array])
+      console.log(array)
     })};
 
   useEffect(() => {
@@ -118,7 +122,7 @@ const Profiles = () => {
   return (
     <ThemeProvider theme={theme}>
         <Container maxWidth>
-            <ProfilesHeader/>
+            <ProfileHeader/>
         </Container>
         {userinfo ? ( 
           userinfo.map((userinfo) => (
@@ -159,7 +163,8 @@ const Profiles = () => {
                         <Typography >ユーザー名</Typography>
                         {/* ユーザー名表示 */}
                         <TextField
-                          margin       = "normal"
+                          margin="normal"
+                          required
                           fullWidth
                           id           = "name"
                           name         = "name"
@@ -192,8 +197,8 @@ const Profiles = () => {
                           {/* 自己紹介の表示 */}
                           <TextField
                             margin       = "normal"
-                            fullWidth
                             id           = "selfintroduction"
+                            fullWidth
                             name         = "selfintroduction"
                             autoComplete = "selfintroduction"
                             multiline
@@ -213,12 +218,12 @@ const Profiles = () => {
             </TabPanel>
             <TabPanel value={value} index={1}>
               {/* 投稿した作品の中身表示 */}
-              <Paper sx={{ m: 0, p: 0 }}>
+              <Paper sx={{ m: 1, p: 1 }}>
                 <Typography align="center" variant="h5">
-                  {name ? name : userinfo ? userinfo.name : ""} さん<br/>
+                  {name ? name : profile ? profile.name : ""} さん<br/>
                   の投稿した作品
                 </Typography>
-                <ProfilesImageList/>
+                <ProfileImageList/>
               </Paper>
             </TabPanel>
             <TabPanel value={value} index={2}>
@@ -237,4 +242,4 @@ const Profiles = () => {
   )
 }
 
-export default Profiles
+export default Profile

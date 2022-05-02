@@ -1,28 +1,31 @@
 import React, 
      { useEffect,
-       useState } from "react"
+       useState }          from "react"
 import {Avatar,
         Box,
         Grid,
-        Stack,
         Typography,
         Container,
         CssBaseline,
-        Link ,}      from "@mui/material"
+        Link, 
+        Button,}           from "@mui/material"
 import { createTheme, 
          ThemeProvider }   from '@mui/material/styles';
 import RecipeDetailsHeader from "./RecipeDetailsHeader"
+import RecipeDetailsButton from "./RecipeDetailsButton"
 import Footer              from '../Footer';
 import ThumbUpAltIcon      from '@mui/icons-material/ThumbUpAlt';
 import StarsIcon           from '@mui/icons-material/Stars';
 import CardMedia           from '@mui/material/CardMedia';
 import useProfile          from "../hooks/useProfile"
-import { firebaseApp }   from "../../firebase";
-import { useHistory }    from 'react-router';
-import { db }               from '../../firebase';
+import { firebaseApp }     from "../../firebase";
+import { useHistory }      from 'react-router';
+import { db }              from '../../firebase';
 import { collection,
-         getDocs ,}         from 'firebase/firestore';
-import { format } from "date-fns"
+         getDocs ,}        from 'firebase/firestore';
+import { format }          from "date-fns"
+import InsertCommentIcon   from '@mui/icons-material/InsertComment';
+import store               from '../../store/index';
 
 const collectionRecipeName = "recipe"
 const collectionUserName   = "users"
@@ -75,12 +78,26 @@ export default function RecipDetail() {
             ...doc.data()
           })
           var testUID = doc.data().image.uid
+          store.getState().recipetitle      = doc.data().title             // 作品タイトル
+          store.getState().category         = doc.data().category          // カテゴリー
+          store.getState().productionCost   = doc.data().productioncost    // 制作費用
+          store.getState().productionPeriod = doc.data().productionperiod  // 制作期間
+          store.getState().productionMemo   = doc.data().memo              // 作品メモ
+          store.getState().createdAt        = doc.data().createdAt         // 制作日時
+          store.getState().displayName      = doc.data().image.user        // ユーザー名
+          store.getState().recipeimage      = doc.data().image.url         // アバター画像
           setGetUID(testUID)
       }else{
     }})
     }).then(()=>{
       setRecipe([...recipeAry])
     })};
+
+  // 編集ボタンをクリックしたらgetStateに各値を代入して遷移する
+  const handleClick = () => {
+    store.getState().photoURL    = getavatarurl      // アバターのURL
+    history.push(`/recipedetails/${getrecipenum}/edit`)
+  }
 
   // firestoreからユーザー情報の取得
   const fetchUsersData = () => {
@@ -177,6 +194,7 @@ export default function RecipDetail() {
             pr : 4,}}>
           <Grid container spacing={4}>
             <Grid item xs={4}>
+              {/* 作品画像を表示 */}
               <Typography variant="body2" align='left'>
                 <CardMedia
                   component = "img"
@@ -204,6 +222,27 @@ export default function RecipDetail() {
                     borderRadius: 1 ,
                     color:"#000000"}}>
                   {recipe.memo}
+                </Typography>
+              </Grid>
+              <br/>
+              {/* 作品コメント表示欄 */}
+              <Grid>
+                <Typography 
+                  sx={{ 
+                    fontSize: 14 , 
+                    color:"#a0522d"}}>
+                  作品カテゴリー
+                </Typography>
+              </Grid>
+              <Grid>
+                <Typography 
+                  sx={{ 
+                    p: 1, 
+                    fontSize: 16 , 
+                    background: "#ffffff", 
+                    borderRadius: 1 ,
+                    color:"#000000"}}>
+                  {recipe.category}
                 </Typography>
               </Grid>
               <br/>
@@ -239,25 +278,51 @@ export default function RecipDetail() {
             pr : 4,}}>
           <Grid container spacing={0} >
             <Grid item xs={2}>
+              {/* いいねボタン/数の表示 */}
               <Typography 
                 sx={{ 
                   p: 1, 
                   fontSize: 16 , 
                   color:"#000000"}}>
-                <ThumbUpAltIcon/>いいね
+                <ThumbUpAltIcon sx={{ color : "#ffa500" , fontSize: 20 }}/>いいね！
               </Typography>
             </Grid>
             <Grid item xs={2}>
+              {/* お気に入りボタン/数の表示 */}
               <Typography 
                 sx={{ 
                   p: 1, 
                   fontSize: 16 , 
                   color:"#000000"}}>
-                <StarsIcon/>お気に入り
+                <StarsIcon sx={{ color : "#a0522d" , fontSize: 20}}/>お気に入り
+              </Typography>
+            </Grid>
+            <Grid item xs={2}>
+              {/* コメントボタン/数の表示 */}
+              <Typography 
+                sx={{ 
+                  p: 1, 
+                  fontSize: 16 , 
+                  color:"#000000"}}>
+                <InsertCommentIcon sx={{ color : "#1e90ff", fontSize: 20 }}/>コメント
               </Typography>
             </Grid>
           </Grid>
         </Box>
+        <br/>
+        <Grid container spacing={0} >
+          <Grid item xs={12} align = "right">
+            {/* 編集完了ボタンの表示 */}
+            {profile && profile.uid === recipe.image.uid ? 
+            <Button 
+              variant = "contained"
+              onClick = {handleClick}
+              sx = {{width : 200}}>
+                この投稿を編集する
+            </Button> : ""}
+          </Grid>
+        </Grid>
+        <br/>
         </Container>
       </Box>
       ))) : (
