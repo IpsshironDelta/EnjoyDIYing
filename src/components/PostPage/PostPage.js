@@ -196,7 +196,7 @@ export default function PostPage() {
                 image: {
                   filename       : image.name,                     // ファイル名
                   user           : profile.name,                   // DIY作成者を入力
-                  url            :  url,                           // 画像のURLを入力
+                  url            : url,                            // 画像のURLを入力
                   uid            : profile.uid,},                  // 作成者のUIDを入力
                 })
               })

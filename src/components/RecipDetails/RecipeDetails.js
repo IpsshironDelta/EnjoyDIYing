@@ -67,8 +67,7 @@ export default function RecipDetail() {
     getDocs(collection(db, collectionRecipeName)).then((querySnapshot)=>{
       // recipenumと遷移元のレシピNoを比較する
       querySnapshot.forEach((doc) => {
-        console.log(doc.id,doc.data())
-        console.log(doc.data().text)
+        console.log("doc.id => " ,doc.id,doc.data())
         console.log(format(doc.data().createdAt.toDate(), "yyyy年MM月dd日hh:mm"))
         // 備忘録：文字列を比較する際、見た目は一緒なのになぜか一致しない現象が起きた。
         // ただし、文字列同士をString()で処理すると問題解決
@@ -78,6 +77,7 @@ export default function RecipDetail() {
             ...doc.data()
           })
           var testUID = doc.data().image.uid
+          store.getState().documentID       = doc.id                       // ドキュメントID
           store.getState().recipetitle      = doc.data().title             // 作品タイトル
           store.getState().category         = doc.data().category          // カテゴリー
           store.getState().productionCost   = doc.data().productioncost    // 制作費用

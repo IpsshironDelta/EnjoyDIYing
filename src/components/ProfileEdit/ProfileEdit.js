@@ -129,11 +129,14 @@ const ProfileEdit = () => {
                 // 画像を選択する
                 if (profile) {
                   const userRef = doc(firestore, collectionUserName, profile?.id)
-                  updateDoc(userRef, { name })
-                  updateDoc(userRef, { location })
-                  updateDoc(userRef, { selfintroduction })
+                  updateDoc(userRef, { name , location , selfintroduction})
               } else {
-                addDoc(docRef, { name, image: "", uid ,selfintroduction , location})
+                addDoc(docRef, { 
+                  name, 
+                  image: "", 
+                  uid ,
+                  selfintroduction , 
+                  location})
               }}
               console.log("画像アップロード完了!")
               // 成功したアラート表示

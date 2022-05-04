@@ -18,8 +18,12 @@ import { createTheme,
          ThemeProvider }         from '@mui/material/styles';
 import { addDoc,
          collection,
-         Timestamp,
-         getDocs , }             from "firebase/firestore"         
+         doc,
+         getDocs ,
+         updateDoc, }             from "firebase/firestore"
+import { ref,
+         uploadBytes,
+         getDownloadURL,}        from "firebase/storage"
 import   RecipeDetailsEditHeader from "./RecipeDetailsEditHeader"
 import   RecipeDetailsEditButton from "./RecipeDetailsEditButton";
 import   Footer                  from '../Footer';
@@ -53,12 +57,13 @@ const theme = createTheme({
 
 export default function RecipeDetailsEdit() {
   const [title , setTilte]         = useState(store.getState().recipetitle)      // 作品タイトルを表示
-  const [category , setCategory]   = useState(store.getState().recipetitle)      // 作品タイトルを表示
-  const [comment , setComment]     = useState(store.getState().productionMemo)   // 作品コメントを表示
+  const [category , setCategory]   = useState(store.getState().category)         // 作品カテゴリーを表示
+  const [memo , setMemo]     = useState(store.getState().productionMemo)         // 作品コメントを表示
   const [cost , setCost]           = useState(store.getState().productionCost)   // 制作費用を表示
   const [period , setPeriod]       = useState(store.getState().productionPeriod) // 制作期間を表示
   const [createdat , setCreatedAt] = useState(store.getState().createdAt)        // 制作日時を表示    
   const [image , setImage]         = useState()                                  // 作品画像を表示
+  const [imagename , setImageName] = useState()                                  // 画像変更時のファイル名を表示
   const [error, setError]          = useState(false)                             // エラー判定
   const [success, setSuccess]      = useState(false)                             // 成功判定
   const [errormessage , setErrorMessage] = useState("")                          // エラーメッセージ
@@ -66,7 +71,13 @@ export default function RecipeDetailsEdit() {
   const profileData = useProfile()
   const profile = profileData.profile
   const firestorage = firebaseApp.firestorage
+  const firestore = firebaseApp.firestore
   const history = useHistory()
+
+  // pathnameから作品Noを取得
+  var recipenumAry = window.location.pathname.split("/")
+  const getrecipenum = recipenumAry[2]
+
   // ------【START】セレクトボックス用------
   const [detail, setDetail] = useState([]);
   const detailAry = [];
@@ -99,6 +110,7 @@ export default function RecipeDetailsEdit() {
   const handleChange = (e) => {
     if (e.target.files !== null) {
       setImage(e.target.files[0])
+      setImageName(e.target.files[0].name)
     }
   }
   // ------【END】画像選択用------
@@ -116,7 +128,7 @@ export default function RecipeDetailsEdit() {
       setError(true)
       return
     }
-    if(comment === ""){
+    if(memo === ""){
       console.log("作品コメントが未入力")
       setErrorMessage("作品コメントを入力してください")
       setError(true)
@@ -140,12 +152,77 @@ export default function RecipeDetailsEdit() {
       setError(true)
       return
     }
-    setSuccess(true)
-  }
-
-  // pathnameから作品Noを取得
-  var recipenumAry = window.location.pathname.split("/")
-  const getrecipenum = recipenumAry[2]
+    try {
+      // const uid = user.uid
+      const docRef = collection(firestore, collectionRecipeName);
+      if(image){
+          const imageRef = ref(firestorage, '/RECIPE_IMG/' + image.name)
+          // firebase strageへ画像をアップロード
+          uploadBytes(imageRef, image).then(() => {
+              // getDownloadURLの中で、profileがある場合はupdateDocを指定
+              // profileがない場合はaddDocを指定
+              // imageがない場合も同様に指定
+              getDownloadURL(imageRef).then(url => {
+                console.log("url => ",url)
+                if (profile) {
+                  const userRef = doc(firestore, collectionRecipeName , store.getState().documentID)
+                  updateDoc(userRef, {
+                    title ,                   // 作品タイトルを入力
+                    category ,                // カテゴリを入力
+                    memo ,                 // 作品メモを入力
+                    cost ,                    // 制作費用を入力
+                    period ,                  // 制作期間を入力
+                    image : {
+                      filename : image.name , // image - ファイル名
+                      url      : url ,
+                      uid      : profile.uid,
+                      user     : profile.name},      // image - 画像URLを入力
+                  })
+                }else{
+                  // firestoreに名前、画像URL、uidを追加する
+                  addDoc(docRef, {
+                      title,
+                      category,
+                      memo,
+                      cost,
+                      period,
+                      image: {
+                        filename : image.name,
+                        url : url,},
+                    })
+                  }
+              })
+            })
+          }else{
+            // 画像を選択する
+            if (profile) {
+              const userRef = doc(firestore, collectionRecipeName, store.getState().documentID)
+              updateDoc(userRef, { title , category , memo , cost , period})
+            } else {
+              addDoc(docRef, { 
+                title, 
+                category , 
+                memo,
+                cost , 
+                period ,
+                image : {
+                  filename : "" , 
+                  url : "" , },
+              })
+            }}
+            console.log("画像アップロード完了!")
+            // 成功したアラート表示
+            setSuccess(true)
+            setTimeout(() => {
+              history.push("/")
+            },2000)
+        } catch (err) {
+            console.log(err)
+            // 失敗したアラート表示
+            setError(true)
+            setErrorMessage("更新できませんでした。")
+        }
+      }
 
   return (
     <ThemeProvider theme={theme}>
@@ -275,9 +352,9 @@ export default function RecipeDetailsEdit() {
                   name         = "name"
                   variant      = "outlined"
                   label        = "コメントを入力してください"
-                  defaultValue = {comment}
-                  value        = {comment ? comment : ""}
-                  onChange     = {e => setComment(e.target.value)}
+                  defaultValue = {memo}
+                  value        = {memo ? memo : ""}
+                  onChange     = {e => setMemo(e.target.value)}
                   sx={{ 
                     fontSize: 32 , 
                     background: "#ffffff", 
@@ -306,7 +383,7 @@ export default function RecipeDetailsEdit() {
                     labelId      = "demo-multiple-name-label"
                     id           = "demo-multiple-name"
                     defaultValue = {category}
-                    value        = {category ? category : ""}
+                    value        = {category ? category : store.getState().category}
                     onChange     = {handleSelectChange}
                     label        = "カテゴリーを選択してください"
                     sx={{ 
@@ -384,7 +461,7 @@ export default function RecipeDetailsEdit() {
         </Box>
         <br/>
         {error && <Alert severity="error">{errormessage}</Alert>}
-        {success && (<Alert severity="success"> すべて入力してあります。成功です！</Alert>)}
+        {success && (<Alert severity="success"> 更新が完了しました！</Alert>)}
           <Grid container spacing={0} >
             <Grid item xs={4} align = "center">
               {/* 戻るボタンの表示 */}

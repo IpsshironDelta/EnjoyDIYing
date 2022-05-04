@@ -18,7 +18,9 @@ const initialState = {
   productionPeriod : "",  // 制作期間
   productionMemo   : "",  // 作品メモ
   createdAt        : "",  // 投稿日時
-  photoURL         : "",  // アバター画像
+  recipeimage      : "",  // 作品画像
+  documentID       : "",  // firebaseのドキュメントID格納用
+  photoURL         : "",  
   memo             : "",
   photoFileData    : "",
   phoneNumber      : "",
