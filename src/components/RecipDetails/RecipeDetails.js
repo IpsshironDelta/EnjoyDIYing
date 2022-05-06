@@ -25,9 +25,13 @@ import { collection,
 import { format }          from "date-fns"
 import InsertCommentIcon   from '@mui/icons-material/InsertComment';
 import store               from '../../store/index';
+import MessageInput        from "./RecipeDetailsMessageInput";
+import Message             from "./RecipeDetailsMessage";
 
-const collectionRecipeName = "recipe"
-const collectionUserName   = "users"
+const collectionRecipeName    = "recipe"
+const collectionUserName      = "users"
+const collectionMessageName   = "message"
+
 const theme = createTheme({
   shadows: ["none"],
   palette: {
@@ -41,21 +45,26 @@ const theme = createTheme({
       default: '#ffffff',
     },
     // テキストのカラー設定
-    text: { primary: '#000000' },
-  },
+    text: { 
+      primary: '#ffffff' },
+    },
 });
 
 export default function RecipDetail() {
   const [recipe, setRecipe] = useState([]);
   const [userinfo, setUserInfo] = useState([]);
+  const [message, setMessage] = useState([]);
   const [getuid , setGetUID] = useState("")
   const [getavatarurl , setGetAvatarURL] = useState("")
+  const [getmessagecount , setGetMessageCount] = useState("")
   const profileData = useProfile()
   const profile = profileData.profile
   const firestorage = firebaseApp.firestorage
   const history = useHistory()
   const recipeAry = [];
   const userDataAry = [];
+  const messageAry = [];
+
 
   // pathnameから作品Noを取得
   var recipenumAry = window.location.pathname.split("/")
@@ -117,9 +126,23 @@ export default function RecipDetail() {
       setUserInfo([...userDataAry])
     })};
 
+  // firebaseからメッセージ情報の取得
+  const fetchMessageData = () => {
+    getDocs(collection(db, collectionMessageName)).then((querySnapshot)=>{
+      querySnapshot.forEach((doc) => {
+        messageAry.push({
+          id : doc.id,
+          ...doc.data()
+        })})
+    }).then(()=>{
+      setMessage([...messageAry])
+      setGetMessageCount(messageAry.length)
+    })};
+
   useEffect(() => {
     fetchRecipeData()
     fetchUsersData()
+    fetchMessageData()
   },[getuid]);
 
   return (
@@ -132,7 +155,7 @@ export default function RecipDetail() {
         <Box
           sx={{
             bgcolor: 'background.paper',
-            pt: 8,
+            pt: 1,
             pb: 6,}}>
           <Container maxWidth="md">
             {/* 作品タイトル表示欄 */}
@@ -147,7 +170,6 @@ export default function RecipDetail() {
             </Typography>
             <Box
               sx={{
-                pt : 1,
                 pl : 4,
                 pr : 4,}}>
               <Grid container spacing={4}>
@@ -269,7 +291,6 @@ export default function RecipDetail() {
             </Grid>
           </Grid>
         </Box>
-        <br/>
         <Box
           sx={{
             bgcolor: '#eeeeee',
@@ -309,9 +330,41 @@ export default function RecipDetail() {
           </Grid>
         </Box>
         <br/>
+        {/* メッセージ表示領域 */}
+        <Box
+          sx={{
+            bgcolor: '#eeeeee',
+            pb : 4,
+            pl : 4,
+            pr : 4,}}>
+          <Typography
+            sx={{ 
+              p: 1, 
+              fontSize: 26 , 
+              color:"#a0522d"}}>
+            <strong>コメント</strong>
+            <Typography
+              sx={{ 
+                fontSize: 14}}>
+              <strong>{getmessagecount}件</strong>
+            </Typography>
+          </Typography>
+
+          <Grid container spacing={0} >
+            {/* メッセージ入力&送信ボタン表示 */}
+            <Grid item xs={12} align = "center">
+              {/* メッセージ内容の表示 */}
+              <Message/>
+              {/* メッセージ送信領域の表示 */}
+              <MessageInput/>
+            </Grid>
+          </Grid>
+        </Box>
+        <br/>
+        {/* 作成者がログインユーザーの場合は編集ボタンを表示する */}
         <Grid container spacing={0} >
           <Grid item xs={12} align = "right">
-            {/* 編集完了ボタンの表示 */}
+            {/* 編集ボタンの表示 */}
             {profile && profile.uid === recipe.image.uid ? 
             <Button 
               variant = "contained"
@@ -326,9 +379,10 @@ export default function RecipDetail() {
       </Box>
       ))) : (
         <p>投稿が存在しません</p>)}
-      {/* Footer */}
+        {/* フッターの表示 */}
       <Footer/>
-      {/* End footer */}
     </ThemeProvider>
+
+
   );
 }
