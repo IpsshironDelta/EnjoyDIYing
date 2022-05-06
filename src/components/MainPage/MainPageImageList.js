@@ -78,20 +78,10 @@ export default function MainPageImageList() {
         })})
     }).then(()=>{
       setRecipe([...recipeAry])
-      console.log("★" , recipeAry)
-      console.log("★0" , recipeAry[0].title , format(recipeAry[0].createdAt.toDate() , "yyyyMMdd"))
-      console.log("★1" , recipeAry[1].title , format(recipeAry[1].createdAt.toDate() , "yyyyMMdd"))
-      console.log("★2" , recipeAry[2].title , format(recipeAry[2].createdAt.toDate() , "yyyyMMdd"))
-      console.log("★3" , recipeAry[3].title , format(recipeAry[3].createdAt.toDate() , "yyyyMMdd"))
       // オブジェクト内の日付(createdAt)をキーに昇順にソートする
       recipeAry.sort(function(first , second){
         return (format(first.createdAt.toDate() , "yyyyMMdd") < format(second.createdAt.toDate() , "yyyyMMdd")) ? -1 : 1
       })
-      console.log("★★" , recipeAry)
-      console.log("★★0" , recipeAry[0].title , format(recipeAry[0].createdAt.toDate() , "yyyyMMdd"))
-      console.log("★★1" , recipeAry[1].title , format(recipeAry[1].createdAt.toDate() , "yyyyMMdd"))
-      console.log("★★2" , recipeAry[2].title , format(recipeAry[2].createdAt.toDate() , "yyyyMMdd"))
-      console.log("★★3" , recipeAry[3].title , format(recipeAry[3].createdAt.toDate() , "yyyyMMdd"))
     })};
 
   useEffect(() => {
@@ -183,7 +173,7 @@ export default function MainPageImageList() {
                     </Link>
                   </Item>
                   {/* 制作費用の表示 */}
-                  <Item>制作費用：<strong>{Number(recipe.productioncost).toLocaleString()}</strong> 円</Item>
+                  <Item>制作費用：<strong>{Number(recipe.cost).toLocaleString()}</strong> 円</Item>
                 </Stack>
               </Box>
             </Box>

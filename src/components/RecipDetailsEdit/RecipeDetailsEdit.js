@@ -20,7 +20,8 @@ import { addDoc,
          collection,
          doc,
          getDocs ,
-         updateDoc, }             from "firebase/firestore"
+         updateDoc,
+         deleteDoc, }            from "firebase/firestore"
 import { ref,
          uploadBytes,
          getDownloadURL,}        from "firebase/storage"
@@ -58,7 +59,7 @@ const theme = createTheme({
 export default function RecipeDetailsEdit() {
   const [title , setTilte]         = useState(store.getState().recipetitle)      // 作品タイトルを表示
   const [category , setCategory]   = useState(store.getState().category)         // 作品カテゴリーを表示
-  const [memo , setMemo]     = useState(store.getState().productionMemo)         // 作品コメントを表示
+  const [memo , setMemo]           = useState(store.getState().productionMemo)   // 作品コメントを表示
   const [cost , setCost]           = useState(store.getState().productionCost)   // 制作費用を表示
   const [period , setPeriod]       = useState(store.getState().productionPeriod) // 制作期間を表示
   const [createdat , setCreatedAt] = useState(store.getState().createdAt)        // 制作日時を表示    
@@ -115,6 +116,30 @@ export default function RecipeDetailsEdit() {
   }
   // ------【END】画像選択用------
 
+  // 「削除」ボタンクリック時
+  const handleDelete = (id) => {
+    console.log("id => " , id)
+    if (window.confirm("削除してもよろしいですか？")) {
+      console.log("OK を選択してます" , id)
+      
+      // ドキュメントのid（名前）を取得
+      console.log("ドキュメントのid（名前）を取得")
+      console.log("削除するID",id)
+      deleteDoc(doc(db , collectionRecipeName , id)).then((doc) => {
+        // fetchUsersData()
+        alert("削除しました。")
+        setTimeout(() => {
+          history.push("/")
+        },1000)
+      })
+      .catch(() => {
+        alert("失敗しました")
+     })
+    }else{
+      console.log("キャンセルを選択してます。")
+    }
+  }
+
   // 「更新」ボタンクリック
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -167,16 +192,16 @@ export default function RecipeDetailsEdit() {
                 if (profile) {
                   const userRef = doc(firestore, collectionRecipeName , store.getState().documentID)
                   updateDoc(userRef, {
-                    title ,                   // 作品タイトルを入力
-                    category ,                // カテゴリを入力
-                    memo ,                 // 作品メモを入力
-                    cost ,                    // 制作費用を入力
-                    period ,                  // 制作期間を入力
+                    title ,                     // 作品タイトルを入力
+                    category ,                  // カテゴリを入力
+                    memo ,                      // 作品メモを入力
+                    cost ,                      // 制作費用を入力
+                    period ,                    // 制作期間を入力
                     image : {
-                      filename : image.name , // image - ファイル名
+                      filename : image.name ,   // image - ファイル名
                       url      : url ,
                       uid      : profile.uid,
-                      user     : profile.name},      // image - 画像URLを入力
+                      user     : profile.name}, // image - 画像URLを入力
                   })
                 }else{
                   // firestoreに名前、画像URL、uidを追加する
@@ -197,7 +222,12 @@ export default function RecipeDetailsEdit() {
             // 画像を選択する
             if (profile) {
               const userRef = doc(firestore, collectionRecipeName, store.getState().documentID)
-              updateDoc(userRef, { title , category , memo , cost , period})
+              updateDoc(userRef, 
+                { title , 
+                  category , 
+                  memo , 
+                  cost , 
+                  period})
             } else {
               addDoc(docRef, { 
                 title, 
@@ -473,10 +503,12 @@ export default function RecipeDetailsEdit() {
             </Grid>
             <Grid item xs={4} align = "center">
               {/* 削除ボタンの表示 */}
-              <RecipeDetailsEditButton 
+              <Button
                 variant = "outlined"
-                text    = "この投稿を削除する"
-                sx = {{width : 200}}/>
+                sx = {{width : 200}}
+                onClick = {() => handleDelete(store.getState().documentID)}>
+                  この投稿を削除する
+              </Button>
             </Grid>
             <Grid item xs={4} align = "center">
               {/* 編集完了ボタンの表示 */}
@@ -485,7 +517,7 @@ export default function RecipeDetailsEdit() {
                 sx = {{width : 200}}
                 onClick = {handleSubmit}>
                   更新する
-                </Button>
+              </Button>
             </Grid>
           </Grid>
         <br/>

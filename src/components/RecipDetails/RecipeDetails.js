@@ -12,7 +12,6 @@ import {Avatar,
 import { createTheme, 
          ThemeProvider }   from '@mui/material/styles';
 import RecipeDetailsHeader from "./RecipeDetailsHeader"
-import RecipeDetailsButton from "./RecipeDetailsButton"
 import Footer              from '../Footer';
 import ThumbUpAltIcon      from '@mui/icons-material/ThumbUpAlt';
 import StarsIcon           from '@mui/icons-material/Stars';
@@ -80,8 +79,8 @@ export default function RecipDetail() {
           store.getState().documentID       = doc.id                       // ドキュメントID
           store.getState().recipetitle      = doc.data().title             // 作品タイトル
           store.getState().category         = doc.data().category          // カテゴリー
-          store.getState().productionCost   = doc.data().productioncost    // 制作費用
-          store.getState().productionPeriod = doc.data().productionperiod  // 制作期間
+          store.getState().productionCost   = doc.data().cost              // 制作費用
+          store.getState().productionPeriod = doc.data().period            // 制作期間
           store.getState().productionMemo   = doc.data().memo              // 作品メモ
           store.getState().createdAt        = doc.data().createdAt         // 制作日時
           store.getState().displayName      = doc.data().image.user        // ユーザー名
@@ -254,7 +253,7 @@ export default function RecipDetail() {
                   background: "#ffffff", 
                   borderRadius: 1 ,
                   color:"#a0522d"}}>
-                かかった費用 : <strong>{Number(recipe.productioncost).toLocaleString()}</strong> 円
+                かかった費用 : <strong>{Number(recipe.cost).toLocaleString()}</strong> 円
               </Typography>
               <br/>
               {/* 制作期間の表示 */}
@@ -265,7 +264,7 @@ export default function RecipDetail() {
                   background: "#ffffff", 
                   borderRadius: 1 ,
                   color:"#a0522d"}}>
-                所要時間 :  <strong>約 {recipe.productionperiod}</strong>
+                所要時間 :  <strong>約 {recipe.period}</strong>
               </Typography>
             </Grid>
           </Grid>

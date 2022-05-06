@@ -64,7 +64,7 @@ function App() {
     }
   }
   
-  const fetchUsersData = () => {
+  const fetchMessageData = () => {
     getDocs(collection(db, collectionName)).then((querySnapshot)=>{
       querySnapshot.forEach((doc) => {
         console.log(doc.id,doc.data())
@@ -79,9 +79,10 @@ function App() {
     })};
 
   useEffect(() => {
-    fetchUsersData()
+    fetchMessageData()
   },[]);
 
+  // 削除ボタンクリック時
   const handleDelete = (id) => {
     console.log("id => ",id)
     if (window.confirm("削除してもよろしいですか？")) {
@@ -91,7 +92,7 @@ function App() {
       console.log("ドキュメントのid（名前）を取得")
       console.log("削除するID",id)
       deleteDoc(doc(db , collectionName , id)).then((doc) => {
-        fetchUsersData()
+        fetchMessageData()
         alert("削除しました。")
       })
       .catch(() => {
@@ -108,7 +109,7 @@ function App() {
       kanji: addKanji,
       yomi: addKana,
     }).then(() => {
-      fetchUsersData();
+      fetchMessageData();
       setaddKana("");
       setaddKanji("");
       alert("追加しました");

@@ -189,8 +189,8 @@ export default function PostPage() {
                 category         : category,                       // カテゴリを入力
                 createdAt        : Timestamp.fromDate(new Date()), // 投稿日
                 memo             : productionmemo ,                // 作品メモを入力
-                productioncost   : productioncost ,                // 制作費用を入力
-                productionperiod : productionperiod ,              // 制作期間を入力
+                cost             : productioncost ,                // 制作費用を入力
+                period           : productionperiod ,              // 制作期間を入力
                 title            : recipetitle ,                   // 作品タイトルを入力
                 recipenum        : recipeNo ,                      // レシピNoを入力
                 image: {
