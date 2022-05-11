@@ -1,8 +1,11 @@
-import React ,
-      { useState }    from 'react'
-import { useHistory } from "react-router-dom";
-import Button         from '@mui/material/Button';
-import useLogout      from '../hooks/logOutUseAuth';
+import   React ,
+      {  useState }      from 'react'
+import { useHistory }    from "react-router-dom";
+import   Button          from '@mui/material/Button';
+import   useLogout       from '../hooks/logOutUseAuth';
+import { createTheme, 
+         ThemeProvider } from '@mui/material/styles';
+
 
 export default function MainPageButton(props){
     const history = useHistory()

@@ -25,6 +25,7 @@ import ProfileEditSelectBox from "./ProfileEditSelectBox"
 import store                from '../../store/index';
 import {useHistory}         from "react-router-dom";
 import ProfileEditButton    from "./ProfileEditButton"
+import Footer               from '../Footer';
 
 const theme = createTheme({
   shadows: ["none"],
@@ -163,6 +164,7 @@ const ProfileEdit = () => {
                 {success && (<Alert severity="success"> {profile ? "更新" : "作成"}しました</Alert>)}
                 <Typography align="center" variant="h5">プロフィール編集</Typography>
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 4 }}>
+                  {/* アバター画像の表示 */}
                 <Container align = "center">
                     <Avatar
                       sx={{ width: 100, height: 100 }}
@@ -180,6 +182,7 @@ const ProfileEdit = () => {
                   </label>
                 </Container>
                     <Container align="left">
+                      {/* ユーザー名の表示 */}
                       <Typography >ユーザー名</Typography>
                       <TextField
                         margin="normal"
@@ -190,12 +193,13 @@ const ProfileEdit = () => {
                         autoComplete="name"
                         autoFocus
                         defaultValue={name}
-                        value={name ? name : profile ? profile.name : ""}
+                        value={name ? name :  ""}
                         onChange={e => 
                           setName(e.target.value)}/>
                     </Container>
                     <br/>
                     <Container align="left">
+                      {/* 所在地の表示 */}
                       <Typography>所在地</Typography>
                       <ProfileEditSelectBox
                         margin       = "normal"
@@ -210,6 +214,7 @@ const ProfileEdit = () => {
                       </Container>
                       <br/>
                       <Container align="left">
+                        {/* 自己紹介文の表示 */}
                         <Typography>自己紹介</Typography>
                         <TextField
                           margin="normal"
@@ -220,7 +225,7 @@ const ProfileEdit = () => {
                           multiline
                           defaultValue={selfintroduction}
                           rows      = {6}
-                          value     = {selfintroduction ? selfintroduction : profile ? profile.selfintroduction : "よろしくお願いします。"}
+                          value     = {selfintroduction ? selfintroduction : ""}
                           onChange  = {e => setSelfIntroduction(e.target.value)}/>
                       </Container>
                     <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
@@ -237,6 +242,7 @@ const ProfileEdit = () => {
                 </Box>
             </Paper>
         </Container>
+      <Footer/>
     </ThemeProvider>
   )
 }

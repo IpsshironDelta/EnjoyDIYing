@@ -4,20 +4,29 @@ import {Alert ,
         TextField,
         Box,
         Divider,
-        Stack,} from "@mui/material"
-import SendIcon from '@mui/icons-material/Send';
-import {firebaseApp } from "../../firebase"
+        Stack,}            from "@mui/material"
+import SendIcon            from '@mui/icons-material/Send';
+import { db }              from '../../firebase';
+import {firebaseApp }      from "../../firebase"
 import {addDoc , 
         collection,
-        Timestamp  } from "firebase/firestore"
-import useProfile from "../hooks/useProfile"
+        Timestamp,
+        getDocs,}          from "firebase/firestore"
+import useProfile          from "../hooks/useProfile"
+
+const collectionName = "message"
 
 export default function MessageInput() {
     const [message, setMessage] = useState("")
     const [error, setError] = useState(false)
     const profileData = useProfile()
     const profile = profileData.profile
-    
+    const MessageAry = []
+
+    // pathnameから作品Noを取得
+    var recipenumAry = window.location.pathname.split("/")
+    const getrecipenum = recipenumAry[2]
+
     const handleClick = () => {
         setError(false)
         const firestore = firebaseApp.firestore
@@ -32,17 +41,17 @@ export default function MessageInput() {
         try {
             const docRef = collection(firestore, "message")
             addDoc(docRef, {
-                text:message,
-                createdAt: Timestamp.fromDate(new Date()),
+                text:message,                               // メッセージ内容
+                createdAt: Timestamp.fromDate(new Date()),  // メッセージ送信日時
+                recipeCommentNum : getrecipenum,            // 対象の投稿(recipenumで認識)
                 user: {
-                    name: profile?.name,
-                    image: profile?.image,
-                    uid: profile?.uid,
+                    name: profile?.name,                    // メッセージ送信者の名前
+                    image: profile?.image,                  // メッセージ送信者のアバター画像
+                    uid: profile?.uid,                      // メッセージ送信者のUID
                   },
               })
             console.log("書き込み成功")
             // 画面をリフレッシュする
-            // window.location.reload()
             setMessage("")
         } catch (err) {
           console.log("メッセージが送信できませんでした。。。")

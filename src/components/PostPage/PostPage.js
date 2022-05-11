@@ -12,12 +12,12 @@ import { Alert ,
          ThemeProvider ,
          CssBaseline ,
          TextField , 
-         Stack,
          Button, 
          FormControl,
          InputLabel,
          Select ,
-         MenuItem ,}      from "@mui/material"
+         MenuItem ,
+         CardMedia,}      from "@mui/material"
 import { firebaseApp }    from "../../firebase"
 import   useUser          from "../hooks/getuseAuth"
 import   PostPageHeader   from './PostPageHeader';
@@ -36,6 +36,7 @@ import { addDoc,
          Timestamp,
          getDocs , }      from "firebase/firestore"
 import { db }             from '../../firebase';
+import Footer            from '../Footer';
 
 const collectionName = "category"
 
@@ -82,14 +83,11 @@ export default function PostPage() {
         // recipenumと遷移元のレシピNoを比較する
         querySnapshot.forEach((doc) => {
           detailAry.push(
-            //...doc.data()
             doc.data().detail
         )
-        console.log("pushする値 : " , doc.data())
       })
       }).then(()=>{
         setDetail([...detailAry])
-        console.log("★:detail => ",detail)
       })};
   
     useEffect(() => {
@@ -227,6 +225,37 @@ export default function PostPage() {
             <Typography component="h1" variant="h4" align="center">
               DIY作品を投稿する
             </Typography>
+            <br/>
+            <Typography component="h1" variant="h6" align="left">
+              画像選択
+            </Typography>
+            <Grid container spacing={1} align= "center">
+                {/* <Item>タイトル画像<ImageUpload/></Item> */}
+                <Grid item xs={12} md={12}>
+                  <CardMedia
+                    sx={{ width: 400, height: 400 }}
+                    // src={image ? URL.createObjectURL(image) : profile ? profile.image : ""}alt=""/>
+                    image={image ? URL.createObjectURL(image) : defaultSrc}alt=""/>
+                  <input
+                    id="image"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleChange}
+                    style={{ display: "none" }}/>
+                    <label htmlFor="image">
+                      <Button 
+                        variant="outlined" 
+                        color="primary" 
+                        component="span"
+                        sx = {{width : 400}}>
+                        画像を選択する
+                      </Button>
+                    </label>
+                </Grid>
+                {/* <Item>画像2<ImageUpload/></Item>
+                <Item>画像3<ImageUpload/></Item> */}
+            </Grid>
+            <br/>
             <Grid container spacing={3}>
               <Grid item xs={12} md={6}>
                 <Typography variant="h6" gutterBottom>
@@ -322,34 +351,34 @@ export default function PostPage() {
                       setProductionMemo(e.target.value)}/>
               </Grid>
             </Grid>
-
-            <Stack
-              direction={{ xs: 'column', sm: 'row' }}
-              spacing={{ xs: 1, sm: 2, md: 10 }}>
-              {/* <Item>タイトル画像<ImageUpload/></Item> */}
-              <Grid item xs={12} md={6}>
-                <Avatar
-                  sx={{ width: 100, height: 100 }}
-                  // src={image ? URL.createObjectURL(image) : profile ? profile.image : ""}alt=""/>
-                  src={image ? URL.createObjectURL(image) : defaultSrc}alt=""/>
-                <input
-                  id="image"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleChange}
-                  style={{ display: "none" }}/>
-                  <label htmlFor="image">
-                    <Button 
-                      variant="contained" 
-                      color="primary" 
-                      component="span">
-                      画像を選択
-                    </Button>
-                  </label>
-              </Grid>
-              {/* <Item>画像2<ImageUpload/></Item>
-              <Item>画像3<ImageUpload/></Item> */}
-            </Stack>
+            {/* 画像選択の表示領域 */}
+            {/* <Stack
+                direction={{ xs: 'column', sm: 'row' }}
+                spacing={{ xs: 1, sm: 2, md: 10 }}>
+              //  <Item>タイトル画像<ImageUpload/></Item> 
+                <Grid item xs={12} md={12}>
+                  <Avatar
+                    sx={{ width: 100, height: 100 }}
+                    // src={image ? URL.createObjectURL(image) : profile ? profile.image : ""}alt=""/>
+                    src={image ? URL.createObjectURL(image) : defaultSrc}alt=""/>
+                  <input
+                    id="image"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleChange}
+                    style={{ display: "none" }}/>
+                    <label htmlFor="image">
+                      <Button 
+                        variant="contained" 
+                        color="primary" 
+                        component="span">
+                        画像を選択
+                      </Button>
+                    </label>
+                </Grid>
+                // <Item>画像2<ImageUpload/></Item>
+                // <Item>画像3<ImageUpload/></Item> 
+                </Stack> */}
 
             <Box sx={{ flexGrow: 1 }}>
               <Grid container spacing={1}>
@@ -387,6 +416,7 @@ export default function PostPage() {
           </Paper>
         </Container>
       </Container>
+      <Footer/>
     </ThemeProvider>
   );
 }

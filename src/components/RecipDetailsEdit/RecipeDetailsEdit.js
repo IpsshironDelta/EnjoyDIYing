@@ -220,6 +220,7 @@ export default function RecipeDetailsEdit() {
             })
           }else{
             // 画像を選択する
+            console.log("profile : ",profile)
             if (profile) {
               const userRef = doc(firestore, collectionRecipeName, store.getState().documentID)
               updateDoc(userRef, 

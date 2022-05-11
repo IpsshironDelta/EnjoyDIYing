@@ -1,36 +1,44 @@
 import React, 
      { useEffect,
        useState }          from "react"
-import {Avatar,
+import {Alert , 
+        Avatar,
         Box,
         Grid,
         Typography,
         Container,
         CssBaseline,
         Link, 
-        Button,}           from "@mui/material"
+        Button,
+        IconButton,
+        Tooltip , }        from "@mui/material"
 import { createTheme, 
          ThemeProvider }   from '@mui/material/styles';
 import RecipeDetailsHeader from "./RecipeDetailsHeader"
 import Footer              from '../Footer';
 import ThumbUpAltIcon      from '@mui/icons-material/ThumbUpAlt';
-import StarsIcon           from '@mui/icons-material/Stars';
 import CardMedia           from '@mui/material/CardMedia';
 import useProfile          from "../hooks/useProfile"
 import { firebaseApp }     from "../../firebase";
 import { useHistory }      from 'react-router';
 import { db }              from '../../firebase';
 import { collection,
-         getDocs ,}        from 'firebase/firestore';
+         getDocs ,
+         addDoc ,
+         Timestamp ,
+         doc ,
+         deleteDoc ,}      from 'firebase/firestore';
 import { format }          from "date-fns"
 import InsertCommentIcon   from '@mui/icons-material/InsertComment';
 import store               from '../../store/index';
-import MessageInput        from "./RecipeDetailsMessageInput";
 import Message             from "./RecipeDetailsMessage";
+import StarsIcon           from '@mui/icons-material/Stars';
 
 const collectionRecipeName    = "recipe"
 const collectionUserName      = "users"
 const collectionMessageName   = "message"
+const collectionBookMarkName  = "/bookmark"
+const collectionGoodName      = "/good"
 
 const theme = createTheme({
   shadows: ["none"],
@@ -46,17 +54,22 @@ const theme = createTheme({
     },
     // テキストのカラー設定
     text: { 
-      primary: '#ffffff' },
+      primary: '#000000' },
     },
 });
 
 export default function RecipDetail() {
-  const [recipe, setRecipe] = useState([]);
-  const [userinfo, setUserInfo] = useState([]);
-  const [message, setMessage] = useState([]);
+  const [goodadd , setGoodAdd] = useState("")
+  const [goodcansel , setGoodCansel] = useState("")
+  const [goodflg , setGoodFlg] = useState(false)
+  const [bookmarkadd , setBookMarkAdd] = useState("")
+  const [bookmarkcansel , setBookMarkCansel] = useState("")
+  const [bookmarkflg , setBookMarkFlg] = useState(false)
+  const [recipe, setRecipe] = useState([])
+  const [userinfo, setUserInfo] = useState([])
+  const [message, setMessage] = useState([])
   const [getuid , setGetUID] = useState("")
   const [getavatarurl , setGetAvatarURL] = useState("")
-  const [getmessagecount , setGetMessageCount] = useState("")
   const profileData = useProfile()
   const profile = profileData.profile
   const firestorage = firebaseApp.firestorage
@@ -64,7 +77,7 @@ export default function RecipDetail() {
   const recipeAry = [];
   const userDataAry = [];
   const messageAry = [];
-
+  const [commentcount , setCommentCount] = useState("")
 
   // pathnameから作品Noを取得
   var recipenumAry = window.location.pathname.split("/")
@@ -72,11 +85,13 @@ export default function RecipDetail() {
 
   // firestoreからレシピ情報の取得
   const fetchRecipeData = () => {
+    var goodBuffCount = 0
+    var bookarkBuffCount = 0
+    var goodFlg = 0
+    var bookmarkFlg = 0
     getDocs(collection(db, collectionRecipeName)).then((querySnapshot)=>{
       // recipenumと遷移元のレシピNoを比較する
       querySnapshot.forEach((doc) => {
-        console.log("doc.id => " ,doc.id,doc.data())
-        console.log(format(doc.data().createdAt.toDate(), "yyyy年MM月dd日hh:mm"))
         // 備忘録：文字列を比較する際、見た目は一緒なのになぜか一致しない現象が起きた。
         // ただし、文字列同士をString()で処理すると問題解決
         if(String(doc.data().recipenum) === String(getrecipenum)){
@@ -84,17 +99,63 @@ export default function RecipDetail() {
             id : doc.id,
             ...doc.data()
           })
-          var testUID = doc.data().image.uid
-          store.getState().documentID       = doc.id                       // ドキュメントID
-          store.getState().recipetitle      = doc.data().title             // 作品タイトル
-          store.getState().category         = doc.data().category          // カテゴリー
-          store.getState().productionCost   = doc.data().cost              // 制作費用
-          store.getState().productionPeriod = doc.data().period            // 制作期間
-          store.getState().productionMemo   = doc.data().memo              // 作品メモ
-          store.getState().createdAt        = doc.data().createdAt         // 制作日時
-          store.getState().displayName      = doc.data().image.user        // ユーザー名
-          store.getState().recipeimage      = doc.data().image.url         // アバター画像
-          setGetUID(testUID)
+          setGetUID(doc.data().image.uid)
+          store.getState().documentID       = doc.id               // ドキュメントID
+          store.getState().recipeUID        = doc.data().image.uid // 投稿したユーザーのUID
+          store.getState().recipetitle      = doc.data().title     // 作品タイトル
+          store.getState().category         = doc.data().category  // カテゴリー
+          store.getState().productionCost   = doc.data().cost      // 制作費用
+          store.getState().productionPeriod = doc.data().period    // 制作期間
+          store.getState().productionMemo   = doc.data().memo      // 作品メモ
+          store.getState().createdAt        = doc.data().createdAt // 制作日時
+          store.getState().displayName      = doc.data().image.user// ユーザー名
+          store.getState().recipeimage      = doc.data().image.url // アバター画像
+          // goodコレクションの個数を取得
+          getDocs(collection(db, collectionRecipeName+"/"+doc.id+collectionGoodName)).then((querySnapshot)=>{
+            querySnapshot.forEach((doc) => {
+              goodBuffCount = goodBuffCount +1
+              // 既にgoodコレクションに登録されているか判定する
+              // 登録済の場合は、いいねボタンをカラー表示する
+              if(String(doc.data().uid)===String(store.getState().loginUserUID)){
+                console.log("goodコレクションにて一致しています。")
+                console.log(doc.data().uid , store.getState().loginUserUID)
+                goodFlg = goodFlg + 1 
+              }else{
+                console.log("goodコレクションにて一致していません。")
+                console.log(doc.data().uid , store.getState().loginUserUID)
+              }
+            })
+            // goodFlgが0以上であればgoodコレクションに同じUIDが存在する
+            if(goodFlg > 0){
+              setGoodFlg(true)
+            }else{
+              setGoodFlg(false)
+            }
+            setGoodCount(goodBuffCount)
+          })
+          // bookmarkコレクションの個数を取得
+          getDocs(collection(db, collectionRecipeName+"/"+doc.id+collectionBookMarkName)).then((querySnapshot)=>{
+            querySnapshot.forEach((doc) => {
+              bookarkBuffCount = bookarkBuffCount +1
+              // 既にbookmarkコレクションに登録されているか判定する
+              // 登録済の場合は、いいねボタンをカラー表示する
+              if(String(doc.data().uid)===String(store.getState().loginUserUID)){
+                console.log("bookmarkコレクションにて一致しています。")
+                console.log(doc.data().uid , store.getState().loginUserUID)
+                bookmarkFlg = bookmarkFlg + 1 
+              }else{
+                console.log("bookmarkコレクションにて一致していません。")
+                console.log(doc.data().uid , store.getState().loginUserUID)
+              }
+            })
+            // bookmarkFlgが0以上であればbookmarkコレクションに同じUIDが存在する
+            if(bookmarkFlg > 0){
+              setBookMarkFlg(true)
+            }else{
+              setBookMarkFlg(false)
+            }
+            setBookMarkCount(bookarkBuffCount)
+          })
       }else{
     }})
     }).then(()=>{
@@ -113,7 +174,7 @@ export default function RecipDetail() {
       // recipenumと遷移元のレシピNoを比較する
       querySnapshot.forEach((doc) => {
         // 備忘録：文字列を比較する際、見た目は一緒なのになぜか一致しない現象が起きた。
-        // ただし、文字列同士をString()で処理すると問題解決        
+        // ただし、文字列同士をString()で処理すると問題解決  
         if(String(doc.data().uid) === String(getuid)){
           userDataAry.push({
             id : doc.id,
@@ -130,20 +191,168 @@ export default function RecipDetail() {
   const fetchMessageData = () => {
     getDocs(collection(db, collectionMessageName)).then((querySnapshot)=>{
       querySnapshot.forEach((doc) => {
-        messageAry.push({
-          id : doc.id,
-          ...doc.data()
-        })})
+        // 対象の作品(getrecipenum)と一致するコメントのみ表示する
+        if(String(getrecipenum) === String(doc.data().recipeCommentNum)){
+          messageAry.push({
+            id : doc.id,
+            ...doc.data()
+          })
+        }
+      })
     }).then(()=>{
       setMessage([...messageAry])
-      setGetMessageCount(messageAry.length)
+      setCommentCount(messageAry.length)
     })};
 
   useEffect(() => {
-    fetchRecipeData()
     fetchUsersData()
+    fetchRecipeData()
     fetchMessageData()
   },[getuid]);
+
+// いいねボタンクリック時の操作
+  const [goodcount , setGoodCount] = useState("")
+  const handleGoodIcon = () => {
+    // 表示中のアラートを消す
+    setGoodAdd(false)
+    setGoodCansel(false)
+    setBookMarkAdd(false)
+    setBookMarkCansel(false)
+    var count = 0
+    var documentOKFlg = 0
+    var buffDocID = ""
+    const firestore = firebaseApp.firestore
+    // recipeのドキュメントを取得
+    getDocs(collection(db, collectionRecipeName)).then((querySnapshot)=>{
+      querySnapshot.forEach((document) => {
+        // goodコレクションに追加1
+        if(String(document.id)===String(recipe[0].id)){
+          const docRef = collection(firestore , collectionRecipeName+"/"+document.id+collectionGoodName)
+          // goodコレクションの個数を取得
+          const goodCollectionRef = collectionRecipeName+"/"+document.id+collectionGoodName
+          getDocs(collection(db, collectionRecipeName+"/"+document.id+collectionGoodName)).then((querySnapshot)=>{
+            querySnapshot.forEach((documentGood) => {
+              count = count +1
+              documentOKFlg = documentOKFlg + 1
+              if(String(documentGood.data().uid)===String(store.getState().loginUserUID)){
+                // 既に登録済しているのでgoodコレクションから削除する
+                buffDocID = documentGood.id
+                console.log("documentOKFlg : ",documentOKFlg)
+                documentOKFlg = documentOKFlg + 1
+              }else{
+                // 登録していないのでgoodコレクションに追加する
+                console.log("documentOKFlg : ",documentOKFlg)
+              }
+            })
+            console.log("documentOKFlg : ",documentOKFlg)
+            if(count === 0 && documentOKFlg === 0){
+              // いいねが0件の場合はこちらから追加する
+              console.log("いいねが0件の場合はこちらから追加する")
+              addDoc(docRef, {
+                uid : profile.uid,
+                clickdate: Timestamp.fromDate(new Date()),  // ボタンをクリックした日時
+              })
+              count = count + 1
+              setGoodCount(count)
+              setGoodAdd(true)
+              setGoodFlg(true)
+            }else if(documentOKFlg > 1){
+              console.log("goodコレクションから削除しました。")
+              deleteDoc(doc(db , goodCollectionRef , buffDocID))
+              count = count - 1
+              setGoodCount(count)
+              setGoodCansel(true)
+              setGoodFlg(false)
+            }else if(documentOKFlg === 1){
+              console.log("いいねが1件以上の場合はこちらから追加する")
+              addDoc(docRef, {
+                uid : profile.uid,
+                clickdate: Timestamp.fromDate(new Date()),  // ボタンをクリックした日時
+              })
+              count = count + 1
+              setGoodCount(count)
+              setGoodAdd(true)
+              setGoodFlg(true)
+            }
+          })
+        }
+      })
+    }).then(()=>{
+      // 何もしない
+    })
+  }
+
+// お気に入りボタンクリック時の操作
+const [bookmarkcount , setBookMarkCount] = useState("")
+  const handleBookMarkIcon = () => {
+    // 表示中のアラートを消す
+    setGoodAdd(false)
+    setGoodCansel(false)
+    setBookMarkAdd(false)
+    setBookMarkCansel(false)
+    var count = 0
+    var documentOKFlg = 0
+    var buffDocID = ""
+    const firestore = firebaseApp.firestore
+    // recipeのドキュメントを取得
+    getDocs(collection(db, collectionRecipeName)).then((querySnapshot)=>{
+      querySnapshot.forEach((document) => {
+        // bookmarkコレクションに追加
+        if(String(document.id)===String(recipe[0].id)){
+          const docRef = collection(firestore , collectionRecipeName+"/"+document.id+collectionBookMarkName)
+          // bookmarkコレクションの個数を取得
+          const bookmarkCollectionRef = collectionRecipeName+"/"+document.id+collectionBookMarkName
+          getDocs(collection(db, collectionRecipeName+"/"+document.id+collectionBookMarkName)).then((querySnapshot)=>{
+            querySnapshot.forEach((documentBookMark) => {
+              count = count +1
+              documentOKFlg = documentOKFlg + 1
+              if(String(documentBookMark.data().uid)===String(store.getState().loginUserUID)){
+                // 既に登録済しているのでgoodコレクションから削除する
+                buffDocID = documentBookMark.id
+                console.log("documentOKFlg : ",documentOKFlg)
+                documentOKFlg = documentOKFlg + 1
+              }else{
+                // 登録していないのでgoodコレクションに追加する
+                console.log("documentOKFlg : ",documentOKFlg)
+              }
+            })
+            console.log("documentOKFlg : ",documentOKFlg)
+            if(count === 0 && documentOKFlg === 0){
+              // いいねが0件の場合はこちらから追加する
+              console.log("いいねが0件の場合はこちらから追加する")
+              addDoc(docRef, {
+                uid : profile.uid,
+                clickdate: Timestamp.fromDate(new Date()),  // ボタンをクリックした日時
+              })
+              count = count + 1
+              setBookMarkCount(count)
+              setBookMarkAdd(true)
+              setBookMarkFlg(true)
+            }else if(documentOKFlg > 1){
+              console.log("goodコレクションから削除しました。")
+              deleteDoc(doc(db , bookmarkCollectionRef , buffDocID))
+              count = count - 1
+              setBookMarkCount(count)
+              setBookMarkCansel(true)
+              setBookMarkFlg(false)
+            }else if(documentOKFlg === 1){
+              console.log("いいねが1件以上の場合はこちらから追加する")
+              addDoc(docRef, {
+                uid : profile.uid,
+                clickdate: Timestamp.fromDate(new Date()),  // ボタンをクリックした日時
+              })
+              count = count + 1
+              setBookMarkCount(count)
+              setBookMarkAdd(true)
+              setBookMarkFlg(true)
+            }
+          })
+        }
+      })
+    }).then(()=>{
+      // 何もしない
+    })
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -299,64 +508,113 @@ export default function RecipDetail() {
           <Grid container spacing={0} >
             <Grid item xs={2}>
               {/* いいねボタン/数の表示 */}
+              {/* 既にいいねが押されている場合は、青色(color:"#4169e1")を設置、
+                  押されていない場合は、グレー表示
+                  登録済の状態でクリックした場合は、goodコレクションから削除し、
+                  グレー表示にする */}
+              {goodflg ? 
               <Typography 
                 sx={{ 
-                  p: 1, 
-                  fontSize: 16 , 
+                  fontSize: 14 , 
+                  color:"#4169e1"}}>
+                <IconButton
+                  onClick={handleGoodIcon}>
+                  <Tooltip title="いいねする" arrow>
+                    <ThumbUpAltIcon sx={{ color : "#4169e1" ,fontSize: 20}}/>
+                  </Tooltip>
+                </IconButton>
+                いいね！：{goodcount}件
+              </Typography>:
+              <Typography 
+                sx={{ 
+                  fontSize: 14 , 
                   color:"#000000"}}>
-                <ThumbUpAltIcon sx={{ color : "#ffa500" , fontSize: 20 }}/>いいね！
-              </Typography>
+                <IconButton
+                  onClick={handleGoodIcon}>
+                  <Tooltip title="いいねする" arrow>
+                    <ThumbUpAltIcon sx={{ color : "#696969" ,fontSize: 20}}/>
+                  </Tooltip>
+                </IconButton>
+                いいね！：{goodcount}件
+              </Typography> }
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={3}>
               {/* お気に入りボタン/数の表示 */}
+              {/* 既にお気に入りが押されている場合は、青色(color:"#4169e1")を設置、
+                  押されていない場合は、グレー表示
+                  登録済の状態でクリックした場合は、bookmarkコレクションから削除し、
+                  グレー表示にする */}
+               {bookmarkflg ? 
+               <Typography 
+                sx={{ 
+                  fontSize: 14 , 
+                  color:"#ffa500"}}>
+                <IconButton
+                  onClick={handleBookMarkIcon}>
+                  <Tooltip title="お気に入り登録する" arrow>
+                    <StarsIcon sx={{ color : "#ffa500" ,fontSize: 20}}/>
+                  </Tooltip>
+                </IconButton>
+                お気に入り：{bookmarkcount}件
+              </Typography> : 
               <Typography 
                 sx={{ 
-                  p: 1, 
-                  fontSize: 16 , 
+                  fontSize: 14 , 
                   color:"#000000"}}>
-                <StarsIcon sx={{ color : "#a0522d" , fontSize: 20}}/>お気に入り
-              </Typography>
-            </Grid>
-            <Grid item xs={2}>
-              {/* コメントボタン/数の表示 */}
-              <Typography 
-                sx={{ 
-                  p: 1, 
-                  fontSize: 16 , 
-                  color:"#000000"}}>
-                <InsertCommentIcon sx={{ color : "#1e90ff", fontSize: 20 }}/>コメント
-              </Typography>
+                <IconButton
+                  onClick={handleBookMarkIcon}>
+                  <Tooltip title="お気に入り登録する" arrow>
+                    <StarsIcon sx={{ color : "#696969" ,fontSize: 20}}/>
+                  </Tooltip>
+                </IconButton>
+                お気に入り：{bookmarkcount}件
+              </Typography>}
             </Grid>
           </Grid>
         </Box>
+        {goodadd && <Alert severity="success">この投稿にいいね！しました。</Alert>}
+        {goodcansel && <Alert severity="error">この投稿のいいね！を取り消しました。</Alert>}
+        {bookmarkadd && <Alert severity="success">お気に入りに登録しました。</Alert>}
+        {bookmarkcansel && <Alert severity="error">お気に入り登録を取り消しました。</Alert>}
         <br/>
         {/* メッセージ表示領域 */}
-        <Box
+
+          <Grid container spacing={0}>
+            <Typography
+              sx={{ 
+                p: 1, 
+                fontSize: 20 , 
+                color:"#000000"}}>
+              <strong>コメント：</strong> 
+            </Typography>
+            <Typography
+              sx={{ 
+                p: 1, 
+                fontSize: 20 , 
+                color:"#E64545"}}>
+              <strong>{commentcount}</strong>
+            </Typography>
+            <Typography
+              sx={{ 
+                p: 1, 
+                fontSize: 20 , 
+                color:"#000000"}}>
+              <strong>件</strong>
+            </Typography>
+          </Grid>
+          <Box
           sx={{
             bgcolor: '#eeeeee',
             pb : 4,
             pl : 4,
             pr : 4,}}>
-          <Typography
-            sx={{ 
-              p: 1, 
-              fontSize: 26 , 
-              color:"#a0522d"}}>
-            <strong>コメント</strong>
-            <Typography
-              sx={{ 
-                fontSize: 14}}>
-              <strong>{getmessagecount}件</strong>
-            </Typography>
-          </Typography>
-
           <Grid container spacing={0} >
             {/* メッセージ入力&送信ボタン表示 */}
             <Grid item xs={12} align = "center">
               {/* メッセージ内容の表示 */}
               <Message/>
               {/* メッセージ送信領域の表示 */}
-              <MessageInput/>
+              {/* <MessageInput/> */}
             </Grid>
           </Grid>
         </Box>
@@ -382,7 +640,5 @@ export default function RecipDetail() {
         {/* フッターの表示 */}
       <Footer/>
     </ThemeProvider>
-
-
   );
 }

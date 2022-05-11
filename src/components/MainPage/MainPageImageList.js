@@ -44,11 +44,6 @@ export default function MainPageImageList() {
   const bottomRef = useRef(null)
   const recipeAry = [];
 
-  // リンク先に遷移
-  const testmethod = (event) => {
-    console.log("TEST" , event)
-  }
-
   // タイムスタンプ
   const time = (date) => {
     let timestamp = formatDistance(new Date(), date.toDate(), {
@@ -100,8 +95,7 @@ export default function MainPageImageList() {
                 display: "flex",
                 my: 2,
                 gap: 2,
-                flexGrow: 1, m: 2,}}
-              onSubmit={testmethod}>
+                flexGrow: 1, m: 2,}}>
               <Box>
                 <MainpageImgButton
                     imgURL = {recipe.image.url}
@@ -155,25 +149,46 @@ export default function MainPageImageList() {
                 </Grid>
                 </Grid>
                 {/* 作品メモの表示 */}
-                <Typography 
-                  sx={{ p: 1, fontSize: 14 , width : 600 , background: "#dddddd", borderRadius: 1 ,color:"#000000"}}>
-                  {recipe.memo}
-                </Typography>
+                <Grid>
+                  <Typography 
+                    sx={{ p: 1, fontSize: 14 , maxWidth : 600 ,minWidth : 600 , background: "#dddddd" ,color:"#000000"}}>
+                    {recipe.memo}
+                    <Typography
+                      sx={{ fontSize: 12 ,color:"#000000" }}
+                      align = "right">
+                      投稿した日：{format(recipe.createdAt.toDate(), "yyyy年MM月dd日")}
+                    </Typography>
+                  </Typography>
+                </Grid>
                 <Stack
                   direction="row"
                   divider={<Divider orientation="vertical" flexItem />}
                   spacing={2}>
                     {/* 投稿日時の表示 */}
-                  <Item>投稿した日：{format(recipe.createdAt.toDate(), "yyyy年MM月dd日")}</Item>
-                  <Item>
+                  <Item 
+                    sx = {{
+                    minWidth : 250,
+                    maxWidth : 250,}}>
                     {/* 投稿したユーザーの表示 */}
                     {/* uidをアドレスの末尾に付与して遷移する */}
-                    <Link href={`/profiles/${recipe.image.uid}`} color="#000000">
-                      {recipe.image.user}
-                    </Link>
+                    <Typography
+                      sx={{ fontSize: 12 ,color:"#000000" }}
+                      align = "left">
+                      <Link href={`/profiles/${recipe.image.uid}`} color="#000000">
+                        {recipe.image.user}
+                      </Link>
+                    </Typography>
                   </Item>
                   {/* 制作費用の表示 */}
-                  <Item>制作費用：<strong>{Number(recipe.cost).toLocaleString()}</strong> 円</Item>
+                  <Item sx = {{
+                    minWidth : 250,
+                    maxWidth : 250,}}>
+                    <Typography
+                      sx={{ fontSize: 12 ,color:"#000000" }}
+                      align = "left">
+                      制作費用：<strong>{Number(recipe.cost).toLocaleString()}</strong> 円
+                    </Typography>
+                  </Item>
                 </Stack>
               </Box>
             </Box>

@@ -11,6 +11,7 @@ const initialState = {
   nicknameErrorMS  : "",
   location         : "",
   locationErrorMS  : "",
+  loginUserUID     : "",  // ログインユーザーのUID
   displayName      : "",  // ユーザー名
   recipetitle      : "",  // 作品タイトル
   category         : "",  // カテゴリー
@@ -20,6 +21,8 @@ const initialState = {
   createdAt        : "",  // 投稿日時
   recipeimage      : "",  // 作品画像
   documentID       : "",  // firebaseのドキュメントID格納用
+  recipeUID        : "",  // recipe-image-uidを格納する
+  commentCount     : "",  // コメントの数
   photoURL         : "",  
   memo             : "",
   photoFileData    : "",

@@ -1,23 +1,24 @@
-import React, 
-      {useState,}        from "react";
+  import React, 
+       { useState,}        from "react";
 import { Box ,
          Typography,
          Container , 
-         Grid , 
-         Paper, } from '@mui/material';
+         Grid , }          from '@mui/material';
 import { createTheme,
-         ThemeProvider } from '@mui/material/styles';
+         ThemeProvider }   from '@mui/material/styles';
 import { useHistory,
-         withRouter }    from 'react-router';
-import MainPageHeader    from './MainPageHeader';
-import MainPageImageList from './MainPageImageList';
-import Footer            from '../Footer';
-import PersonIcon        from '@mui/icons-material/Person';
-import EditIcon          from '@mui/icons-material/Edit';
-import MainPageButton    from './MainPageButton';
-import { firebaseApp }   from "../../firebase";
-import useProfile        from "../../components/hooks/useProfile"
-import {ref ,}           from "firebase/storage"
+         withRouter }      from 'react-router';
+import   MainPageHeader    from './MainPageHeader';
+import   MainPageImageList from './MainPageImageList';
+import   Footer            from '../Footer';
+import   PersonIcon        from '@mui/icons-material/Person';
+import   EditIcon          from '@mui/icons-material/Edit';
+import   MainPageButton    from './MainPageButton';
+import { firebaseApp }     from "../../firebase";
+import   useProfile        from "../../components/hooks/useProfile"
+import { ref ,}            from "firebase/storage"
+import   store             from '../../store/index';
+
 
 const theme = createTheme({
   shadows: ["none"],
@@ -48,11 +49,24 @@ const filename       = "001_mainpage_img.png"
 const filepath       = "gs://myfirebasesample-c6d99.appspot.com/PAGE_USE_IMG/"
 
 function MainPage(props) {
+  const buttonTheme = {
+    background: "orange",
+    color: "#ffffff"
+  };
+  const style = {
+		display: "flex",
+		flexDirection: "column",
+		alignItems: "center",
+		height: "100vh",
+		justifyContent: "center"
+	};
   const history = useHistory()
   // ユーザーが認証されていない場合、ログイン画面へ遷移する
   firebaseApp.fireauth.onAuthStateChanged(user => {
-    if (!user) {      
+    if (!user) {
       history.push("/login")
+    }else{
+      store.getState().loginUserUID = user.uid
     }
   })
   const profileData = useProfile()
@@ -91,7 +105,8 @@ function MainPage(props) {
                 variant   = 'contained'
                 link      = "/postpage"
                 startIcon = {<EditIcon/>}
-                sx        = {"background-color:#3D85CC"}
+                sx        = {{backgroundColor:"#3D85CC" , 
+                              display:"null",}}
                 text      = "投稿する"/>
             </Grid>
             <Grid item xs={6} align = "left">
@@ -100,7 +115,7 @@ function MainPage(props) {
                 variant   = 'contained'
                 link      = {profile ? "/profiles/"+profile.uid : ""} 
                 startIcon = {<PersonIcon/>}
-                sx        = {"background-color:#3D85CC"}
+                sx        = {{backgroundColor:"#3D85CC"}}
                 text      = "マイページ"/>
             </Grid>
           </Grid>
@@ -121,7 +136,8 @@ function MainPage(props) {
         <Grid container spacing={0} >
           <Grid item xs={12}>
             <Typography variant="h5" align="center" color="#000000">
-              <strong><br/>その "考え" を探しましょう！</strong>
+              <strong>その "考え" を探しましょう！</strong>
+              <br/>★ログインユーザー:{profile ? profile.name : ""} ★
             </Typography>
           </Grid>
           <Grid item xs={4}>

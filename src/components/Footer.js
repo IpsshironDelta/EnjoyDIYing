@@ -28,7 +28,7 @@ function Footer() {
             <Grid item xs={3}>
               <Typography variant="body2" align="center" >
                 <Link
-                  color="#00000"
+                  color="#ffffff"
                   style={{ textDecoration: 'none' }}>
                     <strong>よくある質問</strong>
                 </Link>
@@ -37,7 +37,7 @@ function Footer() {
             <Grid item xs={3}>
               <Typography variant="body2" align="center" >
                 <Link
-                  color="#00000"
+                  color="#ffffff"
                   style={{ textDecoration: 'none' }}>
                     <strong>お問い合わせ</strong>
                 </Link>
@@ -46,7 +46,7 @@ function Footer() {
             <Grid item xs={3}>
               <Typography variant="body2" align="center" >
                 <Link
-                  color="#00000"
+                  color="#ffffff"
                   style={{ textDecoration: 'none' }}>
                     <strong>利用規約</strong>
                 </Link>
@@ -55,7 +55,7 @@ function Footer() {
             <Grid item xs={3}>
               <Typography variant="body2" align="center" >
                 <Link
-                  color="#00000"
+                  color="#ffffff"
                   style={{ textDecoration: 'none' }}>
                     <strong>プライバシーポリシー</strong>
                 </Link>

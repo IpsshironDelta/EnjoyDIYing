@@ -4,8 +4,6 @@ import { styled }     from '@mui/material/styles';
 import Box            from '@mui/material/Box';
 import ButtonBase     from '@mui/material/ButtonBase';
 import { useHistory } from "react-router-dom";
-import { PrivacyTipSharp } from "@mui/icons-material";
-
 
 const ImageButton = styled(ButtonBase)(({ theme }) => ({
   position: 'relative',

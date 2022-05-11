@@ -21,6 +21,7 @@ import   ProfilesHeader    from "./ProfilesHeader"
 import { db }              from '../../firebase';
 import { collection,
          getDocs ,}        from 'firebase/firestore';
+import Footer            from '../Footer';
 
 const collectionName = "users"
 const theme = createTheme({
@@ -233,6 +234,7 @@ const Profiles = () => {
         </Container>
         ))) : (
           <p>投稿が存在しません</p>)}
+      <Footer/>
     </ThemeProvider>
   )
 }
