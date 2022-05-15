@@ -26,7 +26,8 @@ import useProfile from "../hooks/useProfile"
 import { useHistory } from "react-router-dom"
 
 const collectionName = "message"
-const titleName      = "チャットルーム(テスト)"
+const collectionCategoryName = "category"
+const titleName      = "カテゴリー入力"
 const theme = createTheme({
   shadows: ["none"],
 })
@@ -105,9 +106,9 @@ function App() {
 
   // 追加
   const handleAdd = () => {
-    addDoc(collection(db , collectionName),{
-      kanji: addKanji,
-      yomi: addKana,
+    addDoc(collection(db , collectionCategoryName),{
+      category: addKanji,
+      detail: addKana,
     }).then(() => {
       fetchMessageData();
       setaddKana("");
@@ -134,13 +135,13 @@ function App() {
             {titleName}
           </Typography>
         <Typography align="center">
-            漢字:{" "}
+            category:{" "}
             <input
               type="text"
               value={addKanji}
               onChange={(event) => setaddKanji(event.target.value)}
             />
-            読み仮名:{" "}
+            detail:{" "}
             <input
               type="text"
               value={addKana}
@@ -187,7 +188,6 @@ function App() {
                 </Box>
               ))) : (
               <p>メッセージが存在しません</p>)}
-              <div ref={bottomRef}></div>
           </Grid>
         </Box>
       </Container>

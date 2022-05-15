@@ -19,7 +19,6 @@ import   useProfile        from "../../components/hooks/useProfile"
 import { ref ,}            from "firebase/storage"
 import   store             from '../../store/index';
 
-
 const theme = createTheme({
   shadows: ["none"],
   palette: {
@@ -131,13 +130,12 @@ function MainPage(props) {
         </Grid>
       </Grid>
         
-      <Box sx={{ flexGrow: 1, m: 2, pt: 5, pb: 4 }}>
+      <Box sx={{ flexGrow: 1, m: 2, pt: 4, pb: 4 }}>
         <Container maxWidth>
         <Grid container spacing={0} >
           <Grid item xs={12}>
             <Typography variant="h5" align="center" color="#000000">
               <strong>その "考え" を探しましょう！</strong>
-              <br/>★ログインユーザー:{profile ? profile.name : ""} ★
             </Typography>
           </Grid>
           <Grid item xs={4}>
@@ -214,7 +212,7 @@ function MainPage(props) {
               gutterBottom>
               注目のレシピ(お気に入り登録数が多い順に表示)
             </Typography>
-            <MainPageImageList/>
+            {/* <MainPageImageList/> */}
             <Typography
               component="h1"
               variant="h4"
@@ -224,7 +222,7 @@ function MainPage(props) {
             {profile ? profile.name : ""}  さんの<br/>
             お気に入り投稿(自分のお気に入りした作品を表示)
             </Typography>
-            <MainPageImageList/>
+            {/* <MainPageImageList/> */}
           </Box>
         </Container>
       </Box>

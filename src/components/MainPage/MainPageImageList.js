@@ -1,31 +1,37 @@
-import React ,
+import  React ,
       { useEffect,
         useState,
         useRef , }          from "react";
 import { db }               from '../../firebase';
-import { collection,
-         getDocs ,}         from 'firebase/firestore';
+import { doc , 
+         collection,
+         getDocs ,
+         updateDoc ,}          from 'firebase/firestore';
 import { Typography , 
          Box ,
          Grid,
          createTheme , 
          ThemeProvider ,
-         Link,
-         Button,}              from "@mui/material"
+         Link,}             from "@mui/material"
 import { format ,
          formatDistance,  } from "date-fns"
 import { ja }               from "date-fns/locale"
-import useProfile           from "../hooks/useProfile"
-import Divider              from '@mui/material/Divider';
-import Paper                from '@mui/material/Paper';
-import Stack                from '@mui/material/Stack';
+import   useProfile         from "../hooks/useProfile"
+import   Divider            from '@mui/material/Divider';
+import   Paper              from '@mui/material/Paper';
+import   Stack              from '@mui/material/Stack';
 import { styled }           from '@mui/material/styles';
-import MainpageImgButton    from './MainPageImageButton'
-import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
-import StarsIcon from '@mui/icons-material/Stars';
-import InsertCommentIcon from '@mui/icons-material/InsertComment';
+import   MainpageImgButton  from './MainPageImageButton'
+import   ThumbUpAltIcon     from '@mui/icons-material/ThumbUpAlt';
+import   StarsIcon          from '@mui/icons-material/Stars';
+import   InsertCommentIcon  from '@mui/icons-material/InsertComment';
+import { firebaseApp }      from "../../firebase";
 
-const collectionRecipeName = "recipe"
+const collectionRecipeName    = "recipe"
+const collectionMessageName   = "message"
+const collectionGoodName      = "/good"
+const collectionBookMarkName  = "/bookmark"
+
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -65,19 +71,50 @@ export default function MainPageImageList() {
 
   // firestoreからレシピ情報の取得
   const fetchRecipeData = () => {
+    var goodBuffCount = 0
+    var bookmarkBuffCount = 0
+    const firestore = firebaseApp.firestore
     getDocs(collection(db, collectionRecipeName)).then((querySnapshot)=>{
-      querySnapshot.forEach((doc) => {
+      querySnapshot.forEach((document) => {
+        // goodコレクションの個数を取得
+        const docGoodRef = doc(firestore, collectionRecipeName , document.id)
+        getDocs(collection(db, collectionRecipeName+"/"+document.id+collectionGoodName)).then((querySnapshot)=>{
+          // 初期化
+          goodBuffCount = 0
+          querySnapshot.forEach((documentGood) => {
+            goodBuffCount = goodBuffCount + 1
+          })
+          updateDoc(docGoodRef , {
+            good : goodBuffCount,
+          })
+        })
+        // bookmarkコレクションの個数を取得
+        getDocs(collection(db, collectionRecipeName+"/"+document.id+collectionBookMarkName)).then((querySnapshot)=>{
+          // 初期化
+          bookmarkBuffCount = 0  
+          querySnapshot.forEach((documentBookMark) => {
+            bookmarkBuffCount = bookmarkBuffCount + 1
+          })
+          updateDoc(docGoodRef , {
+            bookmark : bookmarkBuffCount,
+          })
+        })
         recipeAry.push({
-          id : doc.id,
-          ...doc.data()
-        })})
+          id : document.id,
+          good : 0,
+          bookmark : 0,
+          ...document.data(),
+        })
+      })
     }).then(()=>{
+      console.log("recipeAry : " , recipeAry)
       setRecipe([...recipeAry])
       // オブジェクト内の日付(createdAt)をキーに昇順にソートする
       recipeAry.sort(function(first , second){
         return (format(first.createdAt.toDate() , "yyyyMMdd") < format(second.createdAt.toDate() , "yyyyMMdd")) ? -1 : 1
       })
-    })};
+    })
+  };
 
   useEffect(() => {
     fetchRecipeData()
@@ -106,7 +143,7 @@ export default function MainPageImageList() {
               <Box sx={{ ml: 2 }}>
                 {/* 作品タイトルの表示 */}
                 <Grid container spacing={0} >
-                <Grid item xs= {9}>
+                <Grid item xs= {10}>
                   <Typography sx={{ fontSize: 22}}>
                     {/* 作品番号をアドレスの末尾に付与して遷移する */}
                     <Link href={`/recipedetails/${recipe.recipenum}`} color="#000000">
@@ -115,38 +152,27 @@ export default function MainPageImageList() {
                   </Typography>
                 </Grid>
                 <Grid item xs= {1} >
-                  {/* いいねボタン表示/数表示 */}
-                  <Button
-                   onClick={() => {
-                    setGoodCount(goodcount +1)}}>
-                    <ThumbUpAltIcon sx={{ color : "#ffa500" }}/>
-                    <Typography color="#000000">
-                      {goodcount}
+                  {/* いいねボタン表示/いいね数表示 */}
+                  <ThumbUpAltIcon sx={{ color : "#ffa500" ,fontSize: 20}}/>
+                    <Typography color="#000000" variant="caption" fontSize={15}>
+                      {recipe.good}
                     </Typography>
-                  </Button>
                 </Grid>
-                {/* お気に入りボタン表示/数表示 */}
+                {/* お気に入りボタン表示/お気に入り数表示 */}
                 <Grid item xs= {1}>
-                  <Button
-                    onClick={() =>{
-                      setBookMarkCount(bookmarkcount + 1)}}>
-                    <StarsIcon sx={{ color : "#a0522d" }}/>
-                    <Typography color="#000000">
-                      {bookmarkcount}
-                    </Typography>
-                  </Button>                  
+                  <StarsIcon sx={{ color : "#a0522d" }}/>
+                  <Typography color="#000000" variant="caption" fontSize={15}>
+                    {recipe.bookmark}
+                  </Typography>
                 </Grid>
-                {/* コメント表示/数表示 */}
-                <Grid item xs= {1}>
-                  <Button
-                    onClick={() =>{
-                      setBookMarkCount(bookmarkcount + 1)}}>
-                    <InsertCommentIcon sx={{ color : "#1e90ff" }}/>
-                    <Typography color="#000000">
-                      {bookmarkcount}
-                    </Typography>
-                  </Button>                  
-                </Grid>
+                {/* コメント表示/コメント数表示 */}
+                {/* ★後日実装 */}
+                {/* <Grid item xs= {1}>
+                  <InsertCommentIcon sx={{ color : "#1e90ff" }}/>
+                  <Typography color="#000000" variant="caption" fontSize={15}>
+                    XXX
+                  </Typography>
+                </Grid> */}
                 </Grid>
                 {/* 作品メモの表示 */}
                 <Grid>

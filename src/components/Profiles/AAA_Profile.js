@@ -133,7 +133,7 @@ const Profile = () => {
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                 <Tab label="プロフィール情報" {...a11yProps(0)} />
-                <Tab label="投稿した作品" {...a11yProps(1)} />
+                <Tab label="AAA投稿した作品" {...a11yProps(1)} />
                 {/* お気に入りタブはログイン中のユーザーのみ表示する */}
                 {profile && profile.uid === getuid ? 
                   <Tab label="お気に入り" {...a11yProps(2)} />

@@ -17,6 +17,7 @@ import { createTheme,
 import   useProfile        from "../hooks/useProfile"
 import   store             from '../../store/index';
 import   ProfilesImageList from "./ProfilesImageList"
+import   BookmarkImageList from "./BookmarkImageList"
 import   ProfilesHeader    from "./ProfilesHeader"
 import { db }              from '../../firebase';
 import { collection,
@@ -24,6 +25,7 @@ import { collection,
 import Footer            from '../Footer';
 
 const collectionName = "users"
+
 const theme = createTheme({
   shadows: ["none"],
   palette: {
@@ -99,22 +101,22 @@ const Profiles = () => {
     getDocs(collection(db, collectionName)).then((querySnapshot)=>{
       // recipenumと遷移元のレシピNoを比較する
       querySnapshot.forEach((doc) => {
-        // 備忘録：文字列を比較する際、見た目は一緒なのになぜか一致しない現象が起きた。
-        // ただし、文字列同士をString()で処理すると問題解決
-        if(String(doc.data().uid) === String(getuid)){
-          userDataAry.push({
-            id : doc.id,
-            ...doc.data()
-        })
-      }
-    })
+          // 備忘録：文字列を比較する際、見た目は一緒なのになぜか一致しない現象が起きた。
+          // ただし、文字列同士をString()で処理すると問題解決
+          if(String(doc.data().uid) === String(getuid)){
+            userDataAry.push({
+              id : doc.id,
+              ...doc.data()
+          })
+        }
+      })
     }).then(()=>{
       setUserInfo([...userDataAry])
-    })};
+    })}
 
   useEffect(() => {
     fetchUsersData()
-  },[]);
+  },[])
 
   return (
     <ThemeProvider theme={theme}>
@@ -228,6 +230,7 @@ const Profiles = () => {
                   <Typography align="center" variant="h5">
                   {name ? name : profile ? profile.name : ""} さん<br/>
                     がお気に入りした作品</Typography>
+                    <BookmarkImageList/>
               </Paper>
             </TabPanel>
           </Box>

@@ -25,8 +25,9 @@ import { styled }            from '@mui/material/styles';
 import   ProfilesImageButton from "./ProfilesImageButton";
 import { firebaseApp }       from "../../firebase";
 
-
 const collectionRecipeName = "recipe"
+const collectionBookMarkName  = "/bookmark"
+
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#ffffff',
   ...theme.typography.body2,
@@ -36,14 +37,10 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 const theme = createTheme()
 
-export default function ProfileImageList() {
-  const [recipe, setRecipe] = useState([]);
-  const [goodcount , setGoodCount] = useState(0)
-  const [bookmarkcount , setBookMarkCount] = useState(0)
+export default function BookmarkImageList() {
   const profileData = useProfile()             // プロフィール取得
   var profile = profileData.profile            // プロフィール取得
   const bottomRef = useRef(null)
-  const recipeAry = [];
   const history = useHistory()
   const firestorage = firebaseApp.firestorage  // 認証情報チェック用
 
@@ -75,25 +72,35 @@ export default function ProfileImageList() {
     }
   }
 
+  // firestoreからユーザー情報の取得
+  const [bookmark , setBookMark] = useState([]);
+  const bookmarkAry = [];
+  const [recipe , setRecipe] = useState([]);
+  const recipeAry = [];
   const fetchRecipeData = () => {
     getDocs(collection(db, collectionRecipeName)).then((querySnapshot)=>{
-      querySnapshot.forEach((doc) => {
-        // ログインしているユーザー情報を取得
-        firebaseApp.fireauth.onAuthStateChanged(user => {
-            // ログインユーザーのuidとfirestore/recipe/image/uidの値が一致している場合のみ配列に追加
-            // if(user.uid === doc.data().image.uid){
-            if(getuid === doc.data().image.uid){
-              recipeAry.push({
-                id : doc.id,
-                ...doc.data()
+      // recipenumと遷移元のレシピNoを比較する
+      querySnapshot.forEach((document) => {
+        // bookmarkコレクションの個数を取得
+        getDocs(collection(db, collectionRecipeName+"/"+document.id+collectionBookMarkName)).then((querySnapshot)=>{
+          querySnapshot.forEach((documentBookMark) => {
+        // 備忘録：文字列を比較する際、見た目は一緒なのになぜか一致しない現象が起きた。
+        // ただし、文字列同士をString()で処理すると問題解決
+            if(String(getuid) === String(documentBookMark.data().uid)){
+              bookmarkAry.push({
+                id : documentBookMark.id,
+                ...document.data(),
               })
+              console.log("if文通過してます")
             }
           })
+        }).then(()=>{
+          setBookMark([...bookmarkAry])
+          setRecipe([...recipeAry])
+          console.log("bookmarkAry =>" , bookmarkAry)
         })
-    }).then(()=>{
-      setRecipe([...recipeAry])
-      console.log("★ : " , recipe)
-    })};
+      })
+    })}
 
   useEffect(() => {
     fetchRecipeData()
@@ -102,10 +109,10 @@ export default function ProfileImageList() {
   return (
     <ThemeProvider theme={theme}>
       <Grid container spacing={0} >
-        {recipe ? ( 
-          recipe.map((recipe) => (
-          <Box 
-            key={recipe.id} 
+        {bookmark ? ( 
+          bookmark.map((bookmark) => (
+            <Box 
+            key={bookmark.id} 
             sx={{
               display: "flex",
               my: 2,
@@ -115,8 +122,8 @@ export default function ProfileImageList() {
               <Box>
                 {/* 作品画像の表示 */}
                 <ProfilesImageButton
-                  imgURL = {recipe.image.url}
-                  info   = {recipe}
+                  imgURL = {bookmark.image.url}
+                  info   = {bookmark}
                   text   = "何か入れる"
                   link   = "/recipedetail/"/>
               </Box>
@@ -125,8 +132,8 @@ export default function ProfileImageList() {
             {/* 作品タイトルの表示 */}
               <Typography sx={{ fontSize: 18 , width : 380}}>
                 {/* 作品番号をアドレスの末尾に付与して遷移する */}
-                <Link href={`/recipedetails/${recipe.recipenum}`} color="#000000">
-                  <strong>{recipe.title}</strong>
+                <Link href={`/recipedetails/${bookmark.recipenum}`} color="#000000">
+                  <strong>{bookmark.title}</strong>
                 </Link>
               </Typography>
               <Grid container spacing={0} >
@@ -136,14 +143,14 @@ export default function ProfileImageList() {
                     <Grid item xs={4} align = "left">
                       <ThumbUpAltIcon sx={{ color : "#ffa500" , fontSize: 20 }}/>
                       <Typography color="#000000" variant="caption" fontSize={15}>
-                          {recipe.good}
+                          {bookmark.good}
                       </Typography>
                     </Grid>
                     <Grid item xs={4} align = "left">
                       {/* お気に入りボタン表示 */}
                       <StarsIcon color="#ffffff" sx={{ color : "#a0522d" , fontSize: 20 }}/>
                       <Typography color="#000000" variant="caption" fontSize={15}>
-                        {recipe.bookmark}
+                        {bookmark.bookmark}
                       </Typography>
                     </Grid>
                     {/* コメントボタン表示 */}
@@ -158,7 +165,7 @@ export default function ProfileImageList() {
                   {/* 投稿日時の表示 */}
                 <Grid item xs={6} align = "left">
                   <Typography color="#000000" variant="body2">
-                    投稿日：{format(recipe.createdAt.toDate(), "yyyy年MM月dd日")}
+                    投稿日：{format(bookmark.createdAt.toDate(), "yyyy年MM月dd日")}
                   </Typography>
                 </Grid>
               </Grid>
@@ -166,7 +173,6 @@ export default function ProfileImageList() {
           </Box>
           ))) : (
           <p>投稿が存在しません</p>)}
-          <div ref={bottomRef}></div>
       </Grid>
     </ThemeProvider>
   );

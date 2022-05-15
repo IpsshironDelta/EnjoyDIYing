@@ -134,7 +134,7 @@ function App() {
     try {
         const docRef = collection(firestore, "message")
         addDoc(docRef, {
-            text:sendmessage,                               // メッセージ内容
+            text:sendmessage,                           // メッセージ内容
             createdAt: Timestamp.fromDate(new Date()),  // メッセージ送信日時
             recipeCommentNum : getrecipenum,            // 対象の投稿(recipenumで認識)
             user: {

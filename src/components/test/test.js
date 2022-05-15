@@ -27,6 +27,8 @@ import { collection,
 import { db }               from '../../firebase';
 
 const collectionRecipeName = "recipe"
+const collectionCategoryName = "category"
+
 const theme = createTheme()
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -67,7 +69,7 @@ export default function RecipeReviewCard() {
   }
   // firestoreからレシピ情報の取得
   const fetchRecipeData = () => {
-    getDocs(collection(db, collectionRecipeName)).then((querySnapshot)=>{
+    getDocs(collection(db, collectionCategoryName)).then((querySnapshot)=>{
       querySnapshot.forEach((doc) => {
         recipeAry.push({
           id : doc.id,
@@ -75,20 +77,10 @@ export default function RecipeReviewCard() {
         })})
     }).then(()=>{
       setRecipe([...recipeAry])
-      console.log("★" , recipeAry)
-      console.log("★0" , recipeAry[0].title , format(recipeAry[0].createdAt.toDate() , "yyyyMMdd"))
-      console.log("★1" , recipeAry[1].title , format(recipeAry[1].createdAt.toDate() , "yyyyMMdd"))
-      console.log("★2" , recipeAry[2].title , format(recipeAry[2].createdAt.toDate() , "yyyyMMdd"))
-      console.log("★3" , recipeAry[3].title , format(recipeAry[3].createdAt.toDate() , "yyyyMMdd"))
       // オブジェクト内の日付(createdAt)をキーに昇順にソートする
       recipeAry.sort(function(first , second){
         return (format(first.createdAt.toDate() , "yyyyMMdd") < format(second.createdAt.toDate() , "yyyyMMdd")) ? -1 : 1
       })
-      console.log("★★" , recipeAry)
-      console.log("★★0" , recipeAry[0].title , format(recipeAry[0].createdAt.toDate() , "yyyyMMdd"))
-      console.log("★★1" , recipeAry[1].title , format(recipeAry[1].createdAt.toDate() , "yyyyMMdd"))
-      console.log("★★2" , recipeAry[2].title , format(recipeAry[2].createdAt.toDate() , "yyyyMMdd"))
-      console.log("★★3" , recipeAry[3].title , format(recipeAry[3].createdAt.toDate() , "yyyyMMdd"))
     })};
 
   useEffect(() => {
