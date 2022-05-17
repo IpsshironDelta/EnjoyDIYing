@@ -14,7 +14,8 @@ const initialState = {
   loginUserUID     : "",  // ログインユーザーのUID
   displayName      : "",  // ユーザー名
   recipetitle      : "",  // 作品タイトル
-  category         : "",  // カテゴリー
+  category         : "",  // 大項目カテゴリー
+  detail           : "",  // 小項目
   productionCost   : "",  // 制作費用
   productionPeriod : "",  // 制作期間
   productionMemo   : "",  // 作品メモ

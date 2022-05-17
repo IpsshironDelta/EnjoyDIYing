@@ -36,9 +36,9 @@ import   store                   from '../../store/index';
 import { db }                    from '../../firebase';
 import { format }                from "date-fns"
 
-const collectionRecipeName = "recipe"
-const collectionUserName   = "users"
-const collectionName       = "category"
+const collectionRecipeName   = "recipe"
+const collectionUserName     = "users"
+const collectionCategoryName = "category"
 const theme = createTheme({
   shadows: ["none"],
   palette: {
@@ -57,18 +57,17 @@ const theme = createTheme({
 });
 
 export default function RecipeDetailsEdit() {
-  const [title , setTilte]         = useState(store.getState().recipetitle)      // 作品タイトルを表示
-  const [category , setCategory]   = useState(store.getState().category)         // 作品カテゴリーを表示
-  const [memo , setMemo]           = useState(store.getState().productionMemo)   // 作品コメントを表示
-  const [cost , setCost]           = useState(store.getState().productionCost)   // 制作費用を表示
-  const [period , setPeriod]       = useState(store.getState().productionPeriod) // 制作期間を表示
-  const [createdat , setCreatedAt] = useState(store.getState().createdAt)        // 制作日時を表示    
-  const [image , setImage]         = useState()                                  // 作品画像を表示
-  const [imagename , setImageName] = useState()                                  // 画像変更時のファイル名を表示
-  const [error, setError]          = useState(false)                             // エラー判定
-  const [success, setSuccess]      = useState(false)                             // 成功判定
-  const [errormessage , setErrorMessage] = useState("")                          // エラーメッセージ
-  const [getavatarurl , setGetAvatarURL] = useState("")
+  const [title , setTilte]                   = useState(store.getState().recipetitle)      // 作品タイトルを表示
+  const [memo , setMemo]                     = useState(store.getState().productionMemo)   // 作品コメントを表示
+  const [cost , setCost]                     = useState(store.getState().productionCost)   // 制作費用を表示
+  const [period , setPeriod]                 = useState(store.getState().productionPeriod) // 制作期間を表示
+  const [createdat , setCreatedAt]           = useState(store.getState().createdAt)        // 制作日時を表示    
+  const [image , setImage]                   = useState()                                  // 作品画像を表示
+  const [imagename , setImageName]           = useState()                                  // 画像変更時のファイル名を表示
+  const [error, setError]                    = useState(false)                             // エラー判定
+  const [success, setSuccess]                = useState(false)                             // 成功判定
+  const [errormessage , setErrorMessage]     = useState("")                                // エラーメッセージ
+  const [getavatarurl , setGetAvatarURL]     = useState("")
   const profileData = useProfile()
   const profile = profileData.profile
   const firestorage = firebaseApp.firestorage
@@ -80,30 +79,64 @@ export default function RecipeDetailsEdit() {
   const getrecipenum = recipenumAry[2]
 
   // ------【START】セレクトボックス用------
-  const [detail, setDetail] = useState([]);
+  const [category , setCategory]             = useState([])         // 作品カテゴリーを表示(category)
+  const [detail , setDetail]                 = useState([])         // 作品カテゴリーを表示(detail)
+  const categoryAry = [];
   const detailAry = [];
+  const [selectcategory , setSelectCategory] = useState(store.getState().category)
+  const [selectdetail , setSelectDetail]     = useState(store.getState().detail)
 
-  // セレクトボックスの要素選択時
+  // categoryセレクトボックスの要素選択時
   const handleSelectChange = (event) => {
-    setCategory(event.target.value)
-  };
+    setSelectCategory(event.target.value)
+    setSelectDetail("")
+    console.log(event.target.value)
+    fetchDetailData(event.target.value)
+  }
 
-  // firestoreからカテゴリーの取得
+  // detailセレクトボックスの要素選択時
+  const handleDetailChange = (event) => {
+    setSelectDetail(event.target.value)
+    console.log(event.target.value)
+  }
+
+  // firestoreからcategoryの取得
   const fetchCategoryData = () => {
-    getDocs(collection(db, collectionName)).then((querySnapshot)=>{
+    getDocs(collection(db, collectionCategoryName)).then((querySnapshot)=>{
       // recipenumと遷移元のレシピNoを比較する
       querySnapshot.forEach((doc) => {
+      // 重複していない要素だけを追加する
+      if(!categoryAry.includes(doc.data().category)){
+        categoryAry.push(
+          doc.data().category
+          )          
+        }
+      })
+    }).then(()=>{
+      setCategory([...categoryAry])
+      console.log("categoryAry : " , categoryAry)
+    })};
+
+  // firestoreからdetailの取得
+  const fetchDetailData = (detail) => {
+    console.log("detail => ", detail)
+    getDocs(collection(db, collectionCategoryName)).then((querySnapshot)=>{
+      querySnapshot.forEach((doc) => {
+        // カテゴリーで選択している要素だけを追加する
+        if(doc.data().category === detail){
         detailAry.push(
-          //...doc.data()
           doc.data().detail
-      )
-    })
+          )
+        }
+        })
     }).then(()=>{
       setDetail([...detailAry])
+      console.log("detailAry : " , detailAry)
     })};
 
   useEffect(() => {
     fetchCategoryData()
+    fetchDetailData(store.getState().category)
   },[]);
   // ------【END】セレクトボックス用------
   
@@ -159,9 +192,15 @@ export default function RecipeDetailsEdit() {
       setError(true)
       return
     }
-    if(category === ""){
-      console.log("作品カテゴリーが未入力")
-      setErrorMessage("作品カテゴリーを選択してください")
+    if(selectcategory === ""){
+      console.log("大項目が未入力")
+      setErrorMessage("大項目を選択してください")
+      setError(true)
+      return
+    }
+    if(selectdetail === ""){
+      console.log("小項目が未入力")
+      setErrorMessage("小項目を選択してください")
       setError(true)
       return
     }
@@ -193,7 +232,8 @@ export default function RecipeDetailsEdit() {
                   const userRef = doc(firestore, collectionRecipeName , store.getState().documentID)
                   updateDoc(userRef, {
                     title ,                     // 作品タイトルを入力
-                    category ,                  // カテゴリを入力
+                    category : selectcategory , // category(大項目)を入力
+                    detail : selectdetail ,     // detail(小項目)を入力
                     memo ,                      // 作品メモを入力
                     cost ,                      // 制作費用を入力
                     period ,                    // 制作期間を入力
@@ -207,7 +247,8 @@ export default function RecipeDetailsEdit() {
                   // firestoreに名前、画像URL、uidを追加する
                   addDoc(docRef, {
                       title,
-                      category,
+                      category : selectcategory,
+                      detail   : selectdetail,
                       memo,
                       cost,
                       period,
@@ -220,19 +261,20 @@ export default function RecipeDetailsEdit() {
             })
           }else{
             // 画像を選択する
-            console.log("profile : ",profile)
             if (profile) {
               const userRef = doc(firestore, collectionRecipeName, store.getState().documentID)
               updateDoc(userRef, 
                 { title , 
-                  category , 
+                  category : selectcategory, 
+                  detail   : selectdetail,
                   memo , 
                   cost , 
                   period})
             } else {
               addDoc(docRef, { 
                 title, 
-                category , 
+                category : selectcategory, 
+                detail   : selectdetail,
                 memo,
                 cost , 
                 period ,
@@ -403,35 +445,66 @@ export default function RecipeDetailsEdit() {
                   作品カテゴリー
                 </Typography>
               </Grid>
-              <Grid>
-                {/* セレクトボックステスト用 */}
-                <FormControl fullWidth >
-                  <InputLabel id="location-label">
-                    カテゴリーを選択してください
-                  </InputLabel>
-                  {/* カテゴリー選択のセレクトボックス */}
-                  <Select
-                    labelId      = "demo-multiple-name-label"
-                    id           = "demo-multiple-name"
-                    defaultValue = {category}
-                    value        = {category ? category : store.getState().category}
-                    onChange     = {handleSelectChange}
-                    label        = "カテゴリーを選択してください"
-                    sx={{ 
-                      background: "#ffffff", 
-                      borderRadius: 1 ,
-                      
-                      }}>
-                    {detail.map((category) => (
-                      <MenuItem
-                        key   = {category}
-                        value = {category ? category : ""}>
-                        {category}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-                {/* セレクトボックステスト用 */}
+              <Grid container spacing={4}>
+                <Grid item xs={12} md={6}>
+                  {/* categoryセレクトボックステスト用 */}
+                  <FormControl fullWidth >
+                    <InputLabel id="category-label">
+                      大項目を選択してください
+                    </InputLabel>
+                    {/* category選択のセレクトボックス */}
+                    <Select
+                      labelId      = "category-name-label"
+                      id           = "category-name"
+                      defaultValue = {selectcategory}
+                      value        = {selectcategory ? selectcategory : store.getState().category}
+                      onChange     = {handleSelectChange}
+                      label        = "カテゴリーを選択してください"
+                      sx={{ 
+                        background: "#ffffff", 
+                        borderRadius: 1 ,
+                        }}>
+                      {category.map((category) => (
+                        <MenuItem
+                          key   = {category}
+                          value = {category ? category : ""}>
+                          {category}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  {/* category セレクトボックステスト用 */}
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  {/* detailセレクトボックステスト用 */}
+                  <FormControl fullWidth >
+                    <InputLabel id="detail-label">
+                      小項目を選択してください
+                    </InputLabel>
+                    {/* detail選択のセレクトボックス */}
+                    <Select
+                      labelId      = "detail-name-label"
+                      id           = "detail-name"
+                      defaultValue = {selectdetail}
+                      value        = {selectdetail ? selectdetail : store.getState().detail}
+                      onChange     = {handleDetailChange}
+                      label        = "カテゴリーを選択してください"
+                      sx={{ 
+                        background: "#ffffff", 
+                        borderRadius: 1 ,
+                        
+                        }}>
+                      {detail.map((detail) => (
+                        <MenuItem
+                          key   = {detail}
+                          value = {detail ? detail : ""}>
+                          {detail}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  {/* detail セレクトボックステスト用 */}
+                </Grid>
               </Grid>
               <br/>
               {/* 制作費用の表示 */}

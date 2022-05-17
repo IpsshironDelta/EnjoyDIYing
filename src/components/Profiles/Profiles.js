@@ -18,6 +18,7 @@ import   useProfile        from "../hooks/useProfile"
 import   store             from '../../store/index';
 import   ProfilesImageList from "./ProfilesImageList"
 import   BookmarkImageList from "./BookmarkImageList"
+import   GoodImageList     from "./GoodImageList"
 import   ProfilesHeader    from "./ProfilesHeader"
 import { db }              from '../../firebase';
 import { collection,
@@ -137,7 +138,11 @@ const Profiles = () => {
                 {profile && profile.uid === getuid ? 
                   <Tab label="お気に入り" {...a11yProps(2)} />
                  : ""}
-              </Tabs>
+                {/* いいねタブはログイン中のユーザーのみ表示する */}
+                {profile && profile.uid === getuid ? 
+                  <Tab label="いいね" {...a11yProps(3)} />
+                 : ""}
+                </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
               {/* プロフィールタブの中身表示 */}
@@ -231,6 +236,15 @@ const Profiles = () => {
                   {name ? name : profile ? profile.name : ""} さん<br/>
                     がお気に入りした作品</Typography>
                     <BookmarkImageList/>
+              </Paper>
+            </TabPanel>
+            <TabPanel value={value} index={3}>
+              {/* お気に入りの中身表示 */}
+              <Paper sx={{ m: 1, p: 1 }}>
+                  <Typography align="center" variant="h5">
+                  {name ? name : profile ? profile.name : ""} さん<br/>
+                    がいいねした作品</Typography>
+                    <GoodImageList/>
               </Paper>
             </TabPanel>
           </Box>

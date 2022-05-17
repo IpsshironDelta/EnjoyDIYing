@@ -38,7 +38,7 @@ import { addDoc,
 import { db }             from '../../firebase';
 import Footer            from '../Footer';
 
-const collectionName = "category"
+const collectionCategoryName = "category"
 
 const defaultSrc =
     "https://firebasestorage.googleapis.com/v0/b/myfirebasesample-c6d99.appspot.com/o/PAGE_USE_IMG%2FAddImage.png?alt=media&token=d4acd7c6-5a2b-4f54-a4bb-0e6240d25f81";
@@ -67,46 +67,16 @@ const theme = createTheme({
 });
 
 export default function PostPage() {
-  // ------セレクトボックス用------
-  const [detail, setDetail] = useState([]);
-  const detailAry = [];
-
-  // セレクトボックスの要素選択時
-  const handleSelectChange = (event) => {
-    console.log("handleSeledctChange通過" , event.target.value)
-    setCategory(event.target.value)
-  };
-
-    // firestoreからカテゴリーの取得
-    const fetchCategoryData = () => {
-      getDocs(collection(db, collectionName)).then((querySnapshot)=>{
-        // recipenumと遷移元のレシピNoを比較する
-        querySnapshot.forEach((doc) => {
-          detailAry.push(
-            doc.data().detail
-        )
-      })
-      }).then(()=>{
-        setDetail([...detailAry])
-      })};
-  
-    useEffect(() => {
-      fetchCategoryData()
-    },[]);
-  // ------セレクトボックス用------
-
   const [name, setName] 
-          = useState(store.getState().displayName)      // プロフィール名
+    = useState(store.getState().displayName)      // プロフィール名
   const [recipetitle, setRecipeTitle] 
-          = useState(store.getState().recipetitle)      // 作品タイトル
-  const [category, setCategory] 
-          = useState(store.getState().category)         // カテゴリー
+    = useState("")      // 作品タイトル
   const [productioncost , setProductionCost] 
-          = useState(store.getState().productionCost)   // 制作費用
+    = useState("")   // 制作費用
   const [productionperiod , setProductionPeriod] 
-          = useState(store.getState().productionPeriod) // 制作期間
+    = useState("") // 制作期間
   const [productionmemo , setProductionMemo] 
-          = useState(store.getState().productionMemo)   // 作品メモ
+    = useState("")   // 作品メモ
   const [error, setError] = useState(false)             // エラー判定
   const [errormessage , setErrorMessage] = useState("") // エラーメッセージ
   const [success, setSuccess] = useState(false)         // 成功判定
@@ -116,6 +86,65 @@ export default function PostPage() {
   const profile = profileData.profile
   const { user } = useUser()
   const history = useHistory()
+
+  // ------セレクトボックス用------
+  const [categorys, setCategorys] = useState([]);
+  const [detail, setDetail] = useState([]);
+  const categoryAry = [];
+  const detailAry = [];
+  const [selectcategory , setSelectCategory] = useState("")         // 大項目カテゴリー
+  const [selectdetail , setSelectDetail]     = useState("")         // 小項目カテゴリー
+
+  // categoryセレクトボックスの要素選択時
+  const handleSelectChange = (event) => {
+    setSelectCategory(event.target.value)
+    setSelectDetail("")
+    fetchDetailData(event.target.value)
+  }
+
+  // detailセレクトボックスの要素選択時
+  const handleDetailChange = (event) => {
+    setSelectDetail(event.target.value)
+    console.log(event.target.value)
+  };
+
+  // firestoreからcategoryの取得
+  const fetchCategoryData = () => {
+    getDocs(collection(db, collectionCategoryName)).then((querySnapshot)=>{
+      querySnapshot.forEach((doc) => {
+        // 重複していない要素だけを追加する
+        if(!categoryAry.includes(doc.data().category)){
+          categoryAry.push(
+            doc.data().category
+            )          
+          }
+        })
+      }).then(()=>{
+        setCategorys([...categoryAry])
+        console.log("categoryAry : " , categoryAry)
+      })};
+
+  // firestoreからdetailの取得
+  const fetchDetailData = (detail) => {
+    console.log("detail => ", detail)
+    getDocs(collection(db, collectionCategoryName)).then((querySnapshot)=>{
+      querySnapshot.forEach((doc) => {
+        // カテゴリーで選択している要素だけを追加する
+        if(doc.data().category === detail){
+        detailAry.push(
+          doc.data().detail
+          )
+        }
+        })
+    }).then(()=>{
+      setDetail([...detailAry])
+      console.log("detailAry : " , detailAry)
+    })};
+      
+    useEffect(() => {
+      fetchCategoryData()
+    },[]);
+  // ------セレクトボックス用------
 
   const handleChange = (e) => {
     console.log(e.target.files)
@@ -141,9 +170,15 @@ export default function PostPage() {
       setError(true)
       return
     }
-    if(category ===""){
-      console.log("カテゴリーが未入力")
-      setErrorMessage("カテゴリーを選択してください")
+    if(selectcategory ===""){
+      console.log("大項目が未入力")
+      setErrorMessage("大項目を選択してください")
+      setError(true)
+      return
+    }
+    if(selectdetail ===""){
+      console.log("小項目が未入力")
+      setErrorMessage("小項目を選択してください")
       setError(true)
       return
     }
@@ -160,8 +195,8 @@ export default function PostPage() {
       return
     }
     if(productionmemo ===""){
-      console.log("作品メモが未入力")
-      setErrorMessage("作品メモを入力してください")
+      console.log("作品コメントが未入力")
+      setErrorMessage("作品コメントを入力してください")
       setError(true)
       return
     }
@@ -184,7 +219,8 @@ export default function PostPage() {
               console.log(url)
               // firestoreへ投稿情報を書き込み
               addDoc(docRef,{
-                category         : category,                       // カテゴリを入力
+                category         : selectcategory,                 // 大項目カテゴリを入力
+                detail           : selectdetail,                 // 小項目カテゴリを入力
                 createdAt        : Timestamp.fromDate(new Date()), // 投稿日
                 memo             : productionmemo ,                // 作品メモを入力
                 cost             : productioncost ,                // 制作費用を入力
@@ -256,8 +292,8 @@ export default function PostPage() {
                 <Item>画像3<ImageUpload/></Item> */}
             </Grid>
             <br/>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={6}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={12}>
                 <Typography variant="h6" gutterBottom>
                   作品タイトル
                 </Typography>
@@ -278,29 +314,55 @@ export default function PostPage() {
               </Grid>
               <Grid item xs={12} md={6}>
                 <Typography variant="h6" gutterBottom>
-                  カテゴリー
+                  カテゴリー：大項目
                 </Typography>
                 <FormControl fullWidth >
-                  <InputLabel id="location-label">
+                  <InputLabel id="category-label">
                     選択してください
                   </InputLabel>
                   {/* カテゴリー選択のセレクトボックス */}
                   <Select
-                    labelId  = "demo-multiple-name-label"
-                    id       = "demo-multiple-name"
-                    value    = {category}
+                    labelId  = "category-name-label"
+                    id       = "category-name"
+                    value    = {selectcategory}
                     onChange = {handleSelectChange}
                     label    = "選択してください">
-                    {detail.map((category) => (
+                    {categorys.map((categorys) => (
                       <MenuItem
-                        key   = {category}
-                        value = {category}>
-                        {category}
+                        key   = {categorys}
+                        value = {categorys}>
+                        {categorys}
                       </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
               </Grid>
+              <Grid item xs={12} md={6}>
+                <Typography variant="h6" gutterBottom>
+                  カテゴリー：小項目
+                </Typography>
+                <FormControl fullWidth >
+                  <InputLabel id="detail-label">
+                    選択してください
+                  </InputLabel>
+                  {/* カテゴリー選択のセレクトボックス */}
+                  <Select
+                    labelId  = "detail-name-label"
+                    id       = "detail-name"
+                    value    = {selectdetail}
+                    onChange = {handleDetailChange}
+                    label    = "選択してください">
+                    {detail.map((detail) => (
+                      <MenuItem
+                        key   = {detail}
+                        value = {detail}>
+                        {detail}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              
               <Grid item xs={12} md={6}>
                 <Typography variant="h6" gutterBottom>
                   制作費用
@@ -318,7 +380,9 @@ export default function PostPage() {
                       setProductionCost(e.target.value)}/>
                   円
                 </Typography>
+              </Grid>
                 <br/><br/>
+              <Grid item xs={12} md={6}>
                 <Typography variant="h6" gutterBottom>
                   制作期間
                 </Typography>
@@ -335,9 +399,9 @@ export default function PostPage() {
                 </Typography>
               </Grid>
 
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={12}>
                 <Typography variant="h6" gutterBottom>
-                  作品メモ
+                  作品コメント
                 </Typography>
                 <TextField
                   fullWidth

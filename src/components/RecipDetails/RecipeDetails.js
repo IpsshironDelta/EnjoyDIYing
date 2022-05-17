@@ -103,7 +103,8 @@ export default function RecipDetail() {
           store.getState().documentID       = doc.id               // ドキュメントID
           store.getState().recipeUID        = doc.data().image.uid // 投稿したユーザーのUID
           store.getState().recipetitle      = doc.data().title     // 作品タイトル
-          store.getState().category         = doc.data().category  // カテゴリー
+          store.getState().category         = doc.data().category  // 大項目(category)
+          store.getState().detail           = doc.data().detail    // 小項目(detail)
           store.getState().productionCost   = doc.data().cost      // 制作費用
           store.getState().productionPeriod = doc.data().period    // 制作期間
           store.getState().productionMemo   = doc.data().memo      // 作品メモ
@@ -440,7 +441,7 @@ const [bookmarkcount , setBookMarkCount] = useState("")
                   sx={{ 
                     fontSize: 14 , 
                     color:"#a0522d"}}>
-                  作品のコメント
+                  作品コメント
                 </Typography>
               </Grid>
               <Grid>
@@ -464,16 +465,41 @@ const [bookmarkcount , setBookMarkCount] = useState("")
                   作品カテゴリー
                 </Typography>
               </Grid>
-              <Grid>
+              <Grid container spacing={4}>
+                <Grid item xs={6}>
                 <Typography 
                   sx={{ 
-                    p: 1, 
-                    fontSize: 16 , 
-                    background: "#ffffff", 
-                    borderRadius: 1 ,
+                    fontSize: 14 , 
                     color:"#000000"}}>
-                  {recipe.category}
+                  大項目
                 </Typography>
+                  <Typography 
+                    sx={{ 
+                      p: 1, 
+                      fontSize: 16 , 
+                      background: "#ffffff", 
+                      borderRadius: 1 ,
+                      color:"#000000"}}>
+                    {recipe.category}
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography 
+                    sx={{ 
+                      fontSize: 14 , 
+                      color:"#000000"}}>
+                    小項目
+                  </Typography>
+                  <Typography 
+                    sx={{ 
+                      p: 1, 
+                      fontSize: 16 , 
+                      background: "#ffffff", 
+                      borderRadius: 1 ,
+                      color:"#000000"}}>
+                    {recipe.detail}
+                  </Typography>
+                </Grid>
               </Grid>
               <br/>
               {/* 制作費用の表示 */}
