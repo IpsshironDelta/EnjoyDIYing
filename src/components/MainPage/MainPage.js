@@ -1,23 +1,47 @@
-  import React, 
-       { useState,}        from "react";
+import   React, 
+       { useState,}          from "react"
 import { Box ,
          Typography,
          Container , 
-         Grid , }          from '@mui/material';
+         Grid, 
+         Button, 
+         Tabs , 
+         Tab ,
+         Link, }             from '@mui/material'
 import { createTheme,
-         ThemeProvider }   from '@mui/material/styles';
+         ThemeProvider }     from '@mui/material/styles'
 import { useHistory,
-         withRouter }      from 'react-router';
-import   MainPageHeader    from './MainPageHeader';
-import   MainPageImageList from './MainPageImageList';
-import   Footer            from '../Footer';
-import   PersonIcon        from '@mui/icons-material/Person';
-import   EditIcon          from '@mui/icons-material/Edit';
-import   MainPageButton    from './MainPageButton';
-import { firebaseApp }     from "../../firebase";
-import   useProfile        from "../../components/hooks/useProfile"
-import { ref ,}            from "firebase/storage"
-import   store             from '../../store/index';
+         withRouter }        from 'react-router'
+import   MainPageHeader      from './MainPageHeader'
+import   MainPageImageList   from './MainPageImageList'
+import   MainPageImageModule from './MainPageImageModule'
+import   MainPageAccordion   from './MainPageAccordion'
+import   MainPageSearchBox   from './MainPageSearchBox'
+import   Footer              from '../Footer'
+import   PersonIcon          from '@mui/icons-material/Person'
+import   EditIcon            from '@mui/icons-material/Edit'
+import { firebaseApp }       from "../../firebase"
+import   useProfile          from "../../components/hooks/useProfile"
+import { ref ,}              from "firebase/storage"
+import { makeStyles }        from "@material-ui/core/styles"
+import   PersonAddIcon       from '@mui/icons-material/PersonAdd'
+import   ViewModuleIcon      from '@mui/icons-material/ViewModule'
+import   ViewListIcon        from '@mui/icons-material/ViewList'
+
+const useStyles = makeStyles({
+  rectangle: {
+    background:"#3D85CC",
+    color : "#ffffff",
+    width: "150px",
+    height: "35px",
+    "&:hover": {
+      background: "#3D85CC"
+    },
+    "&:active": {
+      background: "aqua"
+    }
+  }
+})
 
 const theme = createTheme({
   shadows: ["none"],
@@ -34,7 +58,7 @@ const theme = createTheme({
     // テキストのカラー設定
     text: { primary: '#000000' },
   },
-});
+})
 
 const maipageImg = 
 "https://firebasestorage.googleapis.com/v0/b/myfirebasesample-c6d99.appspot.com/o/PAGE_USE_IMG%2F001_mainpage_img.png?alt=media&token=ec1c9756-3602-43a6-ad0e-ce4d23e3ca5f"
@@ -47,27 +71,53 @@ const subImg_003 =
 const filename       = "001_mainpage_img.png"
 const filepath       = "gs://myfirebasesample-c6d99.appspot.com/PAGE_USE_IMG/"
 
-function MainPage(props) {
-  const buttonTheme = {
-    background: "orange",
-    color: "#ffffff"
+// タブパネルの関数
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}>
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>)}
+    </div>
+  )
+}
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
   };
-  const style = {
-		display: "flex",
-		flexDirection: "column",
-		alignItems: "center",
-		height: "100vh",
-		justifyContent: "center"
-	};
-  const history = useHistory()
+}
+
+function MainPage(props) {
+  // const buttonTheme = {
+  //   background: "orange",
+  //   color: "#ffffff"
+  // };
+  // const style = {
+	// 	display: "flex",
+	// 	flexDirection: "column",
+	// 	alignItems: "center",
+	// 	height: "100vh",
+	// 	justifyContent: "center"
+	// };
   // ユーザーが認証されていない場合、ログイン画面へ遷移する
-  firebaseApp.fireauth.onAuthStateChanged(user => {
-    if (!user) {
-      history.push("/login")
-    }else{
-      store.getState().loginUserUID = user.uid
-    }
-  })
+  // firebaseApp.fireauth.onAuthStateChanged(user => {
+  //   if (!user) {
+  //     history.push("/login")
+  //   }else{
+  //     store.getState().loginUserUID = user.uid
+  //   }
+  // })
+
+  const classes = useStyles()
+  const history = useHistory()
   const profileData = useProfile()
   const profile = profileData.profile
   const [image, setImage] = useState()
@@ -76,6 +126,12 @@ function MainPage(props) {
     firestorage,
     filepath + filename
   )
+
+  // タブ関連
+  const [value, setValue] = React.useState(0);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  }
   
   return (
     <ThemeProvider theme={theme}>
@@ -99,23 +155,57 @@ function MainPage(props) {
           </Typography>
           <Grid container spacing={1}>
             <Grid item xs={6} align = "right">
-              <MainPageButton
-                id        = "post"
-                variant   = 'contained'
-                link      = "/postpage"
+              {profile ? 
+              <Button
                 startIcon = {<EditIcon/>}
-                sx        = {{backgroundColor:"#3D85CC" , 
-                              display:"null",}}
-                text      = "投稿する"/>
+                sx = {{background:"#1D7BED" ,
+                       padding : 1,
+                       borderRadius : 10,
+                       borderWidth : 1,
+                       overflow : "hedden",
+                       color:"#ffffff",
+                       width: "150px",
+                       height: "35px",
+                       "&:hover": {
+                         background: "#1D7BED"},}}
+                  onClick = {() => {
+                    history.push("/postpage")}}>
+                  投稿する
+                </Button>
+              :<Button
+                startIcon = {<PersonAddIcon/>}
+                sx = {{background:"#1D7BED" ,
+                        padding : 1,
+                        borderRadius : 10,
+                        borderWidth : 1,
+                        color:"#ffffff",
+                        width: "150px",
+                        height: "35px",
+                        "&:hover": {
+                          background: "#1D7BED"
+                        },}}
+                  onClick = {() => {
+                    history.push("/signup")}}>
+                  新規登録する
+                </Button> }
             </Grid>
             <Grid item xs={6} align = "left">
-              <MainPageButton
-                id        = "mypage"
-                variant   = 'contained'
-                link      = {profile ? "/profiles/"+profile.uid : ""} 
+            {profile ? 
+              <Button
                 startIcon = {<PersonIcon/>}
-                sx        = {{backgroundColor:"#3D85CC"}}
-                text      = "マイページ"/>
+                sx = {{background:"#1D7BED" ,
+                       padding : 1,
+                       borderRadius : 10,
+                       borderWidth : 1,
+                       color:"#ffffff",
+                       width: "150px",
+                       height: "35px",
+                       "&:hover": {background: "#1D7BED"},}}
+                onClick = {() => {
+                  history.push("/profiles/"+profile.uid)}}>
+                  マイページ
+              </Button>
+              : ""}
             </Grid>
           </Grid>
         </Grid>
@@ -195,34 +285,74 @@ function MainPage(props) {
               bgcolor: 'background.paper',
               pt: 8,
               pb: 6,}}>
-            <Typography
+              <Typography
               component="h1"
-              variant="h4"
+              variant="h5"
               align="left"
               color="text.primary"
-              gutterBottom>
-              新着レシピ(投稿日付順に表示)
+              gutterBottom
+              sx = {{backgroundColor : "#ffffff",
+                     color : "#000000",
+                     padding: "1rem 2rem",
+                     borderTop: "double #E64545 6px",
+                     borderBottom: "double #E64545 6px",
+                     pt : 1 , 
+                     pb : 1 ,}}>
+              フリーワードでさがす
             </Typography>
-            <MainPageImageList/>
+            <br/>
+            <MainPageSearchBox/>
+            <br/>
             <Typography
               component="h1"
-              variant="h4"
+              variant="h5"
               align="left"
               color="text.primary"
-              gutterBottom>
-              注目のレシピ(お気に入り登録数が多い順に表示)
+              gutterBottom
+              sx = {{backgroundColor : "#ffffff",
+                     color : "#000000",
+                     padding: "1rem 2rem",
+                     borderTop: "double #E64545 6px",
+                     borderBottom: "double #E64545 6px",
+                     pt : 1 , 
+                     pb : 1 ,}}>
+              <Link href={"/categorylist"} color="#000000">
+                カテゴリー</Link>
+                でさがす
             </Typography>
-            {/* <MainPageImageList/> */}
+            <br/>
+            <MainPageAccordion/>
+            <br/>
             <Typography
               component="h1"
-              variant="h4"
+              variant="h5"
               align="left"
               color="text.primary"
-              gutterBottom>
-            {profile ? profile.name : ""}  さんの<br/>
-            お気に入り投稿(自分のお気に入りした作品を表示)
+              gutterBottom
+              sx = {{backgroundColor : "#ffffff",
+                     color : "#000000",
+                     padding: "1rem 2rem",
+                     borderTop: "double #E64545 6px",
+                     borderBottom: "double #E64545 6px",
+                     pt : 1 , 
+                     pb : 1 ,}}>
+              みんなの作品をみる
             </Typography>
-            {/* <MainPageImageList/> */}
+            {/* タブの文言 */}
+            <Box sx={{ width: '100%' }}>
+              <Box sx={{ borderBottom: 1, borderColor: 'divider'}}>
+                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" >
+                  <Tab label={<ViewListIcon/>} {...a11yProps(0)} />
+                  <Tab label={<ViewModuleIcon/>} {...a11yProps(1)} />
+                </Tabs>
+              </Box>
+              <TabPanel value={value} index={0}>
+                <MainPageImageList/>
+              </TabPanel>
+              <TabPanel value={value} index={1}>
+                <MainPageImageModule/>
+              </TabPanel>
+            </Box>
           </Box>
         </Container>
       </Box>

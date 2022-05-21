@@ -162,7 +162,17 @@ const ProfileEdit = () => {
             <Paper sx={{ m: 4, p: 4 }}>
                 {error && <Alert severity="error">{errormessage}</Alert>}
                 {success && (<Alert severity="success"> {profile ? "更新" : "作成"}しました</Alert>)}
-                <Typography align="center" variant="h5">プロフィール編集</Typography>
+                <Typography 
+                  align="center" 
+                  variant="h5"
+                  sx = {{color : "#000000",
+                         padding: "1rem 2rem",
+                         borderTop: "double #E64545 6px",
+                         borderBottom: "double #E64545 6px",
+                         pt : 2 , 
+                         pb : 2 ,}}>
+                    プロフィール編集
+                </Typography>
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 4 }}>
                   {/* アバター画像の表示 */}
                 <Container align = "center">
@@ -183,7 +193,13 @@ const ProfileEdit = () => {
                 </Container>
                     <Container align="left">
                       {/* ユーザー名の表示 */}
-                      <Typography >ユーザー名</Typography>
+                      <Typography
+                        sx = {{backgroundColor : "#ffffff",
+                              color : "#000000",
+                              padding: "0.2rem",
+                              borderLeft : "solid #E64545 6px"}}>
+                        <strong>ユーザー名</strong>
+                      </Typography>
                       <TextField
                         margin="normal"
                         required
@@ -200,7 +216,13 @@ const ProfileEdit = () => {
                     <br/>
                     <Container align="left">
                       {/* 所在地の表示 */}
-                      <Typography>所在地</Typography>
+                      <Typography
+                        sx = {{backgroundColor : "#ffffff",
+                              color : "#000000",
+                              padding: "0.2rem",
+                              borderLeft : "solid #E64545 6px"}}>
+                        <strong>所在地</strong>
+                      </Typography>
                       <ProfileEditSelectBox
                         margin       = "normal"
                         fullWidth
@@ -215,7 +237,13 @@ const ProfileEdit = () => {
                       <br/>
                       <Container align="left">
                         {/* 自己紹介文の表示 */}
-                        <Typography>自己紹介</Typography>
+                        <Typography
+                          sx = {{backgroundColor : "#ffffff",
+                                color : "#000000",
+                                padding: "0.2rem",
+                                borderLeft : "solid #E64545 6px"}}>
+                          <strong>自己紹介</strong>
+                        </Typography>
                         <TextField
                           margin="normal"
                           id        ="selfintroduction"

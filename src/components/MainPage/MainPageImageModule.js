@@ -99,19 +99,17 @@ export default function MainPageImageList() {
       <Grid container spacing={0} >
       {recipe ? (
         recipe.sort().map((recipe) => (
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <Box 
               key={recipe.id} 
               sx={{
                 display: "flex",
-                my: 2,
-                gap: 2,
                 pt : 2,
                 pb : 2,
                 pl : 1,
                 pr : 1,
-                flexGrow: 1, m: 2,
-                width : 160,
+                m: 1,
+                maxWidth : 185,
                 borderTop    : "solid #dddddd 1px",
                 borderBottom : "solid #dddddd 1px",
                 borderLeft   : "solid #dddddd 1px",
@@ -122,7 +120,7 @@ export default function MainPageImageList() {
                     info   = {recipe}
                     className   = "MuiImageBackdrop-root"
                     link   = "/recipedetail/"
-                    style  = {{width: "155px"}}/>
+                    style  = {{width: "167px",height:"167px"}}/>
                   <Typography sx={{ fontSize: 14}}>
                     {/* 作品番号をアドレスの末尾に付与して遷移する */}
                     <Button 
@@ -130,7 +128,9 @@ export default function MainPageImageList() {
                               borderRadius : 2,
                               color:"#ffffff" , 
                               backgroundColor : "#E64545",
-                              height : 20,}}>
+                              height : 20,
+                              "&:hover": {
+                                background: "#E64545"},}}>
                       {recipe.detail}
                     </Button>
                   </Typography>

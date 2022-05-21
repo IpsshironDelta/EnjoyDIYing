@@ -15,6 +15,8 @@ import {Alert ,
 import { createTheme, 
          ThemeProvider }   from '@mui/material/styles';
 import RecipeDetailsHeader from "./RecipeDetailsHeader"
+import RecipeDetailsImageModule from "./RecipeDetailsImageModule"
+import RecipeDetailsImageButton from "./RecipeDetailsImageButton"
 import Footer              from '../Footer';
 import ThumbUpAltIcon      from '@mui/icons-material/ThumbUpAlt';
 import CardMedia           from '@mui/material/CardMedia';
@@ -372,10 +374,12 @@ const [bookmarkcount , setBookMarkCount] = useState("")
             <Typography
               sx={{ 
                 p: 1, 
+                pl : 3,
                 fontSize: 32 , 
                 background: "#faf0e6", 
                 borderRadius: 1 ,
-                color:"#a0522d"}}>
+                color:"#a0522d",
+                borderLeft : "solid #a0522d 6px",}}>
               <strong>{recipe.title}</strong>
             </Typography>
             <Box
@@ -424,51 +428,33 @@ const [bookmarkcount , setBookMarkCount] = useState("")
             pl : 4,
             pr : 4,}}>
           <Grid container spacing={4}>
-            <Grid item xs={4}>
+            <Grid item xs={6}>
               {/* 作品画像を表示 */}
               <Typography variant="body2" align='left'>
                 <CardMedia
                   component = "img"
-                  height    = "250"
+                  height    = "400"
                   image     = {recipe.image.url}
                   alt       = "Paella dish"/>
               </Typography>
             </Grid>
-            <Grid item xs={8}>
-              {/* 作品コメント表示欄 */}
+            <Grid item xs={6}>
+              {/* 作品カテゴリー表示欄 */}
               <Grid>
                 <Typography 
                   sx={{ 
+                    pl : 1 ,
                     fontSize: 14 , 
-                    color:"#a0522d"}}>
-                  作品コメント
-                </Typography>
-              </Grid>
-              <Grid>
-                <Typography 
-                  sx={{ 
-                    p: 1, 
-                    fontSize: 16 , 
-                    background: "#ffffff", 
-                    borderRadius: 1 ,
-                    color:"#000000"}}>
-                  {recipe.memo}
-                </Typography>
-              </Grid>
-              <br/>
-              {/* 作品コメント表示欄 */}
-              <Grid>
-                <Typography 
-                  sx={{ 
-                    fontSize: 14 , 
-                    color:"#a0522d"}}>
-                  作品カテゴリー
+                    color:"#a0522d",
+                    borderLeft : "solid #a0522d 6px"}}>
+                  <strong>作品カテゴリー</strong>
                 </Typography>
               </Grid>
               <Grid container spacing={4}>
                 <Grid item xs={6}>
                 <Typography 
                   sx={{ 
+                    pl : 2,
                     fontSize: 14 , 
                     color:"#000000"}}>
                   大項目
@@ -486,6 +472,7 @@ const [bookmarkcount , setBookMarkCount] = useState("")
                 <Grid item xs={6}>
                   <Typography 
                     sx={{ 
+                      pl : 2 ,
                       fontSize: 14 , 
                       color:"#000000"}}>
                     小項目
@@ -505,25 +492,64 @@ const [bookmarkcount , setBookMarkCount] = useState("")
               {/* 制作費用の表示 */}
               <Typography 
                 sx={{ 
-                  p: 1, 
-                  fontSize: 16 , 
-                  background: "#ffffff", 
-                  borderRadius: 1 ,
-                  color:"#a0522d"}}>
-                かかった費用 : <strong>{Number(recipe.cost).toLocaleString()}</strong> 円
+                  pl : 1 ,
+                  fontSize: 14 , 
+                  color:"#a0522d",
+                  borderLeft : "solid #a0522d 6px"}}>
+                <strong>かかった費用</strong>
               </Typography>
-              <br/>
-              {/* 制作期間の表示 */}
               <Typography 
                 sx={{ 
                   p: 1, 
                   fontSize: 16 , 
                   background: "#ffffff", 
                   borderRadius: 1 ,
-                  color:"#a0522d"}}>
-                所要時間 :  <strong>約 {recipe.period}</strong>
+                  color:"#000000"}}>
+                {Number(recipe.cost).toLocaleString()} 円
+              </Typography>
+              <br/>
+              {/* 制作期間の表示 */}
+              <Typography 
+                sx={{ 
+                  pl : 1 ,
+                  fontSize: 14 , 
+                  color:"#a0522d",
+                  borderLeft : "solid #a0522d 6px"}}>
+                <strong>所要時間</strong>
+              </Typography>
+              <Typography 
+                sx={{ 
+                  p: 1, 
+                  fontSize: 16 , 
+                  background: "#ffffff", 
+                  borderRadius: 1 ,
+                  color:"#000000"}}>
+                約 {recipe.period}
               </Typography>
             </Grid>
+          </Grid>
+          {/* 作品コメント表示欄 */}
+          <br/>
+          <Grid>
+            <Typography 
+              sx={{ 
+                pl : 1 ,
+                fontSize: 14 , 
+                color:"#a0522d",
+                borderLeft : "solid #a0522d 6px"}}>
+              <strong>作品コメント</strong>
+            </Typography>
+          </Grid>
+          <Grid>
+            <Typography 
+              sx={{ 
+                p: 1, 
+                fontSize: 16 , 
+                background: "#ffffff", 
+                borderRadius: 1 ,
+                color:"#000000"}}>
+              {recipe.memo}
+            </Typography>
           </Grid>
         </Box>
         <Box
@@ -630,7 +656,7 @@ const [bookmarkcount , setBookMarkCount] = useState("")
           </Grid>
           <Box
           sx={{
-            bgcolor: '#eeeeee',
+            bgcolor: '#ffffff',
             pb : 4,
             pl : 4,
             pr : 4,}}>
@@ -639,8 +665,6 @@ const [bookmarkcount , setBookMarkCount] = useState("")
             <Grid item xs={12} align = "center">
               {/* メッセージ内容の表示 */}
               <Message/>
-              {/* メッセージ送信領域の表示 */}
-              {/* <MessageInput/> */}
             </Grid>
           </Grid>
         </Box>
@@ -659,6 +683,22 @@ const [bookmarkcount , setBookMarkCount] = useState("")
           </Grid>
         </Grid>
         <br/>
+          <Typography
+            component="h1"
+            variant="h5"
+            align="left"
+            color="text.primary"
+            gutterBottom
+            sx = {{backgroundColor : "#ffffff",
+                    color : "#000000",
+                    padding: "1rem 2rem",
+                    borderBottom: "double #E64545 6px",
+                    pb : 1 ,}}>
+            関連するほかの作品
+          </Typography>
+          <RecipeDetailsImageModule
+            detail    = {recipe.detail}
+            recipeNum = {recipe.recipenum}/>
         </Container>
       </Box>
       ))) : (

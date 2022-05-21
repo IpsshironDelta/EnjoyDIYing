@@ -312,10 +312,13 @@ export default function RecipeDetailsEdit() {
             <Typography 
               sx={{ 
                 p: 1, 
+                pt : 2 ,
+                pb : 2 ,
                 fontSize: 20 , 
                 width : 600 , 
-                color:"#a0522d"}}>
-              作品タイトル
+                color:"#a0522d",
+                borderLeft : "solid #a0522d 6px"}}>
+              <strong>作品タイトル</strong>
             </Typography>
             <TextField 
               fullWidth
@@ -407,42 +410,17 @@ export default function RecipeDetailsEdit() {
               {/* 作品画像テスト用 */}
             </Grid>
             <Grid item xs={8}>
-              {/* 作品コメント表示欄 */}
-              <Grid>
-                <Typography 
-                  sx={{ 
-                    pb       :  1,
-                    fontSize : 14 , 
-                    color    : "#a0522d"}}>
-                  作品のコメント
-                </Typography>
-              </Grid>
-              <Grid>
-                <TextField 
-                  fullWidth
-                  multiline
-                  id           = "name"
-                  name         = "name"
-                  variant      = "outlined"
-                  label        = "コメントを入力してください"
-                  defaultValue = {memo}
-                  value        = {memo ? memo : ""}
-                  onChange     = {e => setMemo(e.target.value)}
-                  sx={{ 
-                    fontSize: 32 , 
-                    background: "#ffffff", 
-                    borderRadius: 1 ,
-                    color:"#a0522d"}}/>
-              </Grid>
-              <br/>
               {/* 制作費用の表示 */}
               <Grid>
                 <Typography 
                   sx={{ 
+                    pt       :  1,
                     pb       :  1,
+                    pl       :  1,
                     fontSize : 14 , 
-                    color    : "#a0522d"}}>
-                  作品カテゴリー
+                    color    : "#a0522d",
+                    borderLeft : "solid #a0522d 6px"}}>
+                  <strong>作品カテゴリー</strong>
                 </Typography>
               </Grid>
               <Grid container spacing={4}>
@@ -511,9 +489,12 @@ export default function RecipeDetailsEdit() {
               <Grid>
                 <Typography 
                   sx={{ 
+                    pt       :  1,
                     pb       :  1,
+                    pl       :  1,
                     fontSize : 14 , 
-                    color    : "#a0522d"}}>
+                    color    : "#a0522d",
+                    borderLeft : "solid #a0522d 6px"}}>
                   かかった費用
                 </Typography>
               </Grid>
@@ -538,9 +519,12 @@ export default function RecipeDetailsEdit() {
               <Grid>
                 <Typography 
                   sx={{ 
+                    pt       :  1,
                     pb       :  1,
+                    pl       :  1,
                     fontSize : 14 , 
-                    color    : "#a0522d"}}>
+                    color    : "#a0522d",
+                    borderLeft : "solid #a0522d 6px"}}>
                   所要時間
                 </Typography>
               </Grid>
@@ -561,6 +545,37 @@ export default function RecipeDetailsEdit() {
                     color:"#a0522d"}}/>
               </Grid>
             </Grid>
+          </Grid>
+          <br/>
+          {/* 作品コメント表示欄 */}
+          <Grid>
+            <Typography 
+              sx={{ 
+                pt       :  1,
+                pb       :  1,
+                pl       :  1,
+                fontSize : 14 , 
+                color    : "#a0522d",
+                borderLeft : "solid #a0522d 6px"}}>
+              <strong>作品のコメント</strong>
+            </Typography>
+          </Grid>
+          <Grid>
+            <TextField 
+              fullWidth
+              multiline
+              id           = "name"
+              name         = "name"
+              variant      = "outlined"
+              label        = "コメントを入力してください"
+              defaultValue = {memo}
+              value        = {memo ? memo : ""}
+              onChange     = {e => setMemo(e.target.value)}
+              sx={{ 
+                fontSize: 32 , 
+                background: "#ffffff", 
+                borderRadius: 1 ,
+                color:"#a0522d"}}/>
           </Grid>
         </Box>
         <br/>

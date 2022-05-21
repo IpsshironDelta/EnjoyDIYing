@@ -12,6 +12,7 @@ import { Alert ,
          ThemeProvider ,
          CssBaseline ,
          TextField , 
+         Input,
          Button, 
          FormControl,
          InputLabel,
@@ -88,12 +89,12 @@ export default function PostPage() {
   const history = useHistory()
 
   // ------セレクトボックス用------
-  const [categorys, setCategorys] = useState([]);
-  const [detail, setDetail] = useState([]);
-  const categoryAry = [];
-  const detailAry = [];
-  const [selectcategory , setSelectCategory] = useState("")         // 大項目カテゴリー
-  const [selectdetail , setSelectDetail]     = useState("")         // 小項目カテゴリー
+  const [categorys, setCategorys] = useState([])
+  const [detail, setDetail] = useState([])
+  const categoryAry = []
+  const detailAry = []
+  const [selectcategory , setSelectCategory] = useState("")  // 大項目カテゴリー
+  const [selectdetail , setSelectDetail]     = useState("")  // 小項目カテゴリー
 
   // categoryセレクトボックスの要素選択時
   const handleSelectChange = (event) => {
@@ -258,11 +259,28 @@ export default function PostPage() {
       <Container maxWidth = "md">
         <Container component="main" maxWidth="lg" sx={{ mb: 4 }}>
           <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-            <Typography component="h1" variant="h4" align="center">
+            <Typography 
+              component="h1" 
+              variant="h4" 
+              align="center"
+              sx = {{backgroundColor : "#ffffff",
+                     color : "#000000",
+                     padding: "1rem 2rem",
+                     borderTop: "double #E64545 6px",
+                     borderBottom: "double #E64545 6px",
+                     pt : 2 , 
+                     pb : 2 ,}}>
               DIY作品を投稿する
             </Typography>
             <br/>
-            <Typography component="h1" variant="h6" align="left">
+            <Typography 
+              component="h1" 
+              variant="h6" 
+              align="left"
+              sx = {{backgroundColor : "#ffffff",
+                     color : "#000000",
+                     padding: "0.2rem",
+                     borderLeft : "solid #E64545 6px"}}>
               画像選択
             </Typography>
             <Grid container spacing={1} align= "center">
@@ -294,7 +312,13 @@ export default function PostPage() {
             <br/>
             <Grid container spacing={2}>
               <Grid item xs={12} md={12}>
-                <Typography variant="h6" gutterBottom>
+                <Typography 
+                  variant="h6" 
+                  gutterBottom
+                  sx = {{backgroundColor : "#ffffff",
+                         color : "#000000",
+                         padding: "0.2rem",
+                         borderLeft : "solid #E64545 6px"}}>
                   作品タイトル
                 </Typography>
                 <Box
@@ -305,7 +329,6 @@ export default function PostPage() {
                     fullWidth
                     id           = "recipetitle"
                     name         = "recipetitle"
-                    variant      = "outlined"
                     label        = "入力してください"
                     defaultValue = ""
                     onChange={e => 
@@ -313,7 +336,13 @@ export default function PostPage() {
                 </Box>
               </Grid>
               <Grid item xs={12} md={6}>
-                <Typography variant="h6" gutterBottom>
+                <Typography 
+                  variant="h6" 
+                  gutterBottom
+                  sx = {{backgroundColor : "#ffffff",
+                         color : "#000000",
+                         padding: "0.2rem",
+                         borderLeft : "solid #E64545 6px"}}>
                   カテゴリー：大項目
                 </Typography>
                 <FormControl fullWidth >
@@ -338,7 +367,13 @@ export default function PostPage() {
                 </FormControl>
               </Grid>
               <Grid item xs={12} md={6}>
-                <Typography variant="h6" gutterBottom>
+                <Typography 
+                  variant="h6" 
+                  gutterBottom
+                  sx = {{backgroundColor : "#ffffff",
+                         color : "#000000",
+                         padding: "0.2rem",
+                         borderLeft : "solid #E64545 6px"}}>
                   カテゴリー：小項目
                 </Typography>
                 <FormControl fullWidth >
@@ -364,7 +399,13 @@ export default function PostPage() {
               </Grid>
               
               <Grid item xs={12} md={6}>
-                <Typography variant="h6" gutterBottom>
+                <Typography 
+                  variant="h6" 
+                  gutterBottom
+                  sx = {{backgroundColor : "#ffffff",
+                         color : "#000000",
+                         padding: "0.2rem",
+                         borderLeft : "solid #E64545 6px"}}>
                   制作費用
                 </Typography>
                 <Typography variant="h7">
@@ -383,7 +424,13 @@ export default function PostPage() {
               </Grid>
                 <br/><br/>
               <Grid item xs={12} md={6}>
-                <Typography variant="h6" gutterBottom>
+                <Typography 
+                  variant="h6" 
+                  gutterBottom
+                  sx = {{backgroundColor : "#ffffff",
+                         color : "#000000",
+                         padding: "0.2rem",
+                         borderLeft : "solid #E64545 6px"}}>
                   制作期間
                 </Typography>
                 <Typography variant="h7">
@@ -400,7 +447,13 @@ export default function PostPage() {
               </Grid>
 
               <Grid item xs={12} md={12}>
-                <Typography variant="h6" gutterBottom>
+                <Typography 
+                  variant="h6" 
+                  gutterBottom
+                  sx = {{backgroundColor : "#ffffff",
+                         color : "#000000",
+                         padding: "0.2rem",
+                         borderLeft : "solid #E64545 6px"}}>
                   作品コメント
                 </Typography>
                 <TextField

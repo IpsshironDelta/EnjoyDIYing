@@ -3,8 +3,10 @@ import React ,
 import { styled }     from '@mui/material/styles'
 import Box            from '@mui/material/Box'
 import ButtonBase     from '@mui/material/ButtonBase'
-import { useHistory } from "react-router-dom"
+import { useHistory,
+         withRouter } from "react-router-dom"
 import ImageListItemBar from '@mui/material/ImageListItemBar'
+import { WindowSharp } from "@mui/icons-material"
 
 const ImageButton = styled(ButtonBase)(({ theme }) => ({
   position: 'relative',
@@ -70,16 +72,16 @@ const ImageMarked = styled('span')(({ theme }) => ({
   transition: theme.transitions.create('opacity'),
 }));
 
-export default function MainPageImageButton(props) {
-    // タイトル表示
-    const [titlename, setTitleName] = useState("");
-    var text  = props.text
-    var recipeNum = props.info.recipenum
-    var info = props.info
-    const history = useHistory();
-    // タイトル変更
-    var changeTitle = (props) => {
-        setTitleName(info.title)
+function RecipeDetailsImageButton(props) {
+  // タイトル表示
+  const [titlename, setTitleName] = useState("");
+  var text  = props.text
+  var recipeNum = props.info.recipenum
+  var info = props.info
+  const history = useHistory()
+  // タイトル変更
+  var changeTitle = (props) => {
+      setTitleName(info.title)
   }
 
   return (
@@ -91,9 +93,14 @@ export default function MainPageImageButton(props) {
         text    = {props.text}
         onClick = {() => {
             changeTitle()
-            console.log(recipeNum)
+            console.log("★",recipeNum)
             // 作品番号(recepeNum)をアドレス末尾に付与
-            history.push(`/recipedetails/${recipeNum}`)}}>
+            // 1回ホーム画面への遷移をかませる
+            history.push("/")
+            setTimeout(() => {
+              history.push(`/recipedetails/${recipeNum}`)
+            },1)
+            }}>
         <ImageSrc style={{ backgroundImage: `url(${props.imgURL})` }} />
           {/* titleとsubtitleが存在する場合は、ImageListItemBarを表示する */}
         {props.title && props.subtitle ?
@@ -106,3 +113,5 @@ export default function MainPageImageButton(props) {
     </Box>
   );
 }
+
+export default withRouter(RecipeDetailsImageButton);

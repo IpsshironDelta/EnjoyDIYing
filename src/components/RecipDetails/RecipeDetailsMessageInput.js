@@ -65,12 +65,13 @@ export default function MessageInput() {
                 size="small" 
                 sx={{ flex: 1 }}
                 value = {message}
+                label = "メッセージを入力してください。"
                 onChange={e => setMessage(e.target.value)} />
             <Button 
                 variant="contained" 
                 endIcon={<SendIcon />}
                 onClick={() => handleClick()}>
-            送信
+            コメントする
             </Button>
         </Stack>
     )

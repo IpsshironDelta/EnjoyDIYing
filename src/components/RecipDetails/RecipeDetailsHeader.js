@@ -36,7 +36,8 @@ export default function MainpageHeader() {
               link      = "/"
               size      = "large"
               variant   = "contained"
-              startIcon = {<HomeIcon/>}/>
+              startIcon = {<HomeIcon/>}
+              sx        = {{"&:hover": {background: "#E64545"}}}/>
             {/* <ProfileButton
               id        = "logout"
               text      = "ログアウト" 

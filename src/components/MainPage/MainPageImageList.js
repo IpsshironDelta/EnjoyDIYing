@@ -1,21 +1,18 @@
 import  React ,
       { useEffect,
-        useState,
-        useRef , }          from "react";
+        useState, }         from "react";
 import { db }               from '../../firebase';
 import { doc , 
          collection,
          getDocs ,
-         updateDoc ,}          from 'firebase/firestore';
+         updateDoc ,}       from 'firebase/firestore';
 import { Typography , 
          Box ,
          Grid,
          createTheme , 
          ThemeProvider ,
          Link,}             from "@mui/material"
-import { format ,
-         formatDistance,  } from "date-fns"
-import { ja }               from "date-fns/locale"
+import { format ,}          from "date-fns"
 import   useProfile         from "../hooks/useProfile"
 import   Divider            from '@mui/material/Divider';
 import   Paper              from '@mui/material/Paper';
@@ -24,11 +21,9 @@ import { styled }           from '@mui/material/styles';
 import   MainpageImgButton  from './MainPageImageButton'
 import   ThumbUpAltIcon     from '@mui/icons-material/ThumbUpAlt';
 import   StarsIcon          from '@mui/icons-material/Stars';
-import   InsertCommentIcon  from '@mui/icons-material/InsertComment';
 import { firebaseApp }      from "../../firebase";
 
 const collectionRecipeName    = "recipe"
-const collectionMessageName   = "message"
 const collectionGoodName      = "/good"
 const collectionBookMarkName  = "/bookmark"
 
@@ -43,31 +38,10 @@ const theme = createTheme()
 
 export default function MainPageImageList() {
   const [recipe, setRecipe] = useState([]);
-  const [goodcount , setGoodCount] = useState(0)
-  const [bookmarkcount , setBookMarkCount] = useState(0)
+
   const profileData = useProfile()
   const profile = profileData.profile
-  const bottomRef = useRef(null)
   const recipeAry = [];
-
-  // タイムスタンプ
-  const time = (date) => {
-    let timestamp = formatDistance(new Date(), date.toDate(), {
-      locale: ja,
-    })
-    if (timestamp.indexOf("未満") !== -1) {
-      return (timestamp = "たった今")
-    } else if (
-      timestamp.indexOf("か月") !== -1 ||
-      timestamp.indexOf("年") !== -1
-    ) {
-      return (timestamp = format(date.toDate(), "yyyy年M月d日", {
-        locale: ja,
-      }))
-    } else {
-      return (timestamp = timestamp + "前")
-    }
-  }
 
   // firestoreからレシピ情報の取得
   const fetchRecipeData = () => {
@@ -114,7 +88,7 @@ export default function MainPageImageList() {
         return (format(first.createdAt.toDate() , "yyyyMMdd") < format(second.createdAt.toDate() , "yyyyMMdd")) ? -1 : 1
       })
     })
-  };
+  }
 
   useEffect(() => {
     fetchRecipeData()
@@ -137,8 +111,9 @@ export default function MainPageImageList() {
                 <MainpageImgButton
                     imgURL = {recipe.image.url}
                     info   = {recipe}
-                    text   = "何か入れる"
-                    link   = "/recipedetail/"/>
+                    className   = "MuiImageBackdrop-root"
+                    link   = "/recipedetail/"
+                    style  = {{width: "100px"}}/>
               </Box>
               <Box sx={{ ml: 2 }}>
                 {/* 作品タイトルの表示 */}
@@ -177,7 +152,13 @@ export default function MainPageImageList() {
                 {/* 作品メモの表示 */}
                 <Grid>
                   <Typography 
-                    sx={{ p: 1, fontSize: 14 , maxWidth : 600 ,minWidth : 600 , background: "#dddddd" ,color:"#000000"}}>
+                    sx={{ p: 1, 
+                          fontSize: 14 , 
+                          maxWidth : 600 ,
+                          minWidth : 600 , 
+                          background: "#dddddd" ,
+                          color:"#000000",
+                          borderRadius : 3,}}>
                     {recipe.memo}
                     <Typography
                       sx={{ fontSize: 12 ,color:"#000000" }}
@@ -220,7 +201,6 @@ export default function MainPageImageList() {
             </Box>
           ))) : (
           <p>投稿が存在しません</p>)}
-          <div ref={bottomRef}></div>
       </Grid>
     </ThemeProvider>
   );

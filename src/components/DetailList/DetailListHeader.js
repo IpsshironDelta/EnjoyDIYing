@@ -7,7 +7,7 @@ import {Avatar,
         ListItemIcon,
         MenuItem,
         Menu ,}       from "@mui/material"
-import MainPageButton from './MainPageButton';
+import DetailListButton from './DetailListButton';
 import EditIcon       from '@mui/icons-material/Edit';
 import HomeIcon       from '@mui/icons-material/Home';
 import PersonAddIcon  from '@mui/icons-material/PersonAdd';
@@ -20,7 +20,7 @@ import IconButton     from '@mui/material/IconButton'
 import StarIcon       from '@mui/icons-material/Star'
 import BugReportIcon from '@mui/icons-material/BugReport'
 
-export default function PrimarySearchAppBar() {
+export default function DetailListHeader() {
   const profileData = useProfile()
   const profile = profileData.profile
   const [anchorEl, setAnchorEl] = useState(null);
@@ -44,14 +44,14 @@ export default function PrimarySearchAppBar() {
               sx={{ display: { xs: 'none', sm: 'block' } }}/>
             <Box sx={{ flexGrow: 1 }}/>
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-              <MainPageButton
+              <DetailListButton
                 text      ="テスト画面" 
                 link      = "/message"
                 size      = "large"
                 variant   = "contained"
                 startIcon = {<BugReportIcon/>}/>
               {profile ? 
-                <MainPageButton
+                <DetailListButton
                   text      = "ホーム" 
                   link      = "/"
                   size      = "large"
@@ -60,7 +60,7 @@ export default function PrimarySearchAppBar() {
                   startIcon = {<HomeIcon/>}/>
               : "" }
               {profile ? 
-                <MainPageButton
+                <DetailListButton
                   text      ="投稿する" 
                   link      = "/postpage"
                   size      = "large"
@@ -69,7 +69,7 @@ export default function PrimarySearchAppBar() {
                   startIcon = {<EditIcon/>}/>
                 : "" }
               {profile ? 
-                <MainPageButton
+                <DetailListButton
                   text      = "マイページ" 
                   link      = {profile ? "/profiles/"+profile.uid : ""} 
                   size      = "large"
@@ -78,7 +78,7 @@ export default function PrimarySearchAppBar() {
                   startIcon = {<PersonIcon/>}/>
                   : "" }
               {profile ? 
-                <MainPageButton
+                <DetailListButton
                   id        = "logout"
                   text      = "ログアウト" 
                   link      = "/"
@@ -86,7 +86,7 @@ export default function PrimarySearchAppBar() {
                   variant   = "contained"
                   sx        = {{"&:hover": {background: "#E64545"}}}
                   startIcon = {<LogoutIcon/>}/>
-                : <MainPageButton
+                : <DetailListButton
                   id        = "login"
                   text      = "ログイン" 
                   link      = "/login"
@@ -98,7 +98,7 @@ export default function PrimarySearchAppBar() {
                 <IconButton onClick={handleClickAvatar}>
                   <Avatar src={profile ? profile.image : ""} alt="" />
                 </IconButton>
-                  : <MainPageButton
+                  : <DetailListButton
                     text    = "新規登録" 
                     link    = "/signup"
                     size    = "large"

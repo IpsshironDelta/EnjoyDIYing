@@ -61,7 +61,7 @@ function TabPanel(props) {
         </Box>
       )}
     </div>
-  );
+  )
 }
 function a11yProps(index) {
   return {
@@ -164,52 +164,48 @@ const Profiles = () => {
                         style  = {{ display: "none" }}/>
                   </Container>
                       <Container align="left">
-                        <Typography >ユーザー名</Typography>
+                        <Typography
+                          sx = {{backgroundColor : "#ffffff",
+                                 color : "#000000",
+                                 padding: "0.2rem",
+                                 borderLeft : "solid #E64545 6px"}}>
+                          <strong>ユーザー名</strong>
+                        </Typography>
                         {/* ユーザー名表示 */}
-                        <TextField
-                          margin       = "normal"
-                          fullWidth
-                          id           = "name"
-                          name         = "name"
-                          autoComplete = "name"
-                          autoFocus
-                          defaultValue = {name}
-                          value        = {name ? name : userinfo ? userinfo.name : ""}
-                          InputProps   = {{readOnly: true,}}
-                          variant      = "standard"/>
+                        <Typography
+                          sx = {{pt : 2 , pl : 2 ,}}>
+                            {name ? name : userinfo ? userinfo.name : ""}
+                        </Typography>
                       </Container>
                       <br/>
                       <Container align="left">
-                        <Typography>所在地</Typography>
+                      <Typography
+                        sx = {{backgroundColor : "#ffffff",
+                               color : "#000000",
+                               padding: "0.2rem",
+                               borderLeft : "solid #E64545 6px"}}>
+                        <strong>所在地</strong>
+                      </Typography>
                         {/* 所在地表示 */}
-                        <TextField
-                          margin       = "normal"
-                          fullWidth
-                          id           = "location"
-                          name         = "location"
-                          autoComplete = "location"
-                          autoFocus
-                          defaultValue = {location}
-                          value        = {location ? location : userinfo ? userinfo.location : ""}
-                          InputProps   = {{readOnly: true,}}
-                          variant      = "standard"/>
+                          <Typography
+                            sx = {{pt : 2 , pl : 2 ,}}>
+                              {location ? location : userinfo ? userinfo.location : ""}
+                          </Typography>
                         </Container>
                         <br/>
                         <Container align="left">
-                          <Typography>自己紹介</Typography>
+                          <Typography
+                            sx = {{backgroundColor : "#ffffff",
+                                   color : "#000000",
+                                   padding: "0.2rem",
+                                   borderLeft : "solid #E64545 6px"}}>
+                            <strong>自己紹介</strong>
+                          </Typography>
                           {/* 自己紹介の表示 */}
-                          <TextField
-                            margin       = "normal"
-                            fullWidth
-                            id           = "selfintroduction"
-                            name         = "selfintroduction"
-                            autoComplete = "selfintroduction"
-                            multiline
-                            defaultValue = {selfintroduction}
-                            rows         = {6}
-                            value        = {selfintroduction ? selfintroduction : userinfo ? userinfo.selfintroduction : "よろしくお願いします。"}
-                            InputProps   = {{readOnly: true,}}
-                            variant      = "standard"/>
+                          <Typography
+                            sx = {{pt : 2 , pl : 2 ,}}>
+                              {selfintroduction ? selfintroduction : userinfo ? userinfo.selfintroduction : "よろしくお願いします。"}
+                          </Typography>
                         </Container>
                         {/* 編集ボタンはログイン中のユーザーのみ表示 */}
                       {profile && profile.uid === getuid ? 

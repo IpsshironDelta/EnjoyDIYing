@@ -4,7 +4,7 @@ import Box            from '@mui/material/Box';
 import Toolbar        from '@mui/material/Toolbar';
 import HeaderTitle    from '../HeaderTitle';
 import SignUpButton    from './SignUpButton';
-import FeedIcon from '@mui/icons-material/Feed';
+import HomeIcon from '@mui/icons-material/Home';
 
 export default function SignUpHeader() {
   return (
@@ -20,11 +20,12 @@ export default function SignUpHeader() {
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
         <SignUpButton
-              text      ="操作説明" 
-              link      = "/operation"
+              text      ="ホーム" 
+              link      = "/"
               size      = "large"
               variant   = "contained"
-              startIcon = {<FeedIcon/>}/>
+              startIcon = {<HomeIcon/>}
+              sx        = {{"&:hover": {background: "#E64545"}}}/>
           </Box>
         </Toolbar>
       </AppBar>

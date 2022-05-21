@@ -28,7 +28,7 @@ import { format ,
 import { ja }               from "date-fns/locale"
 import useProfile           from "../hooks/useProfile"
 import DeleteIcon           from '@mui/icons-material/Delete'
-import SendIcon             from '@mui/icons-material/Send'
+import ChatBubbleIcon       from '@mui/icons-material/ChatBubble';
 import store                from '../../store/index';
 
 const collectionMessageName = "message"
@@ -220,21 +220,24 @@ function App() {
               </Box>
             ))) : (
             <p>メッセージが存在しません</p>)}
-            <div ref={bottomRef}></div>
+            {/* ログイン状態の時だけメッセージ送信機能を表示 */}
             {/* メッセージ送信部分 */}
+            {profile ? 
             <Stack direction="row" spacing={2} sx={{ margin: "0.5rem 1rem" }}>
               <TextField 
                   size="small" 
                   sx={{ flex: 1 }}
                   value = {sendmessage}
+                  label = "この作品にコメントする"
                   onChange={e => setSendMessage(e.target.value)} />
               <Button 
                   variant="contained" 
-                  endIcon={<SendIcon />}
+                  endIcon={<ChatBubbleIcon />}
                   onClick={() => handleClick()}>
-              送信
+              コメントする
               </Button>
             </Stack>
+            :""}
           </Grid>
       </Box>
       {/* 空入力の場合はエラーを表示 */}

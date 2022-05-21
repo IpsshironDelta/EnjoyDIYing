@@ -26,7 +26,7 @@ import   ProfilesImageButton from "./ProfilesImageButton";
 import { firebaseApp }       from "../../firebase";
 
 const collectionRecipeName = "recipe"
-const collectionBookMarkName  = "/bookmark"
+const collectionGoodName  = "/good"
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#ffffff',
@@ -73,31 +73,31 @@ export default function GoodImageList() {
   }
 
   // firestoreからユーザー情報の取得
-  const [bookmark , setBookMark] = useState([]);
-  const bookmarkAry = [];
+  const [good , setGood] = useState([]);
+  const goodAry = [];
   const [recipe , setRecipe] = useState([]);
   const recipeAry = [];
   const fetchRecipeData = () => {
     getDocs(collection(db, collectionRecipeName)).then((querySnapshot)=>{
       // recipenumと遷移元のレシピNoを比較する
       querySnapshot.forEach((document) => {
-        // bookmarkコレクションの個数を取得
-        getDocs(collection(db, collectionRecipeName+"/"+document.id+collectionBookMarkName)).then((querySnapshot)=>{
-          querySnapshot.forEach((documentBookMark) => {
+        // goodコレクションの個数を取得
+        getDocs(collection(db, collectionRecipeName+"/"+document.id+collectionGoodName)).then((querySnapshot)=>{
+          querySnapshot.forEach((documentGood) => {
         // 備忘録：文字列を比較する際、見た目は一緒なのになぜか一致しない現象が起きた。
         // ただし、文字列同士をString()で処理すると問題解決
-            if(String(getuid) === String(documentBookMark.data().uid)){
-              bookmarkAry.push({
-                id : documentBookMark.id,
+            if(String(getuid) === String(documentGood.data().uid)){
+              goodAry.push({
+                id : documentGood.id,
                 ...document.data(),
               })
               console.log("if文通過してます")
             }
           })
         }).then(()=>{
-          setBookMark([...bookmarkAry])
+          setGood([...goodAry])
           setRecipe([...recipeAry])
-          console.log("bookmarkAry =>" , bookmarkAry)
+          console.log("goodAry =>" , goodAry)
         })
       })
     })}
@@ -109,10 +109,10 @@ export default function GoodImageList() {
   return (
     <ThemeProvider theme={theme}>
       <Grid container spacing={0} >
-        {bookmark ? ( 
-          bookmark.map((bookmark) => (
+        {good ? ( 
+          good.map((good) => (
             <Box 
-            key={bookmark.id} 
+            key={good.id} 
             sx={{
               display: "flex",
               my: 2,
@@ -122,8 +122,8 @@ export default function GoodImageList() {
               <Box>
                 {/* 作品画像の表示 */}
                 <ProfilesImageButton
-                  imgURL = {bookmark.image.url}
-                  info   = {bookmark}
+                  imgURL = {good.image.url}
+                  info   = {good}
                   text   = "何か入れる"
                   link   = "/recipedetail/"/>
               </Box>
@@ -132,8 +132,8 @@ export default function GoodImageList() {
             {/* 作品タイトルの表示 */}
               <Typography sx={{ fontSize: 18 , width : 380}}>
                 {/* 作品番号をアドレスの末尾に付与して遷移する */}
-                <Link href={`/recipedetails/${bookmark.recipenum}`} color="#000000">
-                  <strong>{bookmark.title}</strong>
+                <Link href={`/recipedetails/${good.recipenum}`} color="#000000">
+                  <strong>{good.title}</strong>
                 </Link>
               </Typography>
               <Grid container spacing={0} >
@@ -143,14 +143,14 @@ export default function GoodImageList() {
                     <Grid item xs={4} align = "left">
                       <ThumbUpAltIcon sx={{ color : "#ffa500" , fontSize: 20 }}/>
                       <Typography color="#000000" variant="caption" fontSize={15}>
-                          {bookmark.good}
+                          {good.good}
                       </Typography>
                     </Grid>
                     <Grid item xs={4} align = "left">
                       {/* お気に入りボタン表示 */}
                       <StarsIcon color="#ffffff" sx={{ color : "#a0522d" , fontSize: 20 }}/>
                       <Typography color="#000000" variant="caption" fontSize={15}>
-                        {bookmark.bookmark}
+                        {good.bookmark}
                       </Typography>
                     </Grid>
                     {/* コメントボタン表示 */}
@@ -165,7 +165,7 @@ export default function GoodImageList() {
                   {/* 投稿日時の表示 */}
                 <Grid item xs={6} align = "left">
                   <Typography color="#000000" variant="body2">
-                    投稿日：{format(bookmark.createdAt.toDate(), "yyyy年MM月dd日")}
+                    投稿日：{format(good.createdAt.toDate(), "yyyy年MM月dd日")}
                   </Typography>
                 </Grid>
               </Grid>

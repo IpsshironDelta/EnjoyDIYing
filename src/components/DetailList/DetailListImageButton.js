@@ -70,7 +70,7 @@ const ImageMarked = styled('span')(({ theme }) => ({
   transition: theme.transitions.create('opacity'),
 }));
 
-export default function MainPageImageButton(props) {
+export default function DetailListImageButton(props) {
     // タイトル表示
     const [titlename, setTitleName] = useState("");
     var text  = props.text

@@ -6,8 +6,10 @@ import Login                    from "./components/Login/Login";
 import SignUp                   from "./components/SignUp/SignUp";
 import PasswordReset            from './components/PasswordReset/PasswordReset';
 import MainPage                 from "./components/MainPage/MainPage";
-import PostPage                  from './components/PostPage/PostPage';
+import PostPage                 from './components/PostPage/PostPage';
 import MainTop                  from './components/MainPage/MainPage';
+import CategoryList             from './components/CategoryList/CategoryList'
+import DetailID                 from './components/DetailList/DetailList'
 import RecipeDetails            from './components/RecipDetails/RecipeDetails';
 import RecipeDetailsEdit        from './components/RecipDetailsEdit/RecipeDetailsEdit';
 import RecipeDetailsID          from './components/RecipDetails/RecipeDetails';
@@ -31,6 +33,8 @@ function App() {
         <Route exact path="/signup" component={SignUp} />
         <Route exact path="/passwordreset" component={PasswordReset} />
         <Route exact path="/mainpage" component={MainPage} />
+        <Route exact path="/categorylist" component={CategoryList} />
+        <Route exact path="/categorylist/:id" component={DetailID} />
         <Route exact path="/profiles" component={Profiles} />
         <Route exact path="/profiles/:id" component={ProfileID} />
         <Route exact path="/profile/edit" component={ProfileEdit} />

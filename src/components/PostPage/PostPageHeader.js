@@ -25,6 +25,7 @@ export default function PrimarySearchAppBar() {
               link    = "/"
               size    = ""
               variant = ""
+              sx        = {{"&:hover": {background: "#E64545"}}}
               startIcon = {<HomeIcon/>}/>
             {/* <PostPageButton
               text    = "マイページ" 

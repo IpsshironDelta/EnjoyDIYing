@@ -5,7 +5,7 @@ import   Button       from '@mui/material/Button';
 import   useLogout    from '../hooks/logOutUseAuth';
 import   useProfile   from "../../components/hooks/useProfile"
 
-export default function MainPageButton(props){
+export default function CategoryListButton(props){
     const history = useHistory()
     const profileData = useProfile()
     const profile = profileData.profile
