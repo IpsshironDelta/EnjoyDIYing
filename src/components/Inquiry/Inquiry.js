@@ -1,5 +1,6 @@
 import   React, 
-       { useState,}          from "react"
+       { useState,
+         useEffect,}         from "react"
 import { Box ,
          Typography,
          Container , }       from '@mui/material'
@@ -7,8 +8,7 @@ import { createTheme,
          ThemeProvider }     from '@mui/material/styles'
 import { useHistory,
          withRouter }        from 'react-router'
-import   CategoryListHeader      from './CategoryListHeader'
-import   CategoryListAccordion   from './CategoryListAccordion'
+import   InquiryHeader    from './InquiryHeader'
 import   Footer              from '../Footer'
 
 const theme = createTheme({
@@ -28,13 +28,12 @@ const theme = createTheme({
   },
 })
 
-function CategoryList(props) {
-  const history = useHistory()
+function Inquiry(props) {
   
   return (
     <ThemeProvider theme={theme}>
         <Container maxWidth>
-            <CategoryListHeader/>
+            <InquiryHeader/>
         </Container>
         <Container maxWidth = "md" >
             <Box sx={{ flexGrow: 1, m: 2, pt: 4, pb: 4 }}>
@@ -52,10 +51,8 @@ function CategoryList(props) {
                                 borderBottom: "double #E64545 6px",
                                 pt : 5 , 
                                 pb : 1 ,}}>
-                        作品のカテゴリー一覧
+                        お問い合わせ
                     </Typography>
-                    <br/>
-                    <CategoryListAccordion/>
                 </Container>
             </Box>
         </Container>
@@ -66,4 +63,4 @@ function CategoryList(props) {
   );
 }
 
-export default withRouter(CategoryList);
+export default withRouter(Inquiry);

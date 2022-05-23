@@ -29,6 +29,7 @@ function Footer() {
               <Typography variant="body2" align="center" >
                 <Link
                   color="#ffffff"
+                  href={`/question`}
                   style={{ textDecoration: 'none' }}>
                     <strong>よくある質問</strong>
                 </Link>
@@ -38,6 +39,7 @@ function Footer() {
               <Typography variant="body2" align="center" >
                 <Link
                   color="#ffffff"
+                  href={`/inquiry`}
                   style={{ textDecoration: 'none' }}>
                     <strong>お問い合わせ</strong>
                 </Link>
@@ -47,6 +49,7 @@ function Footer() {
               <Typography variant="body2" align="center" >
                 <Link
                   color="#ffffff"
+                  href={`/terms`}
                   style={{ textDecoration: 'none' }}>
                     <strong>利用規約</strong>
                 </Link>
@@ -56,6 +59,7 @@ function Footer() {
               <Typography variant="body2" align="center" >
                 <Link
                   color="#ffffff"
+                  href={`/privacypolicy`}
                   style={{ textDecoration: 'none' }}>
                     <strong>プライバシーポリシー</strong>
                 </Link>

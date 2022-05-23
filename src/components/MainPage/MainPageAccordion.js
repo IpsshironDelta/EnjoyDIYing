@@ -6,8 +6,7 @@ import   ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp
 import   MuiAccordion             from '@mui/material/Accordion';
 import   MuiAccordionSummary      from '@mui/material/AccordionSummary';
 import   MuiAccordionDetails      from '@mui/material/AccordionDetails';
-import { Typography,
-         Grid ,
+import { Grid ,
          Button,
          Link, }                from '@mui/material';
 import { createTheme,
@@ -16,6 +15,7 @@ import { collection,
          getDocs , }              from "firebase/firestore"
 import { db }                     from '../../firebase';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { useHistory }             from "react-router-dom"
 
 const collectionCategoryName = "category"
 const theme = createTheme({
@@ -83,6 +83,7 @@ export default function CustomizedAccordions() {
   const [detail, setDetail] = useState([])
   const categoryAry = []
   const detailAry = []
+  const history = useHistory()
 
   // firestoreからcategoryの取得
   const fetchCategoryData = () => {
@@ -138,7 +139,10 @@ export default function CustomizedAccordions() {
                              borderRadius : 5,
                              color:"#a0522d" , 
                              width : 170 ,
-                             backgroundColor : "#faf0e6"}}>
+                             backgroundColor : "#faf0e6"}}
+                      onClick = {() => {
+                        history.push(`/categorylist/${categorys}_${detail.detail}`)
+                      }}>
                       {detail.detail}
                       <ArrowForwardIosIcon sx = {{fontSize:16}}/>
                     </Button>

@@ -155,7 +155,6 @@ function MainPage(props) {
           </Typography>
           <Grid container spacing={1}>
             <Grid item xs={6} align = "right">
-              {profile ? 
               <Button
                 startIcon = {<EditIcon/>}
                 sx = {{background:"#1D7BED" ,
@@ -169,25 +168,10 @@ function MainPage(props) {
                        "&:hover": {
                          background: "#1D7BED"},}}
                   onClick = {() => {
-                    history.push("/postpage")}}>
+                    {profile ? history.push("/postpage")
+                  : history.push("/signup")}}}>
                   投稿する
-                </Button>
-              :<Button
-                startIcon = {<PersonAddIcon/>}
-                sx = {{background:"#1D7BED" ,
-                        padding : 1,
-                        borderRadius : 10,
-                        borderWidth : 1,
-                        color:"#ffffff",
-                        width: "150px",
-                        height: "35px",
-                        "&:hover": {
-                          background: "#1D7BED"
-                        },}}
-                  onClick = {() => {
-                    history.push("/signup")}}>
-                  新規登録する
-                </Button> }
+              </Button>
             </Grid>
             <Grid item xs={6} align = "left">
             {profile ? 
@@ -205,7 +189,22 @@ function MainPage(props) {
                   history.push("/profiles/"+profile.uid)}}>
                   マイページ
               </Button>
-              : ""}
+              : <Button
+              startIcon = {<PersonAddIcon/>}
+              sx = {{background:"#1D7BED" ,
+                      padding : 1,
+                      borderRadius : 10,
+                      borderWidth : 1,
+                      color:"#ffffff",
+                      width: "150px",
+                      height: "35px",
+                      "&:hover": {
+                        background: "#1D7BED"
+                      },}}
+                onClick = {() => {
+                  history.push("/signup")}}>
+                新規登録する
+              </Button> }
             </Grid>
           </Grid>
         </Grid>
@@ -285,7 +284,7 @@ function MainPage(props) {
               bgcolor: 'background.paper',
               pt: 8,
               pb: 6,}}>
-              <Typography
+              {/* <Typography
               component="h1"
               variant="h5"
               align="left"
@@ -301,7 +300,7 @@ function MainPage(props) {
               フリーワードでさがす
             </Typography>
             <br/>
-            <MainPageSearchBox/>
+            <MainPageSearchBox/> */}
             <br/>
             <Typography
               component="h1"

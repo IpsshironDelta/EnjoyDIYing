@@ -30,6 +30,7 @@ import useProfile           from "../hooks/useProfile"
 import DeleteIcon           from '@mui/icons-material/Delete'
 import ChatBubbleIcon       from '@mui/icons-material/ChatBubble';
 import store                from '../../store/index';
+import { useHistory }       from "react-router-dom"
 
 const collectionMessageName = "message"
 
@@ -55,6 +56,7 @@ function App() {
   const profile = profileData.profile
   const messageAry = [];
   const bottomRef = useRef(null)
+  const history = useHistory()
 
   // pathnameから作品Noを取得
   var recipenumAry = window.location.pathname.split("/")
@@ -222,7 +224,6 @@ function App() {
             <p>メッセージが存在しません</p>)}
             {/* ログイン状態の時だけメッセージ送信機能を表示 */}
             {/* メッセージ送信部分 */}
-            {profile ? 
             <Stack direction="row" spacing={2} sx={{ margin: "0.5rem 1rem" }}>
               <TextField 
                   size="small" 
@@ -233,11 +234,13 @@ function App() {
               <Button 
                   variant="contained" 
                   endIcon={<ChatBubbleIcon />}
-                  onClick={() => handleClick()}>
+                  onClick={() => 
+                    {profile ? 
+                      handleClick()
+                    : history.push("/signup")}}>
               コメントする
               </Button>
             </Stack>
-            :""}
           </Grid>
       </Box>
       {/* 空入力の場合はエラーを表示 */}

@@ -43,7 +43,6 @@ function DetailList(props) {
       setGetDetail(categoryAry[2].substring(categoryAry[2].indexOf("_")+1))
     }else{
       setGetCategory(categoryAry[2])
-      console.log(categoryAry[2])
     }
   }
 
@@ -73,7 +72,7 @@ function DetailList(props) {
                                 borderBottom: "double #E64545 6px",
                                 pt : 5 , 
                                 pb : 1 ,}}>
-                        "{getdetail}"に関する作品たち
+                        "{getdetail}"に関する作品の検索結果
                     </Typography>
                     : <Typography
                     component="h1"
@@ -88,7 +87,7 @@ function DetailList(props) {
                             borderBottom: "double #E64545 6px",
                             pt : 5 , 
                             pb : 1 ,}}>
-                    "{getcategory}"に関する作品たち
+                    "{getcategory}"に関する作品の検索結果
                 </Typography> }
                     <Typography
                         component="h1"
@@ -101,8 +100,6 @@ function DetailList(props) {
                                 padding: "1rem 2rem",
                                 pt : 1 , 
                                 pb : 1 ,}}>
-                        {getcategory}<br/>
-                        {getdetail}
                     </Typography>
                     <DetailListImageList
                       GetCategory = {getcategory}

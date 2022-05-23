@@ -19,7 +19,11 @@ import ProfileEdit              from './components/ProfileEdit/ProfileEdit'
 import UserRegistration         from './components/UserRegistration/UserRegistration';
 import UserRegistrationReview   from './components/UserRegistration/UserRegistrationReview';
 import UserRegistrationComplete from './components/UserRegistration/UserRegistrationComplete';
-import Message                  from './components/Message/Message';
+import Message                  from './components/Message/Message'
+import Question                 from './components/Question/Question'
+import Inquiry                  from './components/Inquiry/Inquiry'
+import Terms                    from "./components/Terms/Terms"
+import PrivacyPolicy            from "./components/PrivacyPolicy/PrivacyPolicy"
 import Test                     from './components/test/test'
 
 function App() {
@@ -46,6 +50,10 @@ function App() {
         <Route exact path="/userregistration/Complete" component={UserRegistrationComplete} />
         <Route exact path="/message" component={Message} />
         <Route exact path="/postpage" component={PostPage} />
+        <Route exact path="/question" component={Question} />
+        <Route exact path="/inquiry" component={Inquiry} />
+        <Route exact path="/terms" component={Terms} />
+        <Route exact path="/privacypolicy" component={PrivacyPolicy} />
         <Route exact path="/test" component={Test} />
 
         {/* <Route component={Page404} /> */}
