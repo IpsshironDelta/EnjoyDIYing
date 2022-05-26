@@ -16,7 +16,8 @@ import useUser              from "../hooks/getuseAuth"
 import {addDoc,
         collection,
         doc,
-        updateDoc, }        from "firebase/firestore"
+        updateDoc, 
+        getDocs,}        from "firebase/firestore"
 import ProfileHeader        from "./ProfileEditHeader"
 import {createTheme, 
         ThemeProvider }     from '@mui/material/styles';
@@ -45,6 +46,8 @@ const theme = createTheme({
 });
 
 const collectionUserName = "users"
+const collectionRecipeName = "recipe"
+const collectionMessageName = "message"
 
 const ProfileEdit = () => {
   const [name, setName] = useState(store.getState().displayName)                   // プロフィール名
@@ -99,7 +102,7 @@ const ProfileEdit = () => {
         const docRef = collection(firestore, collectionUserName);
  
         if(image){
-            const imageRef = ref(firestorage, 'USER_PROFILE_IMG/' + image.name)
+            const imageRef = ref(firestorage, 'USER_PROFILE_IMG/' + uid + "/" + image.name)
             // firebase strageへ画像をアップロード
             uploadBytes(imageRef, image).then(() => {
                 // getDownloadURLの中で、profileがある場合はupdateDocを指定
@@ -114,6 +117,10 @@ const ProfileEdit = () => {
                       image: url,
                       location,
                       selfintroduction,})
+                    // messageドキュメント内の対象のユーザー情報を更新する
+                    updateMessage(name , url)
+                    // recipeドキュメント内の対象のユーザー情報を更新する
+                    updateRecipe(name)
                   }else{
                     // firestoreに名前、画像URL、uidを追加する
                     addDoc(docRef, {
@@ -131,6 +138,11 @@ const ProfileEdit = () => {
                 if (profile) {
                   const userRef = doc(firestore, collectionUserName, profile?.id)
                   updateDoc(userRef, { name , location , selfintroduction})
+                  console.log("bbb")
+                  // messageドキュメント内の対象のユーザー情報を更新する
+                  updateMessage(name , profile.image)
+                  // recipeドキュメント内の対象のユーザー情報を更新する
+                  updateRecipe(name)
               } else {
                 addDoc(docRef, { 
                   name, 
@@ -151,6 +163,40 @@ const ProfileEdit = () => {
               setError(true)
             }
           }
+  
+  //  messegeドキュメント内の対象ユーザーの情報を更新する
+  const updateMessage = (getName , getImage) => {
+    getDocs(collection(firestore, collectionMessageName)).then((querySnapshot)=>{
+      querySnapshot.forEach((docMessage) => {
+        // 対象の作品(getrecipenum)と一致するコメントのみ表示する
+        if(String(profile.uid) === String(docMessage.data().user.uid)){
+          const messageRef = doc(firestore , collectionMessageName , docMessage.id)
+          updateDoc(messageRef, { user : { 
+                                    name  : getName,
+                                    image : getImage,
+                                    uid   : docMessage.data().user.uid,}, })
+        }
+      })
+    })
+  }
+
+  // recipeドキュメント内の対象ユーザーの情報を更新する
+  const updateRecipe = (getName) => {
+    console.log("updateRecipe通過")
+    getDocs(collection(firestore, collectionRecipeName)).then((querySnapshot)=>{
+      querySnapshot.forEach((docRecipe) => {
+        // 対象の作品(getrecipenum)と一致するコメントのみ表示する
+        if(String(profile.uid) === String(docRecipe.data().image.uid)){
+          const recipeRef = doc(firestore , collectionRecipeName , docRecipe.id)
+          updateDoc(recipeRef, { image : { 
+                                  filename : docRecipe.data().image.filename,
+                                  url      : docRecipe.data().image.url,
+                                  user     : getName,
+                                  uid      : docRecipe.data().image.uid,}, })
+        }
+      })
+    })
+  }
 
   return (
     <ThemeProvider theme={theme}>

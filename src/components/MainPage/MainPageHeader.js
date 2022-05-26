@@ -37,19 +37,19 @@ export default function PrimarySearchAppBar() {
       <Box sx={{ flexGrow: 1 }} >
         <AppBar position="fixed" >
           <Toolbar>
-          <HeaderTitle
-              variant   = "h6"
-              noWrap
-              component = "div"
-              sx={{ display: { xs: 'none', sm: 'block' } }}/>
+            <HeaderTitle
+                variant   = "h6"
+                noWrap
+                component = "div"
+                sx={{ display: { xs: 'none', sm: 'block' } }}/>
             <Box sx={{ flexGrow: 1 }}/>
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-              <MainPageButton
+              {/* <MainPageButton
                 text      ="テスト画面" 
                 link      = "/message"
                 size      = "large"
                 variant   = "contained"
-                startIcon = {<BugReportIcon/>}/>
+                startIcon = {<BugReportIcon/>}/> */}
               {profile ? 
                 <MainPageButton
                   text      = "ホーム" 
@@ -105,71 +105,71 @@ export default function PrimarySearchAppBar() {
                     variant = "contained"
                     sx        = {{"&:hover": {background: "#E64545"}}}
                     startIcon = {<PersonAddIcon/>}/>}
-              </Box>
+            </Box>
           </Toolbar>
         </AppBar>
 
         {/* アバターアイコンをクリックしたときのメニュー表示 */}
-        <Menu
-        anchorEl={anchorEl}
-        id="account-menu"
-        open={open}
-        onClose={handleClose}
-        onClick={handleClose}
-        PaperProps={{
-          elevation: 0,
-          sx: {
-            overflow: 'visible',
-            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-            mt: 1.5,
-            '& .MuiAvatar-root': {
-              width: 32,
-              height: 32,
-              ml: -0.5,
-              mr: 1,
+          {/* <Menu
+          anchorEl={anchorEl}
+          id="account-menu"
+          open={open}
+          onClose={handleClose}
+          onClick={handleClose}
+          PaperProps={{
+            elevation: 0,
+            sx: {
+              overflow: 'visible',
+              filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+              mt: 1.5,
+              '& .MuiAvatar-root': {
+                width: 32,
+                height: 32,
+                ml: -0.5,
+                mr: 1,
+              },
+              '&:before': {
+                content: '""',
+                display: 'block',
+                position: 'absolute',
+                top: 0,
+                right: 14,
+                width: 10,
+                height: 10,
+                bgcolor: 'background.paper',
+                transform: 'translateY(-50%) rotate(45deg)',
+                zIndex: 0,
+              },
             },
-            '&:before': {
-              content: '""',
-              display: 'block',
-              position: 'absolute',
-              top: 0,
-              right: 14,
-              width: 10,
-              height: 10,
-              bgcolor: 'background.paper',
-              transform: 'translateY(-50%) rotate(45deg)',
-              zIndex: 0,
-            },
-          },
-        }}
-        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-      >
-        <MenuItem>
-          <ListItemIcon>
-            <EditIcon fontSize="small" />
-          </ListItemIcon>
-          投稿した作品を確認する
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <PersonIcon fontSize="small" />
-          </ListItemIcon>
-          マイページ
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <StarIcon fontSize="small" />
-          </ListItemIcon>
-          お気に入り
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <LogoutIcon fontSize="small" />
-          </ListItemIcon>
-          ログアウト
-        </MenuItem>
-      </Menu>
+          }}
+          transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        >
+          <MenuItem>
+            <ListItemIcon>
+              <EditIcon fontSize="small" />
+            </ListItemIcon>
+            投稿した作品を確認する
+          </MenuItem>
+          <MenuItem>
+            <ListItemIcon>
+              <PersonIcon fontSize="small" />
+            </ListItemIcon>
+            マイページ
+          </MenuItem>
+          <MenuItem>
+            <ListItemIcon>
+              <StarIcon fontSize="small" />
+            </ListItemIcon>
+            お気に入り
+          </MenuItem>
+          <MenuItem>
+            <ListItemIcon>
+              <LogoutIcon fontSize="small" />
+            </ListItemIcon>
+            ログアウト
+          </MenuItem>
+        </Menu> */}
       </Box>
   );
 }

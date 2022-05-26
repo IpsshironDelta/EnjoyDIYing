@@ -93,6 +93,9 @@ function App() {
         }
       })
     }).then(()=>{
+      messageAry.sort(function(a, b) {
+        return (a.createdAt < b.createdAt) ? -1 : 1;  //オブジェクトの昇順ソート
+      })
       setMessage([...messageAry])
     })}
 

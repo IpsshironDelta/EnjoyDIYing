@@ -91,8 +91,10 @@ export default function ProfileImageList() {
           })
         })
     }).then(()=>{
+      recipeAry.sort(function(a, b) {
+        return (a.createdAt < b.createdAt) ? -1 : 1;  //オブジェクトの昇順ソート
+      })
       setRecipe([...recipeAry])
-      console.log("★ : " , recipe)
     })};
 
   useEffect(() => {

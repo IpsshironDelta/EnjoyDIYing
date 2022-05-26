@@ -41,14 +41,12 @@ function Question(props) {
                     <Typography
                         component="h1"
                         variant="h5"
-                        align="left"
+                        align="center"
                         color="text.primary"
                         gutterBottom
                         sx = {{backgroundColor : "#ffffff",
                                 color : "#000000",
                                 padding: "1rem 2rem",
-                                borderTop: "double #E64545 6px",
-                                borderBottom: "double #E64545 6px",
                                 pt : 5 , 
                                 pb : 1 ,}}>
                         よくある質問

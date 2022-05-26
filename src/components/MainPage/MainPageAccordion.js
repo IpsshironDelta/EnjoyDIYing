@@ -91,24 +91,34 @@ export default function CustomizedAccordions() {
       querySnapshot.forEach((doc) => {
         // 重複していない要素だけを追加する
         if(!categoryAry.includes(doc.data().category)){
-          categoryAry.push(
-            doc.data().category,
-            )
-          }
-        })
-      }).then(()=>{
-        setCategorys([...categoryAry])
-        console.log("categoryAry : " , categoryAry)
-      })}
+          // 「その他」は末尾に格納する
+          if(doc.data().category !== "その他"){
+            categoryAry.unshift(
+              doc.data().category)
+          }else{
+            categoryAry.push(
+              doc.data().category)
+          }          
+        }
+      })
+    }).then(()=>{
+      setCategorys([...categoryAry])
+      console.log(categoryAry)
+    })}
 
   // firestoreからdetailの取得
   const fetchDetailData = () => {
     getDocs(collection(db, collectionCategoryName)).then((querySnapshot)=>{
       querySnapshot.forEach((doc) => {
-        // カテゴリーで選択している要素だけを追加する
-        detailAry.push(
-          doc.data(),
-      )})
+        // 「その他」は末尾に格納する
+        if(doc.data().detail !== "その他"){
+          detailAry.unshift(
+            doc.data())
+        }else{
+          detailAry.push(
+            doc.data())
+        }
+      })
     }).then(()=>{
       setDetail([...detailAry])
       console.log("detailAry : " , detailAry)

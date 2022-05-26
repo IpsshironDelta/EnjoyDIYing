@@ -44,12 +44,6 @@ export default function PrivacyPolicyHeader() {
               sx={{ display: { xs: 'none', sm: 'block' } }}/>
             <Box sx={{ flexGrow: 1 }}/>
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-              <PrivacyPolicyButton
-                text      ="テスト画面" 
-                link      = "/message"
-                size      = "large"
-                variant   = "contained"
-                startIcon = {<BugReportIcon/>}/>
               {profile ? 
                 <PrivacyPolicyButton
                   text      = "ホーム" 
@@ -108,68 +102,6 @@ export default function PrivacyPolicyHeader() {
               </Box>
           </Toolbar>
         </AppBar>
-
-        {/* アバターアイコンをクリックしたときのメニュー表示 */}
-        <Menu
-        anchorEl={anchorEl}
-        id="account-menu"
-        open={open}
-        onClose={handleClose}
-        onClick={handleClose}
-        PaperProps={{
-          elevation: 0,
-          sx: {
-            overflow: 'visible',
-            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-            mt: 1.5,
-            '& .MuiAvatar-root': {
-              width: 32,
-              height: 32,
-              ml: -0.5,
-              mr: 1,
-            },
-            '&:before': {
-              content: '""',
-              display: 'block',
-              position: 'absolute',
-              top: 0,
-              right: 14,
-              width: 10,
-              height: 10,
-              bgcolor: 'background.paper',
-              transform: 'translateY(-50%) rotate(45deg)',
-              zIndex: 0,
-            },
-          },
-        }}
-        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-      >
-        <MenuItem>
-          <ListItemIcon>
-            <EditIcon fontSize="small" />
-          </ListItemIcon>
-          投稿した作品を確認する
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <PersonIcon fontSize="small" />
-          </ListItemIcon>
-          マイページ
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <StarIcon fontSize="small" />
-          </ListItemIcon>
-          お気に入り
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <LogoutIcon fontSize="small" />
-          </ListItemIcon>
-          ログアウト
-        </MenuItem>
-      </Menu>
       </Box>
-  );
+  )
 }

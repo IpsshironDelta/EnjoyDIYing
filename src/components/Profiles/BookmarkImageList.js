@@ -91,13 +91,17 @@ export default function BookmarkImageList() {
                 id : documentBookMark.id,
                 ...document.data(),
               })
-              console.log("if文通過してます")
             }
           })
         }).then(()=>{
+          bookmarkAry.sort(function(a, b) {
+            return (a.createdAt < b.createdAt) ? -1 : 1;  //オブジェクトの昇順ソート
+          })
+          recipeAry.sort(function(a, b) {
+            return (a.createdAt < b.createdAt) ? -1 : 1;  //オブジェクトの昇順ソート
+          })
           setBookMark([...bookmarkAry])
           setRecipe([...recipeAry])
-          console.log("bookmarkAry =>" , bookmarkAry)
         })
       })
     })}

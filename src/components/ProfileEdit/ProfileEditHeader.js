@@ -30,14 +30,14 @@ export default function ProfileEditHeader() {
               link      = "/operation"
               size      = "large"
               variant   = "contained"
-              startIcon = {<FeedIcon/>}/>
+              startIcon = {<FeedIcon/>}/> */}
             <ProfileButton
               text      ="ホーム" 
               link      = "/"
               size      = "large"
               variant   = "contained"
               startIcon = {<HomeIcon/>}/>
-            <ProfileButton
+            {/* <ProfileButton
               id        = "logout"
               text      = "ログアウト" 
               link      = "/"

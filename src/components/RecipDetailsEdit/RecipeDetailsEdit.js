@@ -107,15 +107,19 @@ export default function RecipeDetailsEdit() {
       querySnapshot.forEach((doc) => {
       // 重複していない要素だけを追加する
       if(!categoryAry.includes(doc.data().category)){
-        categoryAry.push(
-          doc.data().category
-          )          
+        // 「その他」は末尾に格納する
+        if(doc.data().category !== "その他"){
+          categoryAry.unshift(
+            doc.data().category)
+        }else{
+          categoryAry.push(
+            doc.data().category)
         }
-      })
-    }).then(()=>{
-      setCategory([...categoryAry])
-      console.log("categoryAry : " , categoryAry)
-    })};
+      }
+    })
+  }).then(()=>{
+    setCategory([...categoryAry])
+  })}
 
   // firestoreからdetailの取得
   const fetchDetailData = (detail) => {
@@ -124,14 +128,18 @@ export default function RecipeDetailsEdit() {
       querySnapshot.forEach((doc) => {
         // カテゴリーで選択している要素だけを追加する
         if(doc.data().category === detail){
-        detailAry.push(
-          doc.data().detail
-          )
+          // 「その他」は末尾に格納する
+          if(doc.data().detail !== "その他"){
+            detailAry.unshift(
+              doc.data().detail)
+          }else{
+            detailAry.push(
+              doc.data().detail)
+          }
         }
-        })
+      })
     }).then(()=>{
       setDetail([...detailAry])
-      console.log("detailAry : " , detailAry)
     })};
 
   useEffect(() => {
@@ -153,11 +161,7 @@ export default function RecipeDetailsEdit() {
   const handleDelete = (id) => {
     console.log("id => " , id)
     if (window.confirm("削除してもよろしいですか？")) {
-      console.log("OK を選択してます" , id)
-      
-      // ドキュメントのid（名前）を取得
-      console.log("ドキュメントのid（名前）を取得")
-      console.log("削除するID",id)
+            // ドキュメントのid（名前）を取得
       deleteDoc(doc(db , collectionRecipeName , id)).then((doc) => {
         // fetchUsersData()
         alert("削除しました。")
@@ -169,7 +173,6 @@ export default function RecipeDetailsEdit() {
         alert("失敗しました")
      })
     }else{
-      console.log("キャンセルを選択してます。")
     }
   }
 
@@ -220,17 +223,16 @@ export default function RecipeDetailsEdit() {
       // const uid = user.uid
       const docRef = collection(firestore, collectionRecipeName);
       if(image){
-          const imageRef = ref(firestorage, '/RECIPE_IMG/' + image.name)
+          const imageRef = ref(firestorage, '/RECIPE_IMG/' + getrecipenum + "/" + image.name)
           // firebase strageへ画像をアップロード
           uploadBytes(imageRef, image).then(() => {
               // getDownloadURLの中で、profileがある場合はupdateDocを指定
               // profileがない場合はaddDocを指定
               // imageがない場合も同様に指定
               getDownloadURL(imageRef).then(url => {
-                console.log("url => ",url)
                 if (profile) {
-                  const userRef = doc(firestore, collectionRecipeName , store.getState().documentID)
-                  updateDoc(userRef, {
+                  const redipeRef = doc(firestore, collectionRecipeName , store.getState().documentID)
+                  updateDoc(redipeRef, {
                     title ,                     // 作品タイトルを入力
                     category : selectcategory , // category(大項目)を入力
                     detail : selectdetail ,     // detail(小項目)を入力
@@ -262,8 +264,8 @@ export default function RecipeDetailsEdit() {
           }else{
             // 画像を選択する
             if (profile) {
-              const userRef = doc(firestore, collectionRecipeName, store.getState().documentID)
-              updateDoc(userRef, 
+              const redipeRef = doc(firestore, collectionRecipeName, store.getState().documentID)
+              updateDoc(redipeRef, 
                 { title , 
                   category : selectcategory, 
                   detail   : selectdetail,

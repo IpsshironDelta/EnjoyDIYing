@@ -115,15 +115,20 @@ export default function PostPage() {
       querySnapshot.forEach((doc) => {
         // 重複していない要素だけを追加する
         if(!categoryAry.includes(doc.data().category)){
-          categoryAry.push(
-            doc.data().category
-            )          
+          // 「その他」は末尾に格納する
+          if(doc.data().category !== "その他"){
+            categoryAry.unshift(
+              doc.data().category)
+          }else{
+            categoryAry.push(
+              doc.data().category)
           }
-        })
-      }).then(()=>{
-        setCategorys([...categoryAry])
-        console.log("categoryAry : " , categoryAry)
-      })};
+        }
+      })
+    }).then(()=>{
+      setCategorys([...categoryAry])
+      console.log("categoryAry : " , categoryAry)
+    })}
 
   // firestoreからdetailの取得
   const fetchDetailData = (detail) => {
@@ -132,11 +137,16 @@ export default function PostPage() {
       querySnapshot.forEach((doc) => {
         // カテゴリーで選択している要素だけを追加する
         if(doc.data().category === detail){
-        detailAry.push(
-          doc.data().detail
-          )
+          // 「その他」は末尾に格納する
+          if(doc.data().detail !== "その他"){
+            detailAry.unshift(
+              doc.data().detail)
+          }else{
+            detailAry.push(
+              doc.data().detail)
+          }
         }
-        })
+      })
     }).then(()=>{
       setDetail([...detailAry])
       console.log("detailAry : " , detailAry)
@@ -212,8 +222,8 @@ export default function PostPage() {
       const docRef = collection(firestore, "recipe");
 
       if(image){
-          const imageRef = ref(firestorage, '/RECIPE_IMG/' + image.name)
           const recipeNo = Math.floor(Math.random()* 1000000000000001)
+          const imageRef = ref(firestorage, '/RECIPE_IMG/' + recipeNo + "/" + image.name)
           // firebase strageへ画像をアップロード
           uploadBytes(imageRef, image).then(() => {
             getDownloadURL(imageRef).then(url => {
