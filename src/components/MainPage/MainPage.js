@@ -27,6 +27,7 @@ import { makeStyles }        from "@material-ui/core/styles"
 import   PersonAddIcon       from '@mui/icons-material/PersonAdd'
 import   ViewModuleIcon      from '@mui/icons-material/ViewModule'
 import   ViewListIcon        from '@mui/icons-material/ViewList'
+import   Adsense             from '../Adsense'
 
 const useStyles = makeStyles({
   rectangle: {
@@ -337,6 +338,8 @@ function MainPage(props) {
                      pb : 1 ,}}>
               みんなの作品をみる
             </Typography>
+{/* google Adsense導入 */}
+<Adsense/>
             {/* タブの文言 */}
             <Box sx={{ width: '100%' }}>
               <Box sx={{ borderBottom: 1, borderColor: 'divider'}}>
@@ -355,6 +358,7 @@ function MainPage(props) {
           </Box>
         </Container>
       </Box>
+
       {/* Footer */}
       <Footer/>
       {/* End footer */}

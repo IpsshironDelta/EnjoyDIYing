@@ -7,20 +7,20 @@ import {Avatar,
         ListItemIcon,
         MenuItem,
         Menu ,}       from "@mui/material"
-import MainPageButton from './MainPageButton';
+import InfomationButton from './InfomationButton';
 import EditIcon       from '@mui/icons-material/Edit';
 import HomeIcon       from '@mui/icons-material/Home';
 import PersonAddIcon  from '@mui/icons-material/PersonAdd';
 import LoginIcon      from '@mui/icons-material/Login';
 import PersonIcon     from '@mui/icons-material/Person';
 import LogoutIcon     from '@mui/icons-material/Logout';
-import useProfile     from "../../components/hooks/useProfile"
+import useProfile     from "../hooks/useProfile"
 import HeaderTitle    from '../HeaderTitle'
 import IconButton     from '@mui/material/IconButton'
 import StarIcon       from '@mui/icons-material/Star'
 import BugReportIcon from '@mui/icons-material/BugReport'
 
-export default function PrimarySearchAppBar() {
+export default function InfomationHeader() {
   const profileData = useProfile()
   const profile = profileData.profile
   const [anchorEl, setAnchorEl] = useState(null);
@@ -37,21 +37,15 @@ export default function PrimarySearchAppBar() {
       <Box sx={{ flexGrow: 1 }} >
         <AppBar position="fixed" >
           <Toolbar>
-            <HeaderTitle
-                variant   = "h6"
-                noWrap
-                component = "div"
-                sx={{ display: { xs: 'none', sm: 'block' } }}/>
+          <HeaderTitle
+              variant   = "h6"
+              noWrap
+              component = "div"
+              sx={{ display: { xs: 'none', sm: 'block' } }}/>
             <Box sx={{ flexGrow: 1 }}/>
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-              <MainPageButton
-                text      ="テスト画面" 
-                link      = "/message"
-                size      = "large"
-                variant   = "contained"
-                startIcon = {<BugReportIcon/>}/>
               {profile ? 
-                <MainPageButton
+                <InfomationButton
                   text      = "ホーム" 
                   link      = "/"
                   size      = "large"
@@ -60,7 +54,7 @@ export default function PrimarySearchAppBar() {
                   startIcon = {<HomeIcon/>}/>
               : "" }
               {profile ? 
-                <MainPageButton
+                <InfomationButton
                   text      ="投稿する" 
                   link      = "/postpage"
                   size      = "large"
@@ -69,7 +63,7 @@ export default function PrimarySearchAppBar() {
                   startIcon = {<EditIcon/>}/>
                 : "" }
               {profile ? 
-                <MainPageButton
+                <InfomationButton
                   text      = "マイページ" 
                   link      = {profile ? "/profiles/"+profile.uid : ""} 
                   size      = "large"
@@ -78,7 +72,7 @@ export default function PrimarySearchAppBar() {
                   startIcon = {<PersonIcon/>}/>
                   : "" }
               {profile ? 
-                <MainPageButton
+                <InfomationButton
                   id        = "logout"
                   text      = "ログアウト" 
                   link      = "/"
@@ -86,7 +80,7 @@ export default function PrimarySearchAppBar() {
                   variant   = "contained"
                   sx        = {{"&:hover": {background: "#E64545"}}}
                   startIcon = {<LogoutIcon/>}/>
-                : <MainPageButton
+                : <InfomationButton
                   id        = "login"
                   text      = "ログイン" 
                   link      = "/login"
@@ -98,78 +92,16 @@ export default function PrimarySearchAppBar() {
                 <IconButton onClick={handleClickAvatar}>
                   <Avatar src={profile ? profile.image : ""} alt="" />
                 </IconButton>
-                  : <MainPageButton
+                  : <InfomationButton
                     text    = "新規登録" 
                     link    = "/signup"
                     size    = "large"
                     variant = "contained"
                     sx        = {{"&:hover": {background: "#E64545"}}}
                     startIcon = {<PersonAddIcon/>}/>}
-            </Box>
+              </Box>
           </Toolbar>
         </AppBar>
-
-        {/* アバターアイコンをクリックしたときのメニュー表示 */}
-          {/* <Menu
-          anchorEl={anchorEl}
-          id="account-menu"
-          open={open}
-          onClose={handleClose}
-          onClick={handleClose}
-          PaperProps={{
-            elevation: 0,
-            sx: {
-              overflow: 'visible',
-              filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-              mt: 1.5,
-              '& .MuiAvatar-root': {
-                width: 32,
-                height: 32,
-                ml: -0.5,
-                mr: 1,
-              },
-              '&:before': {
-                content: '""',
-                display: 'block',
-                position: 'absolute',
-                top: 0,
-                right: 14,
-                width: 10,
-                height: 10,
-                bgcolor: 'background.paper',
-                transform: 'translateY(-50%) rotate(45deg)',
-                zIndex: 0,
-              },
-            },
-          }}
-          transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-        >
-          <MenuItem>
-            <ListItemIcon>
-              <EditIcon fontSize="small" />
-            </ListItemIcon>
-            投稿した作品を確認する
-          </MenuItem>
-          <MenuItem>
-            <ListItemIcon>
-              <PersonIcon fontSize="small" />
-            </ListItemIcon>
-            マイページ
-          </MenuItem>
-          <MenuItem>
-            <ListItemIcon>
-              <StarIcon fontSize="small" />
-            </ListItemIcon>
-            お気に入り
-          </MenuItem>
-          <MenuItem>
-            <ListItemIcon>
-              <LogoutIcon fontSize="small" />
-            </ListItemIcon>
-            ログアウト
-          </MenuItem>
-        </Menu> */}
       </Box>
-  );
+  )
 }

@@ -25,7 +25,17 @@ function Footer() {
       <Container maxWidth>
         <Box component="footer" sx={{backgroundColor:textColor,py:1}}>
           <Grid container spacing={1}>
-            <Grid item xs={3}>
+            <Grid item xs={2.5}>
+                <Typography variant="body2" align="center" >
+                  <Link
+                    color="#ffffff"
+                    href={`/infomation`}
+                    style={{ textDecoration: 'none' }}>
+                      <strong>お知らせ・ニュース</strong>
+                  </Link>
+                </Typography>
+              </Grid>
+            <Grid item xs={2.5}>
               <Typography variant="body2" align="center" >
                 <Link
                   color="#ffffff"
@@ -35,7 +45,7 @@ function Footer() {
                 </Link>
               </Typography>
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={2.5}>
               <Typography variant="body2" align="center" >
                 <Link
                   color="#ffffff"
@@ -45,7 +55,7 @@ function Footer() {
                 </Link>
               </Typography>
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={2.5}>
               <Typography variant="body2" align="center" >
                 <Link
                   color="#ffffff"
@@ -55,7 +65,7 @@ function Footer() {
                 </Link>
               </Typography>
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={2}>
               <Typography variant="body2" align="center" >
                 <Link
                   color="#ffffff"

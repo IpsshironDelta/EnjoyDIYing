@@ -21,6 +21,7 @@ import UserRegistrationReview   from './components/UserRegistration/UserRegistra
 import UserRegistrationComplete from './components/UserRegistration/UserRegistrationComplete';
 import Message                  from './components/Message/Message'
 import Question                 from './components/Question/Question'
+import Infomation               from './components/Infomation/Infomation'
 import Inquiry                  from './components/Inquiry/Inquiry'
 import Terms                    from "./components/Terms/Terms"
 import PrivacyPolicy            from "./components/PrivacyPolicy/PrivacyPolicy"
@@ -50,6 +51,7 @@ function App() {
         <Route exact path="/userregistration/Complete" component={UserRegistrationComplete} />
         <Route exact path="/message" component={Message} />
         <Route exact path="/postpage" component={PostPage} />
+        <Route exact path="/infomation" component={Infomation} />
         <Route exact path="/question" component={Question} />
         <Route exact path="/inquiry" component={Inquiry} />
         <Route exact path="/terms" component={Terms} />
