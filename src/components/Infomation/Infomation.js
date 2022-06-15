@@ -158,8 +158,8 @@ export default withRouter(Infomation);
 
 const InfomationData = [
   {
-    id   : "20220531",
-    date : "2022/05/31",
+    id   : "20220601",
+    date : "2022/06/01",
     title: "これ、考えた人すごいね。をリリースしました。",
     contents: "はじめまして　「これ、考えた人すごいね。」ちぢめて「これかん」と申します。"+
               "この度、DIYのアイディアをみんなで共有&投稿するアプリをリリースしました。"+

@@ -44,12 +44,12 @@ export default function PrimarySearchAppBar() {
                 sx={{ display: { xs: 'none', sm: 'block' } }}/>
             <Box sx={{ flexGrow: 1 }}/>
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-              <MainPageButton
+              {/* <MainPageButton
                 text      ="テスト画面" 
                 link      = "/message"
                 size      = "large"
                 variant   = "contained"
-                startIcon = {<BugReportIcon/>}/>
+                startIcon = {<BugReportIcon/>}/> */}
               {profile ? 
                 <MainPageButton
                   text      = "ホーム" 
