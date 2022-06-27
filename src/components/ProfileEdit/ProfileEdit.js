@@ -138,7 +138,6 @@ const ProfileEdit = () => {
                 if (profile) {
                   const userRef = doc(firestore, collectionUserName, profile?.id)
                   updateDoc(userRef, { name , location , selfintroduction})
-                  console.log("bbb")
                   // messageドキュメント内の対象のユーザー情報を更新する
                   updateMessage(name , profile.image)
                   // recipeドキュメント内の対象のユーザー情報を更新する

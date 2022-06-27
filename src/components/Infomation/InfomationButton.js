@@ -3,9 +3,9 @@ import   React ,
 import { useHistory } from "react-router-dom";
 import   Button       from '@mui/material/Button';
 import   useLogout    from '../hooks/logOutUseAuth';
-import   useProfile   from "../../components/hooks/useProfile"
+import   useProfile   from "../hooks/useProfile"
 
-export default function QuestionButton(props){
+export default function InfomationButton(props){
     const history = useHistory()
     const profileData = useProfile()
     const profile = profileData.profile

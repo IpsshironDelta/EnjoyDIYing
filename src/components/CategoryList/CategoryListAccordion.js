@@ -99,7 +99,7 @@ export default function CategoryListAccordion() {
             }else{
               categoryAry.push(
                 doc.data().category)
-            }          
+            }
           }
         })
       }).then(()=>{
