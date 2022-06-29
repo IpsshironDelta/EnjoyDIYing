@@ -44,15 +44,13 @@ export default function InquiryHeader() {
               sx={{ display: { xs: 'none', sm: 'block' } }}/>
             <Box sx={{ flexGrow: 1 }}/>
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-              {profile ? 
-                <InquiryButton
-                  text      = "ホーム" 
-                  link      = "/"
-                  size      = "large"
-                  variant   = "contained"
-                  sx        = {{"&:hover": {background: "#E64545"}}}
-                  startIcon = {<HomeIcon/>}/>
-              : "" }
+              <InquiryButton
+                text      = "ホーム" 
+                link      = "/"
+                size      = "large"
+                variant   = "contained"
+                sx        = {{"&:hover": {background: "#E64545"}}}
+                startIcon = {<HomeIcon/>}/>
               {profile ? 
                 <InquiryButton
                   text      ="投稿する" 

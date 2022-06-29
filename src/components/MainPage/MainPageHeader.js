@@ -50,15 +50,13 @@ export default function PrimarySearchAppBar() {
                 size      = "large"
                 variant   = "contained"
                 startIcon = {<BugReportIcon/>}/> */}
-              {profile ? 
-                <MainPageButton
-                  text      = "ホーム" 
-                  link      = "/"
-                  size      = "large"
-                  variant   = "contained"
-                  sx        = {{"&:hover": {background: "#E64545"}}}
-                  startIcon = {<HomeIcon/>}/>
-              : "" }
+              <MainPageButton
+                text      = "ホーム" 
+                link      = "/"
+                size      = "large"
+                variant   = "contained"
+                sx        = {{"&:hover": {background: "#E64545"}}}
+                startIcon = {<HomeIcon/>}/>
               {profile ? 
                 <MainPageButton
                   text      ="投稿する" 

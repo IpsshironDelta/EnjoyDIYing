@@ -3,13 +3,16 @@ import   React,
          useEffect,}         from "react"
 import { Box ,
          Typography,
-         Container , }       from '@mui/material'
+         Container ,
+         TextField ,
+         Button , }       from '@mui/material'
 import { createTheme,
          ThemeProvider }     from '@mui/material/styles'
 import { useHistory,
          withRouter }        from 'react-router'
 import   InquiryHeader    from './InquiryHeader'
 import   Footer              from '../Footer'
+import useSignup from "../hooks/useAuth"
 
 const theme = createTheme({
   shadows: ["none"],
@@ -28,8 +31,19 @@ const theme = createTheme({
   },
 })
 
+const inquiryImg = 
+"https://firebasestorage.googleapis.com/v0/b/myfirebasesample-c6d99.appspot.com/o/PAGE_USE_IMG%2Finquiry_img.jpg?alt=media&token=c9997f22-a7fe-4911-a516-a0c32beebf5c"
+
 function Inquiry(props) {
-  
+  const [email, setEmail] = useState("")
+  const [name, setName] = useState("")
+  const [comment, setComment] = useState("")
+  const { signup, error , success } = useSignup()
+
+  // "送信ボタンクリック時のハンドル"
+  const handleSubmit = (event) => {
+  }
+
   return (
     <ThemeProvider theme={theme}>
         <Container maxWidth>
@@ -38,6 +52,13 @@ function Inquiry(props) {
         <Container maxWidth = "md" >
             <Box sx={{ flexGrow: 1, m: 2, pt: 4, pb: 4 }}>
                 <Container maxWidth>
+                  <Typography variant="body2" align='center'>
+                    <img 
+                      src     = {inquiryImg}
+                      width   = "350px" 
+                      alt     = "preview"
+                      padding = "1em"/>
+                  </Typography>
                     <Typography
                         component="h1"
                         variant="h5"
@@ -47,12 +68,73 @@ function Inquiry(props) {
                         sx = {{backgroundColor : "#ffffff",
                                 color : "#000000",
                                 padding: "1rem 2rem",
-                                borderTop: "double #E64545 6px",
                                 borderBottom: "double #E64545 6px",
                                 pt : 5 , 
                                 pb : 1 ,}}>
                         お問い合わせ
                     </Typography>
+                    <Typography variant="h7"
+                                align="left"
+                                color="text.primary"
+                                gutterBottom
+                                sx = {{backgroundColor : "#ffffff",
+                                        color : "#000000",}}>
+                      お名前：
+                    </Typography>
+                    <TextField
+                      margin       = "normal"
+                      fullWidth
+                      id           = "name"
+                      label        = "お名前"
+                      name         = "name"
+                      autoComplete = "name"
+                      autoFocus
+                      value        = {name}
+                      onChange     = {e => setName(e.target.value)}/>
+                    <Typography variant="h7"
+                                align="left"
+                                color="text.primary"
+                                gutterBottom
+                                sx = {{backgroundColor : "#ffffff",
+                                        color : "#000000",}}>
+                      メールアドレス：
+                    </Typography>
+                    <TextField
+                      margin       = "normal"
+                      fullWidth
+                      name         = "email"
+                      label        = "example@example.com"
+                      type         = "email"
+                      id           = "email"
+                      autoComplete = "current-email"
+                      value={email}
+                      onChange={e => setEmail(e.target.value)}/>
+                    <Typography variant="h7"
+                                align="left"
+                                color="text.primary"
+                                gutterBottom
+                                sx = {{backgroundColor : "#ffffff",
+                                        color : "#000000",}}>
+                      お問い合わせ内容：
+                      </Typography>
+                      <TextField
+                        fullWidth
+                        id       = "comment"
+                        name     = "comment"
+                        multiline
+                        rows={6}
+                        defaultValue = ""
+                        onChange={e => 
+                          setComment(e.target.value)}/>
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      sx={{ mt: 3, mb: 2,}}
+                      link = "/"
+                      onClick = {handleSubmit}>
+                      メールを送信する
+                    </Button>
                 </Container>
             </Box>
         </Container>
