@@ -1,18 +1,20 @@
 import   React, 
        { useState,
-         useEffect,}         from "react"
-import { Box ,
+         useEffect,}     from "react"
+import { Alert ,
+         Box ,
          Typography,
          Container ,
          TextField ,
-         Button , }       from '@mui/material'
+         Button , }      from '@mui/material'
 import { createTheme,
-         ThemeProvider }     from '@mui/material/styles'
+         ThemeProvider } from '@mui/material/styles'
 import { useHistory,
-         withRouter }        from 'react-router'
-import   InquiryHeader    from './InquiryHeader'
-import   Footer              from '../Footer'
-import useSignup from "../hooks/useAuth"
+         withRouter }    from 'react-router'
+import   InquiryHeader   from './InquiryHeader'
+import   Footer          from '../Footer'
+import useSignup         from "../hooks/useAuth"
+import sendMail          from "../hooks/sendMail"
 
 const theme = createTheme({
   shadows: ["none"],
@@ -31,17 +33,53 @@ const theme = createTheme({
   },
 })
 
+const sendmailaddress = 
+"ysueda0716@gmail.com"
+
 const inquiryImg = 
 "https://firebasestorage.googleapis.com/v0/b/myfirebasesample-c6d99.appspot.com/o/PAGE_USE_IMG%2Finquiry_img.jpg?alt=media&token=c9997f22-a7fe-4911-a516-a0c32beebf5c"
 
 function Inquiry(props) {
-  const [email, setEmail] = useState("")
-  const [name, setName] = useState("")
-  const [comment, setComment] = useState("")
-  const { signup, error , success } = useSignup()
+  
+  const [email, setEmail]                      = useState("")    // メールアドレス入力欄
+  const [name, setName]                        = useState("")    // お名前入力欄
+  const [comment, setComment]                  = useState("")    // お問い合わせ内容入力欄
+  const [error , setError ]                    = useState(false)  // 入力エラー判定
+  const [success, setSuccess]                  = useState(false) // 成功判定
+  const [sendmailerr , setSendMailErr]         = useState(false) // メール送信エラー判定
+  const [sendmailsuccess , setSendMailSuccess] = useState(false) // メール送信エラー判定
+  const [errormessage , setErrorMessage]       = useState("")    // エラーメッセージ
+
 
   // "送信ボタンクリック時のハンドル"
   const handleSubmit = (event) => {
+    // アラートが出ている場合は一旦消す
+    setError(false)
+    setSuccess(false)
+    if(name === ""){
+      console.log("お名前未入力")
+      setErrorMessage("お名前を入力してください")
+      setError(true)
+      return
+    }
+    if(email === ""){
+      console.log("mailアドレス未入力")
+      setErrorMessage("mailアドレスを入力してください")
+      setError(true)
+      return
+    }
+    if(comment === ""){
+      console.log("お問い合わせ内容未入力")
+      setErrorMessage("お問い合わせ内容を入力してください")
+      setError(true)
+      return
+    }
+
+    // 問合わせメールを送信する
+    console.log(sendmailaddress)
+    console.log(event)
+    // event.preventDefault()
+    // sendMail(sendmailaddress)
   }
 
   return (
@@ -135,6 +173,10 @@ function Inquiry(props) {
                       onClick = {handleSubmit}>
                       メールを送信する
                     </Button>
+                    {/* メール送信が成功した場合はアラートを出す */}
+                    {success && <Alert severity="success">投稿完了しました！</Alert>}
+                    {/* メール送信が失敗した場合はアラートを出す */}
+                    {error && <Alert severity="error">{errormessage}</Alert>}
                 </Container>
             </Box>
         </Container>

@@ -1,17 +1,17 @@
-import { useState } from "react"
+import { useState    } from "react"
 import { firebaseApp } from "../../firebase"
-import { useHistory } from "react-router-dom";
-import { sendPasswordResetEmail} from "firebase/auth"
+import { useHistory  } from "react-router-dom";
+import { sendPasswordResetEmail    } from "firebase/auth"
 
 const fireauth = firebaseApp.fireauth
 // パスワードの再設定で使用する
-export default function usePasswordReset () {
+export default function useSendMail () {
     const history = useHistory()
   
     const [success, setSuccess] = useState(false)
     const [error, setError] = useState(null)
   
-    const passwordReset = (email) => {
+    const sendMail = (email) => {
       sendPasswordResetEmail(fireauth, email)
         .then(() => {
           setSuccess(true)
@@ -25,5 +25,5 @@ export default function usePasswordReset () {
         })
     }
   
-    return { success, error, passwordReset }
+    return { success, error, sendMail }
   }
